@@ -3,6 +3,8 @@
 *.com
 *.class
 *.dll
+*.pdb
+*.cache
 *.exe
 *.o
 *.so
