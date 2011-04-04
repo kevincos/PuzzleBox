@@ -1,0 +1,15 @@
+C:\Users\Kevin\AppData\Local\Temporary Projects\PuzzleBoxTest\bin\Release\PuzzleBoxTest.exe
+C:\Users\Kevin\AppData\Local\Temporary Projects\PuzzleBoxTest\bin\Release\PuzzleBoxTest.pdb
+C:\Users\Kevin\AppData\Local\Temporary Projects\PuzzleBoxTest\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\Kevin\AppData\Local\Temporary Projects\PuzzleBoxTest\obj\x86\Release\PuzzleBoxTest.exe
+C:\Users\Kevin\AppData\Local\Temporary Projects\PuzzleBoxTest\obj\x86\Release\PuzzleBoxTest.pdb
+E:\git_projects\puzzlebox\PuzzleBoxTest\PuzzleBoxTest\obj\x86\Release\PuzzleBoxTest.exe
+E:\git_projects\puzzlebox\PuzzleBoxTest\PuzzleBoxTest\obj\x86\Release\PuzzleBoxTest.pdb
+E:\git_projects\puzzlebox\PuzzleBoxTest\PuzzleBoxTest\bin\Release\PuzzleBoxTest.exe
+E:\git_projects\puzzlebox\PuzzleBoxTest\PuzzleBoxTest\bin\Release\PuzzleBoxTest.pdb
+E:\git_projects\puzzlebox\PuzzleBoxTest\PuzzleBoxTest\obj\x86\Release\ResolveAssemblyReference.cache
+C:\git_projects\PuzzleBox\PuzzleBoxTest\PuzzleBoxTest\obj\x86\Release\PuzzleBoxTest.exe
+C:\git_projects\PuzzleBox\PuzzleBoxTest\PuzzleBoxTest\obj\x86\Release\PuzzleBoxTest.pdb
+C:\dev_bin\puzzlebox\PuzzleBoxTest.exe
+C:\dev_bin\puzzlebox\PuzzleBoxTest.pdb
+C:\git_projects\PuzzleBox\PuzzleBoxTest\PuzzleBoxTest\obj\x86\Release\ResolveAssemblyReference.cache
