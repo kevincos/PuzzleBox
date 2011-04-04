@@ -19,6 +19,7 @@ namespace PuzzleBox
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Texture2D orbTexture;
+        PuzzleBox puzzleBox;
 
 
         public Game1()
@@ -36,8 +37,11 @@ namespace PuzzleBox
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            
             base.Initialize();
+
+            OrbRenderer.Init(spriteBatch, orbTexture);
+            puzzleBox = new PuzzleBox();
         }
 
         /// <summary>
@@ -72,6 +76,8 @@ namespace PuzzleBox
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                this.Exit();
 
             // TODO: Add your update logic here
 
@@ -90,9 +96,16 @@ namespace PuzzleBox
             spriteBatch.Begin();
             int mouseX = Mouse.GetState().X;
             int mouseY = Mouse.GetState().Y;
-            spriteBatch.Draw(orbTexture,
-                new Rectangle(mouseX - 16, mouseY - 16, 32, 32),
-                Color.White);
+            /*spriteBatch.Draw(orbTexture,
+                new Rectangle(mouseX - 16, mouseY - 16, 32, 32), new Rectangle(0,0,64,64),
+                Color.White);*/
+            for (int y = 0; y < 3; y++)
+            {
+                for (int x = 0; x < 3; x++)
+                {
+                    OrbRenderer.DrawOrb(300+y*100, 150+x*100, 2.5f, puzzleBox.arr[x, y, 0].color);
+                }                
+            }
             spriteBatch.End();
 
             base.Draw(gameTime);

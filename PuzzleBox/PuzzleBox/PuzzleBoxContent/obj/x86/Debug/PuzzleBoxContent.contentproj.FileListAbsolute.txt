@@ -1,1 +1,2 @@
 C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBoxContent\obj\x86\Debug\ResolveAssemblyReference.cache
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBoxContent\obj\x86\Debug\ResolveAssemblyReference.cache
