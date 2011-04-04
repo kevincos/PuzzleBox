@@ -1,5 +1,5 @@
-C:\Users\Kevin\AppData\Local\Temporary Projects\PuzzleBoxTest\bin\Debug\PuzzleBoxTest.exe
-C:\Users\Kevin\AppData\Local\Temporary Projects\PuzzleBoxTest\bin\Debug\PuzzleBoxTest.pdb
-C:\Users\Kevin\AppData\Local\Temporary Projects\PuzzleBoxTest\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\Kevin\AppData\Local\Temporary Projects\PuzzleBoxTest\obj\x86\Debug\PuzzleBoxTest.exe
-C:\Users\Kevin\AppData\Local\Temporary Projects\PuzzleBoxTest\obj\x86\Debug\PuzzleBoxTest.pdb
+E:\git_projects\puzzlebox\PuzzleBoxTest\PuzzleBoxTest\bin\Debug\PuzzleBoxTest.exe
+E:\git_projects\puzzlebox\PuzzleBoxTest\PuzzleBoxTest\bin\Debug\PuzzleBoxTest.pdb
+E:\git_projects\puzzlebox\PuzzleBoxTest\PuzzleBoxTest\obj\x86\Debug\ResolveAssemblyReference.cache
+E:\git_projects\puzzlebox\PuzzleBoxTest\PuzzleBoxTest\obj\x86\Debug\PuzzleBoxTest.exe
+E:\git_projects\puzzlebox\PuzzleBoxTest\PuzzleBoxTest\obj\x86\Debug\PuzzleBoxTest.pdb
