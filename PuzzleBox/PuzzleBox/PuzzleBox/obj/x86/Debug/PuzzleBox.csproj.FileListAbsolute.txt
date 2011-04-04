@@ -1,0 +1,7 @@
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\PuzzleBox.exe
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Debug\PuzzleBox.exe
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Debug\PuzzleBox.pdb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\PuzzleBox.pdb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\orb.xnb
