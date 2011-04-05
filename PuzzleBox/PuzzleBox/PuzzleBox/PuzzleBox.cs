@@ -7,14 +7,31 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PuzzleBox
 {
-    class PuzzleNode
+    class PuzzleNode : IComparable
     {
         public PuzzleNode(Color color)
         {
             this.color = color;
         }
 
+        public PuzzleNode(Color color, int screenX, int screenY, float distance)
+        {
+            this.color = color;
+            this.screenX = screenX;
+            this.screenY = screenY;
+            this.distance = distance;
+        }
+
+        public int CompareTo(object obj)
+        {
+            PuzzleNode p = obj as PuzzleNode;
+            return distance.CompareTo(p.distance);
+        }
+
         public Color color;
+        public int screenX;
+        public int screenY;
+        public float distance;
     }
 
     class PuzzleBox

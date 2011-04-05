@@ -20,7 +20,11 @@ namespace PuzzleBox
         SpriteBatch spriteBatch;
         Texture2D orbTexture;
         PuzzleBox puzzleBox;
-
+        float cameraDistance = 50f;
+        float theta = 0f;
+        float phi = 0f;
+        Vector3 cameraBasePos = new Vector3(50f, 0f, 0f);
+        Vector3 u = new Vector3(0f, 1f, 0f);
 
         public Game1()
         {
@@ -78,6 +82,16 @@ namespace PuzzleBox
                 this.Exit();
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
+            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                theta -= .05f;
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                theta += .05f;
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                phi -= .05f;
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                phi += .05f;
+                
+
 
             // TODO: Add your update logic here
 
@@ -96,16 +110,66 @@ namespace PuzzleBox
             spriteBatch.Begin();
             int mouseX = Mouse.GetState().X;
             int mouseY = Mouse.GetState().Y;
-            /*spriteBatch.Draw(orbTexture,
-                new Rectangle(mouseX - 16, mouseY - 16, 32, 32), new Rectangle(0,0,64,64),
-                Color.White);*/
+            int shiftX = 400 - mouseX;
+            int shiftY = 300 - mouseY;
+
+            
+            //theta = theta + 2 * (float)Math.PI * gameTime.ElapsedGameTime.Milliseconds / 4000;
+            //phi = (float)shiftY/300*(float)Math.PI/2;
+            cameraBasePos = new Vector3(cameraDistance * (float)Math.Cos(theta) * (float)Math.Sin(Math.PI/2-phi),
+                cameraDistance * (float)Math.Cos(Math.PI / 2 - phi),
+                cameraDistance * (float)Math.Sin(theta) * (float)Math.Sin(Math.PI / 2 - phi));
+            Vector3 v = (Vector3.Zero - cameraBasePos);
+            
+            u = Vector3.Cross(v, Vector3.Cross(new Vector3(0f, 1f, 0f), v));
+            v.Normalize();
+            u.Normalize();
+
+            List<PuzzleNode> zBuffer = new List<PuzzleNode>();
+
+            for (int x = 0; x < 3; x++)
+            {
+                for (int y = 0; y < 3; y++)
+                {
+                    for (int z = 0; z < 3; z++)
+                    {
+                        Vector3 p = new Vector3((x - 1) * 100f, (y - 1) * 100f, (z - 1) * 100f);
+                        zBuffer.Add(new PuzzleNode(puzzleBox.arr[x, y, z].color,
+                            400 + CameraUtils.GetScreenX(v, cameraBasePos, u, p),
+                            300 + CameraUtils.GetScreenY(v, cameraBasePos, u, p),
+                            CameraUtils.GetDistance(v, cameraBasePos, p)));
+
+                    }
+                }
+            }
+
+            zBuffer.Sort();
+            foreach (PuzzleNode p in zBuffer)
+            {
+                OrbRenderer.DrawOrb(p.screenX, p.screenY, 2.5f, p.color);
+            }
+
+            /*for (int y = 0; y < 3; y++)
+            {
+                for (int x = 0; x < 3; x++)
+                {
+                    OrbRenderer.DrawOrb(shiftX + 300 + x * 100, shiftY+150 + y * 100, 2.5f, puzzleBox.arr[x, y, 2].color);
+                }
+            }
             for (int y = 0; y < 3; y++)
             {
                 for (int x = 0; x < 3; x++)
                 {
-                    OrbRenderer.DrawOrb(300+y*100, 150+x*100, 2.5f, puzzleBox.arr[x, y, 0].color);
-                }                
+                    OrbRenderer.DrawOrb(shiftX/2 + 300 + x * 100, shiftY/2 + 150 + y * 100, 2.5f, puzzleBox.arr[x, y, 2].color);
+                }
             }
+            for (int y = 0; y < 3; y++)
+            {
+                for (int x = 0; x < 3; x++)
+                {
+                    OrbRenderer.DrawOrb(300+x*100, 150+y*100, 2.5f, puzzleBox.arr[x, y, 0].color);
+                }                
+            }*/
             spriteBatch.End();
 
             base.Draw(gameTime);
