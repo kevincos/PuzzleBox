@@ -88,9 +88,9 @@ namespace PuzzleBox
             NEGZ
         }        
 
-        public void Rotate(String[, ,] arr, ROTATION r)
+        public void Rotate(ROTATION r)
         {
-            String[, ,] newArr = new String[3, 3, 3];
+            PuzzleNode[, ,] newArr = new PuzzleNode[3, 3, 3];
             for (int x = 0; x < 3; x++)
             {
                 for (int y = 0; y < 3; y++)
@@ -120,11 +120,11 @@ namespace PuzzleBox
                             default:
                                 newArr[x, y, z] = arr[x, y, z];
                                 break;
-                        }
+                        }                        
                     }
-                }
-                arr = newArr;
-            }     
+                }                
+            }
+            arr = newArr;
         }
     }
 }
