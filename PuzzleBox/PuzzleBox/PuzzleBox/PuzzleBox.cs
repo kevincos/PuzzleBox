@@ -7,38 +7,25 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PuzzleBox
 {
-    class PuzzleNode : IComparable
-    {
-        public PuzzleNode(Color color)
-        {
-            this.color = color;
-        }
-
-        public PuzzleNode(Color color, int screenX, int screenY, float distance)
-        {
-            this.color = color;
-            this.screenX = screenX;
-            this.screenY = screenY;
-            this.distance = distance;
-        }
-
-        public int CompareTo(object obj)
-        {
-            PuzzleNode p = obj as PuzzleNode;
-            return distance.CompareTo(p.distance);
-        }
-
-        public Color color;
-        public int screenX;
-        public int screenY;
-        public float distance;
-    }
-
     class PuzzleBox
     {
         public PuzzleNode[, ,] arr = new PuzzleNode[3, 3, 3];
 
-        public PuzzleBox()
+        private void AllRed()
+        {
+            for (int x = 0; x < 3; x++)
+            {
+                for (int y = 0; y < 3; y++)
+                {
+                    for (int z = 0; z < 3; z++)
+                    {
+                        arr[x, y, z] = new PuzzleNode(Color.Red);
+                    }
+                }
+            }
+        }
+
+        private void RandomSetup()
         {
             Random r = new Random();
 
@@ -76,6 +63,12 @@ namespace PuzzleBox
                     }
                 }
             }
+        }
+
+        public PuzzleBox()
+        {
+            AllRed();
+            //RandomSetup();
         }
 
         public enum ROTATION

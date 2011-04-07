@@ -14,12 +14,21 @@ namespace PuzzleBox
     public enum State
     {
         READY,
+        DESTROY,
+        REGENERATE,
         ROTATEPOSX,
         ROTATENEGX,
         ROTATEPOSY,
         ROTATENEGY,
         ROTATEPOSZ,
         ROTATENEGZ,
+    }
+
+    public enum AnimationState
+    {
+        NORMAL,
+        EXPLODING,
+        APPEARING
     }
 
     /// <summary>
@@ -31,6 +40,7 @@ namespace PuzzleBox
         SpriteBatch spriteBatch;
         Texture2D orbTexture;
         PuzzleBox puzzleBox;
+        MasterGrid masterGrid;
         State gameState = State.READY;
         float cameraDistance = 50f;
         float theta = 0f;
@@ -39,6 +49,8 @@ namespace PuzzleBox
         float rotateSpeed = .05f;
         Vector3 cameraBasePos = new Vector3(50f, 0f, 0f);
         bool firstHalf = true;
+        int animateTime = 0;
+        int maxAnimateTime = 250;
         
         public Game1()
         {
@@ -60,6 +72,7 @@ namespace PuzzleBox
 
             OrbRenderer.Init(spriteBatch, orbTexture);
             puzzleBox = new PuzzleBox();
+            masterGrid = new MasterGrid();
         }
 
         /// <summary>
@@ -91,6 +104,12 @@ namespace PuzzleBox
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            if (gameState == State.DESTROY || gameState == State.REGENERATE)
+            {
+                animateTime += gameTime.ElapsedGameTime.Milliseconds;
+                if (animateTime > maxAnimateTime)
+                    animateTime = maxAnimateTime;
+            }
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
@@ -145,7 +164,8 @@ namespace PuzzleBox
                     {
                         theta = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.POSY);
-                        gameState = State.READY;
+                        gameState = State.DESTROY;
+                        animateTime = 0;
                     }
                     break;
                 case State.ROTATEPOSY:
@@ -154,7 +174,8 @@ namespace PuzzleBox
                     {
                         theta = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.NEGY);
-                        gameState = State.READY;
+                        gameState = State.DESTROY;
+                        animateTime = 0;
                     }
                     break;
                 case State.ROTATENEGX:
@@ -168,8 +189,9 @@ namespace PuzzleBox
                     if (!firstHalf && phi > 0)
                     {
                         phi = 0;
-                        firstHalf = true;      
-                        gameState = State.READY;
+                        firstHalf = true;
+                        gameState = State.DESTROY;
+                        animateTime = 0;
                     }
                     break;
                 case State.ROTATEPOSX:
@@ -184,7 +206,8 @@ namespace PuzzleBox
                     {
                         phi = 0;
                         firstHalf = true;
-                        gameState = State.READY;
+                        gameState = State.DESTROY;
+                        animateTime = 0;
                     }
                     break;
                 case State.ROTATENEGZ:
@@ -192,7 +215,8 @@ namespace PuzzleBox
                     if(psi < -Math.PI/2)
                     {
                         psi = (float)-Math.PI / 2;
-                        gameState = State.READY;
+                        gameState = State.DESTROY;
+                        animateTime = 0;
                         psi = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.POSX);
                     }
@@ -202,7 +226,8 @@ namespace PuzzleBox
                     if(psi > Math.PI/2)
                     {
                         psi = (float)Math.PI / 2;
-                        gameState = State.READY;
+                        gameState = State.DESTROY;
+                        animateTime = 0;
                         psi = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.NEGX);
                     }                    
@@ -230,18 +255,6 @@ namespace PuzzleBox
             u.Normalize();
             left = Vector3.Cross(u, v);
             left.Normalize();
-            /*cameraBasePos = cameraBasePos +
-                (u * shift.Y / 300 * 20f)*(float)Math.Cos(2*phi) +
-                (left * shift.X / 400 * 20f) * (float)Math.Cos(2*phi);
-
-            v = (Vector3.Zero - cameraBasePos);
-            u_0 = Vector3.Cross(v, Vector3.Cross(new Vector3(0f, 1f, 0f), v));
-            u_0.Normalize();
-            v.Normalize();
-            left = Vector3.Cross(u_0, v);
-            left.Normalize();
-            u = (float)Math.Sin(psi) * left + (float)Math.Cos(psi) * u_0;*/
-
             List<PuzzleNode> zBuffer = new List<PuzzleNode>();
 
             for (int x = 0; x < 3; x++)
@@ -252,11 +265,10 @@ namespace PuzzleBox
                     {
                         Vector3 p = new Vector3((x - 1) * 100f, (y - 1) * 100f, (z - 1) * 100f);
                         int dist = (int)CameraUtils.GetDistance(v, cameraBasePos, p);
-                        zBuffer.Add(new PuzzleNode(puzzleBox.arr[x, y, z].color,
-                            400 + CameraUtils.GetScreenX(v, cameraBasePos, u, p) + (int)(shift.X/800f*dist),
-                            300 + CameraUtils.GetScreenY(v, cameraBasePos, u, p) + (int)(shift.Y/800f*dist),
-                            CameraUtils.GetDistance(v, cameraBasePos, p)));
-
+                        puzzleBox.arr[x, y, z].screenX = 400 + CameraUtils.GetScreenX(v, cameraBasePos, u, p) + (int)(shift.X / 800f * dist);
+                        puzzleBox.arr[x, y, z].screenY = 300 + CameraUtils.GetScreenY(v, cameraBasePos, u, p) + (int)(shift.Y / 800f * dist);
+                        puzzleBox.arr[x,y,z].distance = CameraUtils.GetDistance(v, cameraBasePos, p);                        
+                        zBuffer.Add(puzzleBox.arr[x,y,z]);
                     }
                 }
             }
@@ -264,82 +276,104 @@ namespace PuzzleBox
             zBuffer.Sort();
             foreach (PuzzleNode p in zBuffer)
             {
-                OrbRenderer.DrawOrb(p.screenX, p.screenY, 2.5f, p.color);
+                if (p.hightlight)
+                {
+                    if(gameState == State.DESTROY)
+                        OrbRenderer.DrawOrb(p.screenX, p.screenY, 2.5f, p.color, AnimationState.EXPLODING, 1.0f * animateTime / maxAnimateTime);
+                    if(gameState == State.REGENERATE)
+                        OrbRenderer.DrawOrb(p.screenX, p.screenY, 2.5f, p.color, AnimationState.EXPLODING, 1f-1.0f * animateTime / maxAnimateTime);
+                }
+                else
+                    OrbRenderer.DrawOrb(p.screenX, p.screenY, 2.5f, p.color);
             }
             float dist2 = 150f;
-            OrbRenderer.DrawOrb(200 + (int)(shift.X / 800f * dist2),
-                300 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Red);
-            OrbRenderer.DrawOrb(100 + (int)(shift.X / 800f * dist2),
-                300 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Orange);
-            OrbRenderer.DrawOrb(600 + (int)(shift.X / 800f * dist2),
-                300 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Red);
-            OrbRenderer.DrawOrb(700 + (int)(shift.X / 800f * dist2),
-                300 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Orange);
-            OrbRenderer.DrawOrb(200 + (int)(shift.X / 800f * dist2),
-                200 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Red);
-            OrbRenderer.DrawOrb(100 + (int)(shift.X / 800f * dist2),
-                200 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Orange);
-            OrbRenderer.DrawOrb(600 + (int)(shift.X / 800f * dist2),
-                200 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Blue);
-            OrbRenderer.DrawOrb(700 + (int)(shift.X / 800f * dist2),
-                200 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Yellow);
-            OrbRenderer.DrawOrb(200 + (int)(shift.X / 800f * dist2),
-                400 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Red);
-            OrbRenderer.DrawOrb(100 + (int)(shift.X / 800f * dist2),
-                400 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Pink);
-            OrbRenderer.DrawOrb(600 + (int)(shift.X / 800f * dist2),
-                400 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Red);
-            OrbRenderer.DrawOrb(700 + (int)(shift.X / 800f * dist2),
-                400 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Green);
-            OrbRenderer.DrawOrb(300 + (int)(shift.X / 800f * dist2),
-                100 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Orange);
-            OrbRenderer.DrawOrb(400 + (int)(shift.X / 800f * dist2),
-                100 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Yellow);
-            OrbRenderer.DrawOrb(500 + (int)(shift.X / 800f * dist2),
-                100 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Green);
-            OrbRenderer.DrawOrb(300 + (int)(shift.X / 800f * dist2),
-                0 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Magenta);
-            OrbRenderer.DrawOrb(400 + (int)(shift.X / 800f * dist2),
-                0 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Blue);
-            OrbRenderer.DrawOrb(500 + (int)(shift.X / 800f * dist2),
-                0 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Green);
-            OrbRenderer.DrawOrb(300 + (int)(shift.X / 800f * dist2),
-                500 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Yellow);
-            OrbRenderer.DrawOrb(400 + (int)(shift.X / 800f * dist2),
-                500 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Green);
-            OrbRenderer.DrawOrb(500 + (int)(shift.X / 800f * dist2),
-                500 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Red);
-            OrbRenderer.DrawOrb(300 + (int)(shift.X / 800f * dist2),
-                600 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Green);
-            OrbRenderer.DrawOrb(400 + (int)(shift.X / 800f * dist2),
-                600 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Green);
-            OrbRenderer.DrawOrb(500 + (int)(shift.X / 800f * dist2),
-                600 + (int)(shift.Y / 800f * dist2),
-                2.5f, Color.Magenta);
+            for (int x = 0; x < 7; x++)
+            {
+                for (int y = 0; y < 7; y++)
+                {
+                    if ((x < 2 && y < 2) ||
+                        (x < 2 && y > 4) ||
+                        (x > 4 && y < 2) ||
+                        (x > 4 && y > 4))
+                        continue;
+                    if (x > 1 && x < 5 && y > 1 && y < 5)
+                        continue;
+                    
+                    {
+                        if (masterGrid.arr[x, y].hightlight)
+                        {
+                            if(gameState == State.DESTROY)
+                                OrbRenderer.DrawOrb(100 + x * 100 + (int)(shift.X / 800f * dist2),
+                                    y * 100 + (int)(shift.Y / 800f * dist2),
+                                    2.5f, masterGrid.arr[x,y].color,
+                                    AnimationState.EXPLODING,1f*animateTime/maxAnimateTime);
+                            if(gameState == State.REGENERATE)
+                                OrbRenderer.DrawOrb(100 + x * 100 + (int)(shift.X / 800f * dist2),
+                                    y * 100 + (int)(shift.Y / 800f * dist2),
+                                    2.5f, masterGrid.arr[x, y].color,
+                                    AnimationState.EXPLODING, 1f-1f * animateTime / maxAnimateTime);
+                        }
+                        else
+                        {
+                            OrbRenderer.DrawOrb(100 + x * 100 + (int)(shift.X / 800f * dist2),
+                                y * 100 + (int)(shift.Y / 800f * dist2),
+                                2.5f, masterGrid.arr[x, y].color);
+                        }
+                        
 
+                    }
+                }
+            }
+
+            if (gameState == State.DESTROY && animateTime == 0)
+            {
+                if (false == Matcher.Solve(puzzleBox, masterGrid))
+                {
+                    if (!Matcher.HasValidMove(puzzleBox, masterGrid))
+                    {
+                        Matcher.Reset(puzzleBox, masterGrid);
+                        gameState = State.REGENERATE;
+                        animateTime = 0;
+                    }
+                    else
+                    {
+                        gameState = State.READY;
+                        animateTime = 0;
+                    }
+                }
+            }
+            if(gameState == State.DESTROY && animateTime == maxAnimateTime)
+            {
+                // Regenerate orbs
+                Matcher.Replace(puzzleBox, masterGrid);
+
+                gameState = State.REGENERATE;
+                animateTime = 0;
+            }
+            if (gameState == State.REGENERATE && animateTime == maxAnimateTime)
+            {
+                // Clear orbs
+                Matcher.Clear(puzzleBox, masterGrid);
+                if (false == Matcher.Solve(puzzleBox, masterGrid))
+                {
+                    if (!Matcher.HasValidMove(puzzleBox, masterGrid))
+                    {
+                        Matcher.Reset(puzzleBox, masterGrid);
+                        gameState = State.REGENERATE;
+                        animateTime = 0;
+                    }
+                    else
+                    {
+                        gameState = State.READY;
+                    }
+                }
+                else
+                {
+                    gameState = State.DESTROY;
+                }
+                animateTime = 0;
+            }
+            
             spriteBatch.End();
 
             base.Draw(gameTime);
