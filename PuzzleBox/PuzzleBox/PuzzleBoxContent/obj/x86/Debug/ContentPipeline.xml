@@ -10,6 +10,15 @@
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\orb.xnb</Output>
       <Time>2011-04-04T14:31:40.1009997-07:00</Time>
     </Item>
+    <Item>
+      <Source>double.png</Source>
+      <Name>double</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\double.xnb</Output>
+      <Time>2011-04-06T18:39:55.4309947-07:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>

@@ -35,31 +35,7 @@ namespace PuzzleBox
                 {
                     for (int z = 0; z < 3; z++)
                     {
-                        int v = r.Next(0, 6);
-                        switch (v)
-                        {
-                            case 0:
-                                arr[x, y, z] = new PuzzleNode(Color.Red);
-                                break;
-                            case 1:
-                                arr[x, y, z] = new PuzzleNode(Color.Green);
-                                break;
-                            case 2:
-                                arr[x, y, z] = new PuzzleNode(Color.Orange);
-                                break;
-                            case 3:
-                                arr[x, y, z] = new PuzzleNode(Color.Magenta);
-                                break;
-                            case 4:
-                                arr[x, y, z] = new PuzzleNode(Color.Blue);
-                                break;
-                            case 5:
-                                arr[x, y, z] = new PuzzleNode(Color.Yellow);
-                                break;
-                            default:
-                                break;
-
-                        }
+                        arr[x, y, z] = new PuzzleNode();
                     }
                 }
             }

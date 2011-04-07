@@ -14,6 +14,7 @@ namespace PuzzleBox
     public enum State
     {
         READY,
+        VERIFY,
         DESTROY,
         REGENERATE,
         ROTATEPOSX,
@@ -36,12 +37,21 @@ namespace PuzzleBox
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        #region Member Variables
+        // Graphics
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Texture2D orbTexture;
+        Texture2D doubleTexture;
+
+        // Game state
         PuzzleBox puzzleBox;
         MasterGrid masterGrid;
         State gameState = State.READY;
+        int animateTime = 0;
+        int maxAnimateTime = 250;
+
+        // Camera
         float cameraDistance = 50f;
         float theta = 0f;
         float phi = 0f;
@@ -49,68 +59,100 @@ namespace PuzzleBox
         float rotateSpeed = .05f;
         Vector3 cameraBasePos = new Vector3(50f, 0f, 0f);
         bool firstHalf = true;
-        int animateTime = 0;
-        int maxAnimateTime = 250;
+        Vector3 v;
+        Vector3 u_0;
+        Vector3 left;
+        Vector3 u;
         
+        // Screen display
+        int spacing = 60;
+        int screenSizeX = 800;
+        int screenSizeY = 400;
+        float scale = 1.5f;
+        float baseDistance;
+        float tiltScale = 1f;
+        int screenCenterX;
+        int screenCenterY;
+        List<PuzzleNode> zBuffer;
+        #endregion
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            
             base.Initialize();
-
-            OrbRenderer.Init(spriteBatch, orbTexture);
+            screenSizeX = GraphicsDevice.Viewport.Width;
+            screenSizeY = GraphicsDevice.Viewport.Height;
+            screenCenterX = screenSizeX / 2;
+            screenCenterY = screenSizeY / 2;
+            OrbRenderer.Init(spriteBatch, orbTexture, doubleTexture);
             puzzleBox = new PuzzleBox();
             masterGrid = new MasterGrid();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
             orbTexture = Content.Load<Texture2D>("orb");
+            doubleTexture = Content.Load<Texture2D>("double");
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // Game state flow
             if (gameState == State.DESTROY || gameState == State.REGENERATE)
             {
                 animateTime += gameTime.ElapsedGameTime.Milliseconds;
                 if (animateTime > maxAnimateTime)
                     animateTime = maxAnimateTime;
             }
-            // Allows the game to exit
+            if (gameState == State.VERIFY)
+            {
+                if (false == Matcher.Solve(puzzleBox, masterGrid))
+                {
+                    if (!Matcher.HasValidMove(puzzleBox, masterGrid))
+                    {
+                        Matcher.Reset(puzzleBox, masterGrid);
+                        gameState = State.REGENERATE;
+                        animateTime = 0;
+                    }
+                    else
+                    {
+                        gameState = State.READY;
+                        animateTime = 0;
+                    }
+                }
+                else
+                {
+                    gameState = State.DESTROY;
+                    animateTime = 0;
+                }
+            }
+            if (gameState == State.DESTROY && animateTime == maxAnimateTime)
+            {
+                // Regenerate orbs
+                Matcher.Replace(puzzleBox, masterGrid);
+
+                gameState = State.REGENERATE;
+                animateTime = 0;
+            }
+            if (gameState == State.REGENERATE && animateTime == maxAnimateTime)
+            {
+                // Clear orbs
+                Matcher.Clear(puzzleBox, masterGrid);
+                gameState = State.VERIFY;
+            }
+
+            // Controls
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -129,33 +171,25 @@ namespace PuzzleBox
                     gameState = State.ROTATEPOSZ;
                 if (Keyboard.GetState().IsKeyDown(Keys.A))
                     gameState = State.ROTATENEGZ;
-            }
-            // TODO: Add your update logic here
+            }            
 
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkBlue);
-
-            // TODO: Add your drawing code here
+            GraphicsDevice.Clear(Color.DarkBlue);            
             spriteBatch.Begin();
-            int mouseX = Mouse.GetState().X;
-            int mouseY = Mouse.GetState().Y;
-            Vector2 shift = new Vector2(400-mouseX, 300-mouseY);
-            if (shift.Length() > 200f)
+
+            // Calculate tilt data
+            Vector2 shift = new Vector2(screenCenterX - Mouse.GetState().X, screenCenterY - Mouse.GetState().Y);
+            if (shift.Length() > (1.0f * screenSizeX) / 4f * tiltScale)
             {
                 shift.Normalize();
-                shift = shift * 200f;
+                shift = shift * (1.0f * screenSizeX) / 4f * tiltScale;
             }
 
-            Vector3 offSet = new Vector3(shift.X, shift.Y, 0);
-
+            #region RotationControls
             switch (gameState)
             {
                 case State.ROTATENEGY:
@@ -164,8 +198,8 @@ namespace PuzzleBox
                     {
                         theta = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.POSY);
-                        gameState = State.DESTROY;
                         animateTime = 0;
+                        gameState = State.VERIFY;                        
                     }
                     break;
                 case State.ROTATEPOSY:
@@ -174,8 +208,8 @@ namespace PuzzleBox
                     {
                         theta = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.NEGY);
-                        gameState = State.DESTROY;
                         animateTime = 0;
+                        gameState = State.VERIFY;                        
                     }
                     break;
                 case State.ROTATENEGX:
@@ -190,8 +224,8 @@ namespace PuzzleBox
                     {
                         phi = 0;
                         firstHalf = true;
-                        gameState = State.DESTROY;
                         animateTime = 0;
+                        gameState = State.VERIFY;                        
                     }
                     break;
                 case State.ROTATEPOSX:
@@ -205,9 +239,9 @@ namespace PuzzleBox
                     if (!firstHalf && phi < 0)
                     {
                         phi = 0;
-                        firstHalf = true;
-                        gameState = State.DESTROY;
+                        firstHalf = true;                        
                         animateTime = 0;
+                        gameState = State.VERIFY;                        
                     }
                     break;
                 case State.ROTATENEGZ:
@@ -215,10 +249,10 @@ namespace PuzzleBox
                     if(psi < -Math.PI/2)
                     {
                         psi = (float)-Math.PI / 2;
-                        gameState = State.DESTROY;
                         animateTime = 0;
                         psi = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.POSX);
+                        gameState = State.VERIFY;                        
                     }
                     break;
                 case State.ROTATEPOSZ:
@@ -226,21 +260,18 @@ namespace PuzzleBox
                     if(psi > Math.PI/2)
                     {
                         psi = (float)Math.PI / 2;
-                        gameState = State.DESTROY;
                         animateTime = 0;
                         psi = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.NEGX);
+                        gameState = State.VERIFY;                        
                     }                    
                     break;
                 default:
                     break;
             }
+            #endregion
 
-            Vector3 v;
-            Vector3 u_0;
-            Vector3 left;
-            Vector3 u;
-                       
+            #region CameraProcessing
             cameraBasePos = new Vector3(cameraDistance * (float)Math.Cos(theta) * (float)Math.Sin(Math.PI/2-phi),
                 cameraDistance * (float)Math.Cos(Math.PI / 2 - phi),
                 cameraDistance * (float)Math.Sin(theta) * (float)Math.Sin(Math.PI / 2 - phi));
@@ -255,42 +286,43 @@ namespace PuzzleBox
             u.Normalize();
             left = Vector3.Cross(u, v);
             left.Normalize();
-            List<PuzzleNode> zBuffer = new List<PuzzleNode>();
+            if (gameState == State.READY)
+                baseDistance = CameraUtils.GetDistance(v, cameraBasePos, new Vector3(-spacing, 0, 0));
+            
+            #endregion
 
+            #region AddOrbsToZBuffer
+            zBuffer = new List<PuzzleNode>();
             for (int x = 0; x < 3; x++)
             {
                 for (int y = 0; y < 3; y++)
                 {
                     for (int z = 0; z < 3; z++)
                     {
-                        Vector3 p = new Vector3((x - 1) * 100f, (y - 1) * 100f, (z - 1) * 100f);
+                        Vector3 p = new Vector3((x - 1) * spacing, (y - 1) * spacing, (z - 1) * spacing);
                         int dist = (int)CameraUtils.GetDistance(v, cameraBasePos, p);
-                        puzzleBox.arr[x, y, z].screenX = 400 + CameraUtils.GetScreenX(v, cameraBasePos, u, p) + (int)(shift.X / 800f * dist);
-                        puzzleBox.arr[x, y, z].screenY = 300 + CameraUtils.GetScreenY(v, cameraBasePos, u, p) + (int)(shift.Y / 800f * dist);
-                        puzzleBox.arr[x,y,z].distance = CameraUtils.GetDistance(v, cameraBasePos, p);                        
+                        puzzleBox.arr[x,y,z].screenX = screenCenterX + CameraUtils.GetScreenX(v, cameraBasePos, u, p) + (int)(shift.X / screenSizeX * dist);
+                        puzzleBox.arr[x,y,z].screenY = screenCenterY + CameraUtils.GetScreenY(v, cameraBasePos, u, p) + (int)(shift.Y / screenSizeX * dist);
+                        puzzleBox.arr[x,y,z].distance = CameraUtils.GetDistance(v, cameraBasePos, p);
+                        puzzleBox.arr[x, y, z].scale = scale;
                         zBuffer.Add(puzzleBox.arr[x,y,z]);
                     }
                 }
             }
-
             zBuffer.Sort();
+            #endregion
+
+            #region OrbRendering
             foreach (PuzzleNode p in zBuffer)
             {
-                if (p.hightlight)
-                {
-                    if(gameState == State.DESTROY)
-                        OrbRenderer.DrawOrb(p.screenX, p.screenY, 2.5f, p.color, AnimationState.EXPLODING, 1.0f * animateTime / maxAnimateTime);
-                    if(gameState == State.REGENERATE)
-                        OrbRenderer.DrawOrb(p.screenX, p.screenY, 2.5f, p.color, AnimationState.EXPLODING, 1f-1.0f * animateTime / maxAnimateTime);
-                }
-                else
-                    OrbRenderer.DrawOrb(p.screenX, p.screenY, 2.5f, p.color);
+                OrbRenderer.DrawOrb(p, gameState, 1f * animateTime / maxAnimateTime);
             }
-            float dist2 = 150f;
+
             for (int x = 0; x < 7; x++)
             {
                 for (int y = 0; y < 7; y++)
                 {
+                    // Avoid rendering orbs in corners and center.
                     if ((x < 2 && y < 2) ||
                         (x < 2 && y > 4) ||
                         (x > 4 && y < 2) ||
@@ -300,79 +332,16 @@ namespace PuzzleBox
                         continue;
                     
                     {
-                        if (masterGrid.arr[x, y].hightlight)
-                        {
-                            if(gameState == State.DESTROY)
-                                OrbRenderer.DrawOrb(100 + x * 100 + (int)(shift.X / 800f * dist2),
-                                    y * 100 + (int)(shift.Y / 800f * dist2),
-                                    2.5f, masterGrid.arr[x,y].color,
-                                    AnimationState.EXPLODING,1f*animateTime/maxAnimateTime);
-                            if(gameState == State.REGENERATE)
-                                OrbRenderer.DrawOrb(100 + x * 100 + (int)(shift.X / 800f * dist2),
-                                    y * 100 + (int)(shift.Y / 800f * dist2),
-                                    2.5f, masterGrid.arr[x, y].color,
-                                    AnimationState.EXPLODING, 1f-1f * animateTime / maxAnimateTime);
-                        }
-                        else
-                        {
-                            OrbRenderer.DrawOrb(100 + x * 100 + (int)(shift.X / 800f * dist2),
-                                y * 100 + (int)(shift.Y / 800f * dist2),
-                                2.5f, masterGrid.arr[x, y].color);
-                        }
-                        
+                        masterGrid.arr[x, y].screenX = screenCenterX + (x - 3) * spacing + (int)(shift.X / screenSizeX * baseDistance);
+                        masterGrid.arr[x, y].screenY = screenCenterY + (y - 3) * spacing + (int)(shift.Y / screenSizeX * baseDistance);
+                        masterGrid.arr[x, y].distance = baseDistance;
+                        masterGrid.arr[x, y].scale = scale;
 
+                        OrbRenderer.DrawOrb(masterGrid.arr[x, y], gameState, 1f * animateTime / maxAnimateTime);
                     }
                 }
             }
-
-            if (gameState == State.DESTROY && animateTime == 0)
-            {
-                if (false == Matcher.Solve(puzzleBox, masterGrid))
-                {
-                    if (!Matcher.HasValidMove(puzzleBox, masterGrid))
-                    {
-                        Matcher.Reset(puzzleBox, masterGrid);
-                        gameState = State.REGENERATE;
-                        animateTime = 0;
-                    }
-                    else
-                    {
-                        gameState = State.READY;
-                        animateTime = 0;
-                    }
-                }
-            }
-            if(gameState == State.DESTROY && animateTime == maxAnimateTime)
-            {
-                // Regenerate orbs
-                Matcher.Replace(puzzleBox, masterGrid);
-
-                gameState = State.REGENERATE;
-                animateTime = 0;
-            }
-            if (gameState == State.REGENERATE && animateTime == maxAnimateTime)
-            {
-                // Clear orbs
-                Matcher.Clear(puzzleBox, masterGrid);
-                if (false == Matcher.Solve(puzzleBox, masterGrid))
-                {
-                    if (!Matcher.HasValidMove(puzzleBox, masterGrid))
-                    {
-                        Matcher.Reset(puzzleBox, masterGrid);
-                        gameState = State.REGENERATE;
-                        animateTime = 0;
-                    }
-                    else
-                    {
-                        gameState = State.READY;
-                    }
-                }
-                else
-                {
-                    gameState = State.DESTROY;
-                }
-                animateTime = 0;
-            }
+            #endregion
             
             spriteBatch.End();
 

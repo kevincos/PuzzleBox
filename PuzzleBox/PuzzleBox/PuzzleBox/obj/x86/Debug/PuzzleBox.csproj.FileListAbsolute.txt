@@ -12,3 +12,4 @@ E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Debug\ResolveAss
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Debug\PuzzleBox.exe
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Debug\PuzzleBox.pdb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\double.xnb

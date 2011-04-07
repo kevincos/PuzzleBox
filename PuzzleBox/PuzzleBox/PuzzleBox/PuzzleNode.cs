@@ -16,6 +16,11 @@ namespace PuzzleBox
             PuzzleNode.r = new Random();
         }
 
+        public static bool Match(PuzzleNode p1, PuzzleNode p2)
+        {
+            return p1.color == p2.color;
+        }
+
         public PuzzleNode()
         {            
             int v = r.Next(0, 6);
@@ -44,6 +49,9 @@ namespace PuzzleBox
                     break;
 
             }
+            v = r.Next(0, 10);
+            if (v == 5)
+                this.bonus = 2;
         }
 
         public PuzzleNode(Color color)
@@ -68,7 +76,9 @@ namespace PuzzleBox
         public Color color;
         public int screenX;
         public int screenY;
+        public int bonus = 1;
         public float distance;
+        public float scale;
         public bool hightlight = false;
     }
 }

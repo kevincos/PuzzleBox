@@ -17,6 +17,8 @@ namespace PuzzleBox
                 return false;
             return (end - start > 1);                
         }
+
+        //Identifies all scoring matches and marks them.
         public static bool Solve(PuzzleBox box, MasterGrid grid)
         {
             bool anythingChanged = false;
@@ -35,18 +37,18 @@ namespace PuzzleBox
             {
                 int start_index = 2;
                 int end_index = 2;
-                Color currentColor = Color.Black;
+                PuzzleNode lastNode = new PuzzleNode(Color.Black);
                 for (int y = 0; y < 7; y++)
                 {
                     if (grid.arr[x, y] == null)
                         continue;
-                    if (grid.arr[x, y].color == currentColor)
+                    if (PuzzleNode.Match(grid.arr[x, y], lastNode))
                     {
                         end_index++;
                     }
                     else
                     {
-                        currentColor = grid.arr[x, y].color;
+                        lastNode = grid.arr[x, y];
                         if (StartEndHelper(start_index, end_index))
                         {
                             anythingChanged = true;
@@ -70,18 +72,18 @@ namespace PuzzleBox
             {
                 int start_index = 2;
                 int end_index = 2;
-                Color currentColor = Color.Black;
+                PuzzleNode lastNode = new PuzzleNode(Color.Black);
                 for (int x = 0; x < 7; x++)
                 {
                     if (grid.arr[x, y] == null)
                         continue;
-                    if (grid.arr[x, y].color == currentColor)
+                    if (PuzzleNode.Match(grid.arr[x, y],lastNode))
                     {
                         end_index++;
                     }
                     else
                     {
-                        currentColor = grid.arr[x, y].color;
+                        lastNode = grid.arr[x, y];
                         if (StartEndHelper(start_index, end_index))
                         {
                             anythingChanged = true;
@@ -120,6 +122,7 @@ namespace PuzzleBox
             return anythingChanged;
         }
 
+        // Checks if any valid move exists.
         public static bool HasValidMove(PuzzleBox box, MasterGrid grid)
         {            
             HashSet<Color> sideColorsBox = new HashSet<Color>();
@@ -165,6 +168,7 @@ namespace PuzzleBox
             return (sideColorsGrid.Count > 0 || cornerColorsGrid.Count > 0);
         }
 
+        // Clears state. Called when returning to ready state.
         public static void Clear(PuzzleBox box, MasterGrid grid)
         {
             for (int x = 0; x < 3; x++)
@@ -186,6 +190,7 @@ namespace PuzzleBox
             }
         }
 
+        // Completely randomizes the entire box and grid.
         public static void Reset(PuzzleBox box, MasterGrid grid)
         {
             for (int x = 0; x < 3; x++)
@@ -209,6 +214,7 @@ namespace PuzzleBox
             }
         }
 
+        // Replaces all marked orbs with new random orbs.
         public static bool Replace(PuzzleBox box, MasterGrid grid)
         {
             bool anythingChanged = false;
