@@ -9,7 +9,51 @@ namespace PuzzleBox
 {
     class PuzzleBox
     {
-        public PuzzleNode[, ,] arr = new PuzzleNode[3, 3, 3];
+        private PuzzleNode[, ,] arr = new PuzzleNode[3, 3, 3];
+
+        public PuzzleBox()
+        {
+            AllRed();
+            //Cross();
+            Edges();
+            //RandomSetup();
+        }
+
+        public PuzzleNode this[int x, int y, int z]
+        {
+            get
+            {
+                return arr[x, y, z];
+            }
+            set
+            {
+                arr[x, y, z] = value;
+            }
+        }
+
+        private void Cross()
+        {
+            for (int z = 0; z < 3; z++)
+            {
+                arr[0, 1, z] = new PuzzleNode(Color.Yellow);
+            }
+            for (int z = 0; z < 3; z++)
+            {
+                arr[2, 1, z] = new PuzzleNode(Color.Orange);
+            }
+            arr[0, 0, 0] = new PuzzleNode(Color.Green);
+            arr[0, 2, 2] = new PuzzleNode(Color.Pink);
+            arr[0, 2, 1] = new PuzzleNode(Color.Pink);
+        }
+
+        private void Edges()
+        {
+            arr[0, 2, 1] = new PuzzleNode(Color.Yellow);
+            arr[0, 1, 2] = new PuzzleNode(Color.Yellow);
+            arr[0, 1, 0] = new PuzzleNode(Color.Yellow);
+            arr[0, 0, 1] = new PuzzleNode(Color.Yellow);
+            arr[0, 1, 1] = new PuzzleNode(Color.Yellow);            
+        }
 
         private void AllRed()
         {
@@ -39,12 +83,6 @@ namespace PuzzleBox
                     }
                 }
             }
-        }
-
-        public PuzzleBox()
-        {
-            AllRed();
-            //RandomSetup();
         }
 
         public enum ROTATION

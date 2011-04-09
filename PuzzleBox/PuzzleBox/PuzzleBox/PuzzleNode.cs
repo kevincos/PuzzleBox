@@ -18,6 +18,7 @@ namespace PuzzleBox
 
         public static bool Match(PuzzleNode p1, PuzzleNode p2)
         {
+            if (p1.color == Color.White || p1.color == Color.Gray || p1.color == Color.Brown || p1.color == Color.Tan || p1.color == Color.Black) return false;
             return p1.color == p2.color;
         }
 
@@ -73,12 +74,30 @@ namespace PuzzleBox
             return distance.CompareTo(p.distance);
         }
 
+        public void ClearMarking()
+        {
+            marked = false;
+            replace_top = false;
+            replace_left = false;
+            replace_right = false;
+            replace_bottom = false;
+            replace_distance = 0;
+            scoring = false;
+        }
+
         public Color color;
         public int screenX;
         public int screenY;
         public int bonus = 1;
         public float distance;
         public float scale;
-        public bool hightlight = false;
+        public bool marked = false;
+        public bool scoring = false;
+        public bool replace_left = false;
+        public bool replace_right = false;
+        public bool replace_top = false;
+        public bool replace_bottom = false;
+        public int replace_distance = 0;
+        public PuzzleNode replace_orb;        
     }
 }

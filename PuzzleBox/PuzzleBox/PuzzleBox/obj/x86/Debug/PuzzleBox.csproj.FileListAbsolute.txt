@@ -13,3 +13,10 @@ E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Debug\Microsoft.
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Debug\PuzzleBox.exe
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Debug\PuzzleBox.pdb
 C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\double.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\double.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\orb-cracked-left.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\orb-cracked-right.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\orb-cracked-top.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\orb-fragment-left.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\orb-fragment-right.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\orb-fragment-top.xnb

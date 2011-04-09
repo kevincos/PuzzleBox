@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CameraUtils.cs" />
+    <Compile Include="Fragment.cs" />
     <Compile Include="MasterGrid.cs" />
     <Compile Include="Matcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
