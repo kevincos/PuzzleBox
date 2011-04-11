@@ -471,6 +471,14 @@ namespace PuzzleBox
             {
                 for (int y = 0; y < 7; y++)
                 {
+                    if (x == 0 || x == 6 || y == 0 || y == 6)
+                    {
+                        for (int i = 0; i < grid[x, y].replace_distance; i++)
+                        {
+                            grid.queues[x, y].RemoveAt(0);
+                            grid.queues[x, y].Add(new PuzzleNode());
+                        }
+                    } 
                     grid[x, y].ClearMarking();
                 }
             }
@@ -530,14 +538,6 @@ namespace PuzzleBox
                 {
                     if(grid[x,y].marked==true)
                     {
-                        if (x == 0 || x == 6 || y == 0 || y == 6)
-                        {
-                            for (int i = 0; i < grid[x, y].replace_distance; i++)
-                            {
-                                grid.queues[x, y].RemoveAt(0);
-                                grid.queues[x, y].Add(new PuzzleNode());
-                            }
-                        } 
                         grid[x, y] = grid[x, y].replace_orb;
                         grid[x, y].marked = true;
                     }

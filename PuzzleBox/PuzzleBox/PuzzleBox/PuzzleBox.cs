@@ -13,10 +13,10 @@ namespace PuzzleBox
 
         public PuzzleBox()
         {
-            AllRed();
+            //AllRed();
             //Cross();
-            Edges();
-            //RandomSetup();
+            //Edges();
+            RandomSetup();
         }
 
         public PuzzleNode this[int x, int y, int z]

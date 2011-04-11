@@ -135,9 +135,8 @@ namespace PuzzleBox
                 {
                     if (!Matcher.HasValidMove(puzzleBox, masterGrid))
                     {
-                        //Matcher.Reset(puzzleBox, masterGrid);
-                        //gameState = State.REGENERATE;
-                        gameState = State.VERIFY;
+                        Matcher.Reset(puzzleBox, masterGrid);
+                        gameState = State.REGENERATE;
                         animateTime = 0;
                     }
                     else
@@ -343,13 +342,24 @@ namespace PuzzleBox
                 {
                     for (int z = 0; z < 3; z++)
                     {
-                        Vector3 p = new Vector3((x - 1) * spacing, (y - 1) * spacing, (z - 1) * spacing);
-                        int distance = (int)CameraUtils.GetDistance(v, cameraBasePos, p);
-                        puzzleBox[x, y, z].screenX = screenCenterX + CameraUtils.GetScreenX(v, cameraBasePos, u, p) + (int)(shift.X / screenSizeX * distance);
-                        puzzleBox[x, y, z].screenY = screenCenterY + CameraUtils.GetScreenY(v, cameraBasePos, u, p) + (int)(shift.Y / screenSizeX * distance);
-                        puzzleBox[x, y, z].distance = distance;
-                        puzzleBox[x, y, z].scale = scale;
-                        zBuffer.Add(puzzleBox[x,y,z]);
+                        float animatedX = (float)x;
+                        float animatedZ = (float)z;
+                        float animatedY = (float)y;
+                        if (gameState == State.REGENERATE)
+                        {
+                            animatedZ = OrbRenderer.GetSlideX(z, puzzleBox[x, y,z], 1f * animateTime / maxAnimateTime);
+                            animatedY = OrbRenderer.GetSlideY(y, puzzleBox[x, y, z], 1f * animateTime / maxAnimateTime);
+                        }
+                        if (!(animatedY < -2f || animatedY > 4f || animatedZ < -2f || animatedZ > 4f))
+                        {
+                            Vector3 p = new Vector3((animatedX - 1) * spacing, (animatedY - 1) * spacing, (animatedZ - 1) * spacing);
+                            int distance = (int)CameraUtils.GetDistance(v, cameraBasePos, p);
+                            puzzleBox[x, y, z].screenX = screenCenterX + CameraUtils.GetScreenX(v, cameraBasePos, u, p) + (int)(shift.X / screenSizeX * distance);
+                            puzzleBox[x, y, z].screenY = screenCenterY + CameraUtils.GetScreenY(v, cameraBasePos, u, p) + (int)(shift.Y / screenSizeX * distance);
+                            puzzleBox[x, y, z].distance = distance;
+                            puzzleBox[x, y, z].scale = scale;
+                            zBuffer.Add(puzzleBox[x, y, z]);
+                        }
                     }
                 }
             }      
@@ -367,28 +377,41 @@ namespace PuzzleBox
                         continue;
                     
                     {
-                        masterGrid[x, y].screenX = screenCenterX + (x - 3) * spacing + (int)(shift.X / screenSizeX * baseDistance);
-                        masterGrid[x, y].screenY = screenCenterY + (y - 3) * spacing + (int)(shift.Y / screenSizeX * baseDistance);
-                        masterGrid[x, y].distance = baseDistance;
-                        masterGrid[x, y].scale = scale;
-                        zBuffer.Add(masterGrid[x, y]);
+                        float animatedX = (float)x;
+                        float animatedY = (float)y;
+                        if (gameState == State.REGENERATE)
+                        {
+                            animatedX = OrbRenderer.GetSlideX(x, masterGrid[x, y], 1f * animateTime / maxAnimateTime);
+                            animatedY = OrbRenderer.GetSlideY(y, masterGrid[x, y], 1f * animateTime / maxAnimateTime);
+                        }
+                        if (!(animatedX > 6f || animatedX < 0f || animatedY < 0f || animatedY > 6f))
+                        {
+                            masterGrid[x, y].screenX = (int)(screenCenterX + (animatedX - 3) * spacing + (shift.X / screenSizeX * baseDistance));
+                            masterGrid[x, y].screenY = (int)(screenCenterY + (animatedY - 3) * spacing + (shift.Y / screenSizeX * baseDistance));
+                            masterGrid[x, y].distance = baseDistance;
+                            masterGrid[x, y].scale = scale;
+                            zBuffer.Add(masterGrid[x, y]);
+                        }
                     }
                     if (x == 0 || x == 6 || y == 0 || y == 6)
                     {
                         if (masterGrid.queues[x, y] != null)
                         {
-                            for (int z = 0; z < masterGrid.queues[x, y].Count; z++)
+                            for (int z = 0; z < Math.Min(masterGrid.queues[x, y].Count,3); z++)
                             {
                                 float distance = baseDistance - 60 * (z + 1);
-                                if (masterGrid[x, y].marked)
+                                if (masterGrid[x,y].marked && gameState == State.REGENERATE)
                                 {
-                                    distance = 120+ distance - 60 * masterGrid[x, y].replace_distance + 60 * (1f * animateTime / maxAnimateTime);
+                                    distance = distance + 60 * (1f * animateTime / maxAnimateTime);
                                 }
-                                masterGrid.queues[x, y][z].screenX = screenCenterX + (x - 3) * spacing + (int)(shift.X / screenSizeX * distance);
-                                masterGrid.queues[x, y][z].screenY = screenCenterY + (y - 3) * spacing + (int)(shift.Y / screenSizeX * distance);
-                                masterGrid.queues[x, y][z].distance = distance;
-                                masterGrid.queues[x, y][z].scale = scale;
-                                zBuffer.Add(masterGrid.queues[x, y][z]);
+                                if (distance <= baseDistance)
+                                {
+                                    masterGrid.queues[x, y][z].screenX = screenCenterX + (x - 3) * spacing + (int)(shift.X / screenSizeX * distance);
+                                    masterGrid.queues[x, y][z].screenY = screenCenterY + (y - 3) * spacing + (int)(shift.Y / screenSizeX * distance);
+                                    masterGrid.queues[x, y][z].distance = distance;
+                                    masterGrid.queues[x, y][z].scale = scale;
+                                    zBuffer.Add(masterGrid.queues[x, y][z]);
+                                }
                             }
                         }
                     }

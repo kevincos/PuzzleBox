@@ -14,10 +14,10 @@ namespace PuzzleBox
 
         public MasterGrid()
         {
-            AllBlue();
+            //AllBlue();
             //Test();
-            Edges();
-            //RandomSetup();
+            //Edges();
+            RandomSetup();
         }
 
         public PuzzleNode this[int x, int y]
@@ -59,11 +59,11 @@ namespace PuzzleBox
             queues[6, 3].Add(new PuzzleNode(Color.Orange));
             queues[3, 0].Add(new PuzzleNode(Color.Pink));
             queues[3, 6].Add(new PuzzleNode(Color.LightGreen));
-            queues[0, 3].Add(new PuzzleNode(Color.DarkBlue));
+            queues[0, 3].Add(new PuzzleNode(Color.Yellow));
             queues[6, 3].Add(new PuzzleNode(Color.Orange));
             queues[3, 0].Add(new PuzzleNode(Color.Pink));
             queues[3, 6].Add(new PuzzleNode(Color.LightGreen));
-            queues[0, 3].Add(new PuzzleNode(Color.DarkBlue));
+            queues[0, 3].Add(new PuzzleNode(Color.Red));
             queues[6, 3].Add(new PuzzleNode(Color.Orange));
             queues[3, 0].Add(new PuzzleNode(Color.Pink));
             queues[3, 6].Add(new PuzzleNode(Color.LightGreen));
@@ -104,7 +104,7 @@ namespace PuzzleBox
                     if (x == 0 || x == 6 || y == 0 || y == 6)
                     {
                         queues[x, y] = new List<PuzzleNode>();
-                        for (int i = 0; i < 2; i++)
+                        for (int i = 0; i < 10; i++)
                             queues[x, y].Add(new PuzzleNode());
                     }
                 }
