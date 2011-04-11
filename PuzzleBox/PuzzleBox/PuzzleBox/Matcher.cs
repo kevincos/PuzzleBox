@@ -9,6 +9,10 @@ namespace PuzzleBox
 {
     class Matcher
     {
+        private static int gridSize = Game1.gridSize;
+        private static int boxSize = Game1.boxSize;
+        private static int boxOffset = Game1.boxOffset;
+
         public static bool IsWildCard(PuzzleNode p)
         {
             int count = 0;
@@ -37,12 +41,12 @@ namespace PuzzleBox
                 if (y <= 3)
                 {
                     p.replace_top = true;
-                    p.replace_distance = 3 - start;
+                    p.replace_distance = 4 - start;
                 }
                 if (y >= 3)
                 {
                     p.replace_bottom = true;
-                    p.replace_distance = end - 5;
+                    p.replace_distance = end - 3;
                 }
             }
             else
@@ -68,12 +72,12 @@ namespace PuzzleBox
             {
                 if (x <= 3)
                 {
-                    p.replace_distance = 3 - start;
+                    p.replace_distance = 4 - start;
                     p.replace_left = true;
                 }
                 if (x >= 3)
                 {
-                    p.replace_distance = end - 4;
+                    p.replace_distance = end - 3;
                     p.replace_right = true;
                 }
             }
@@ -97,18 +101,18 @@ namespace PuzzleBox
             PuzzleNode p = grid[x, y];
             if (IsWildCard(p))
             {
-                p.replace_orb = new PuzzleNode();
+                p.replace_orb = new PuzzleNode(p.color);
                 p.replace_orb.bonus = 2;
             }
             else if (p.replace_bottom)
             {
                 if (y + p.replace_distance < 7)
-                    p.replace_orb = new PuzzleNode(grid[x, y + p.replace_distance].color);
+                    p.replace_orb = grid[x, y + p.replace_distance];
                 else
                 {
                     int queueDepth = y + p.replace_distance - 7;
                     if (queueDepth < grid.queues[x, 6].Count)
-                        p.replace_orb = new PuzzleNode(grid.queues[x, 6][queueDepth].color);
+                        p.replace_orb = grid.queues[x, 6][queueDepth];
                     else
                         p.replace_orb = new PuzzleNode(Color.Black);
                 }
@@ -116,12 +120,12 @@ namespace PuzzleBox
             else if (p.replace_top)
             {
                 if (y - p.replace_distance >= 0)
-                    p.replace_orb = new PuzzleNode(grid[x, y - p.replace_distance].color);
+                    p.replace_orb = grid[x, y - p.replace_distance];
                 else
                 {
                     int queueDepth = p.replace_distance - y - 1;
                     if (queueDepth < grid.queues[x, 0].Count)
-                        p.replace_orb = new PuzzleNode(grid.queues[x, 0][queueDepth].color);
+                        p.replace_orb = grid.queues[x, 0][queueDepth];
                     else
                         p.replace_orb = new PuzzleNode(Color.Black);
                 }
@@ -129,12 +133,12 @@ namespace PuzzleBox
             else if (p.replace_left)
             {
                 if (x - p.replace_distance >= 0)
-                    p.replace_orb = new PuzzleNode(grid[x - p.replace_distance, y].color);
+                    p.replace_orb = grid[x - p.replace_distance, y];
                 else
                 {
                     int queueDepth = p.replace_distance - x - 1;
                     if (queueDepth < grid.queues[0, y].Count)
-                        p.replace_orb = new PuzzleNode(grid.queues[0, y][queueDepth].color);
+                        p.replace_orb = grid.queues[0, y][queueDepth];
                     else
                         p.replace_orb = new PuzzleNode(Color.Black);
                 }
@@ -142,12 +146,12 @@ namespace PuzzleBox
             else if (p.replace_right)
             {
                 if (x + p.replace_distance < 7)
-                    p.replace_orb = new PuzzleNode(grid[x + p.replace_distance, y].color);
+                    p.replace_orb = grid[x + p.replace_distance, y];
                 else
                 {
                     int queueDepth = x + p.replace_distance - 7;
                     if (queueDepth < grid.queues[6, y].Count)
-                        p.replace_orb = new PuzzleNode(grid.queues[6, y][queueDepth].color);
+                        p.replace_orb = grid.queues[6, y][queueDepth];
                     else
                         p.replace_orb = new PuzzleNode(Color.Black);
                 }
@@ -182,15 +186,16 @@ namespace PuzzleBox
             // Marking vertical lines
             for (int x = 2; x < 5; x++)
             {
-                int start_index = 2;
-                int end_index = 2;
+                int start_index = 0;
+                int end_index = 0;
                 PuzzleNode lastNode = new PuzzleNode(Color.Black);
                 for (int y = 0; y < 7; y++)
                 {
                     if (grid[x, y] == null)
                         continue;
-                    if (PuzzleNode.Match(grid[x, y], lastNode))
+                    if (PuzzleNode.Match(lastNode, grid[x, y]))
                     {
+                        lastNode = grid[x, y];
                         end_index++;
                     }
                     else
@@ -219,15 +224,16 @@ namespace PuzzleBox
             // Marking horizontal lines
             for (int y = 2; y < 5; y++)
             {
-                int start_index = 2;
-                int end_index = 2;
+                int start_index = 0;
+                int end_index = 0;
                 PuzzleNode lastNode = new PuzzleNode(Color.Black);
                 for (int x = 0; x < 7; x++)
                 {
                     if (grid[x, y] == null)
                         continue;
-                    if (PuzzleNode.Match(grid[x, y],lastNode))
+                    if (PuzzleNode.Match(lastNode, grid[x, y]))
                     {
+                        lastNode = grid[x, y];
                         end_index++;
                     }
                     else
@@ -351,6 +357,7 @@ namespace PuzzleBox
                 }
             }
 
+            // fix replace distances
             for (int x = 0; x < 7; x++)
             {
                 for (int y = 0; y < 7; y++)
@@ -407,6 +414,58 @@ namespace PuzzleBox
             }
             return max_distance;        
         }
+
+        public static void UpdateMoveCountdown(PuzzleBox box, MasterGrid grid)
+        {
+            for (int x = 0; x < 3; x++)
+            {
+                for (int y = 0; y < 3; y++)
+                {
+                    for (int z = 0; z < 3; z++)
+                    {
+                        if (box[x, y, z].moveCountdownOrb)
+                        {
+                            box[x, y, z].countdown--;
+                            if (box[x, y, z].countdown == 0)
+                            {
+                                box[x, y, z].moveCountdownOrb = false;
+                                box[x, y, z].color = Color.Gray;
+                            }
+                        }
+                        if (box[x, y, z].toggleOrb)
+                        {
+                            Color temp = box[x, y, z].color;
+                            box[x, y, z].color = box[x, y, z].toggleColor;
+                            box[x, y, z].toggleColor = temp;
+
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void UpdateTimeCountdown(PuzzleBox box, MasterGrid grid, int elapsedTime)
+        {
+            for (int x = 0; x < 3; x++)
+            {
+                for (int y = 0; y < 3; y++)
+                {
+                    for (int z = 0; z < 3; z++)
+                    {
+                        if (box[x, y, z].timeCountdownOrb)
+                        {
+                            box[x, y, z].countdown-=elapsedTime;
+                            if (box[x, y, z].countdown <= 0)
+                            {
+                                box[x, y, z].timeCountdownOrb = false;
+                                box[x, y, z].color = Color.Gray;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
         // Checks if any valid move exists.
         public static bool HasValidMove(PuzzleBox box, MasterGrid grid)

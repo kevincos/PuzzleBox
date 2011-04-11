@@ -17,7 +17,10 @@ namespace PuzzleBox
         public static Texture2D orbFragmentLeftTexture;
         public static Texture2D orbFragmentRightTexture;
         public static Texture2D orbFragmentTopTexture;
+        public static Texture2D numbersTexture;
+        public static Texture2D toggleTexture;
         public static Texture2D doubleTexture;
+        public static Texture2D highlightTexture;
 
         public static void DrawFragments(Fragment frag)
         {
@@ -76,8 +79,51 @@ namespace PuzzleBox
             return slideY;
         }
 
+        public static void DrawOrb(PuzzleNode node, int x, int y, int size)
+        {
+            spriteBatch.Draw(orbTexture,
+                new Rectangle(x,y, size, size), new Rectangle(0, 0, 64, 64),
+                node.color);
+            if (node.bonus == 2)
+            {
+                spriteBatch.Draw(doubleTexture,
+                    new Rectangle(x, y, size, size), new Rectangle(0, 0, 64, 64),
+                    node.color);            
+            }
+            if (node.moveCountdownOrb == true)
+            {
+                int texX = 64*(node.countdown % 4);
+                int texY = 64*(node.countdown / 4);
+                spriteBatch.Draw(numbersTexture,
+                    new Rectangle(x, y, size, size), new Rectangle(texX, texY, 64, 64),
+                    node.color);
+            }
+            if (node.timeCountdownOrb == true)
+            {
+                int texX = 64 * ((node.countdown/1000) % 4);
+                int texY = 64 * ((node.countdown/1000) / 4);
+                spriteBatch.Draw(numbersTexture,
+                    new Rectangle(x, y, size, size), new Rectangle(texX, texY, 64, 64),
+                    node.color);
+            }
+            if (node.toggleOrb == true)
+            {
+                spriteBatch.Draw(toggleTexture,
+                    new Rectangle(x, y, size, size), new Rectangle(0, 0, 64, 64),
+                    node.toggleColor);
+            }
+        }
+
         public static void DrawOrb(PuzzleNode node, State gameState, float animationPercentage)
         {
+            if (node.distance >= Game1.baseDistance)
+            {
+                Color highlightColer = node.color;
+                highlightColer.A = 0;
+                spriteBatch.Draw(highlightTexture,
+                    new Rectangle(node.screenX - (int)(19 * node.scale), node.screenY - (int)(19 * node.scale), (int)(38 * node.scale), (int)(38 * node.scale)), new Rectangle(0, 0, 64, 64),
+                    highlightColer);   
+            }
             if (node.marked)
             {
                 //if (gameState == State.VANSIH)
@@ -128,10 +174,8 @@ namespace PuzzleBox
                     }
                     else
                     {
-                        float scale = node.scale;          
-                        spriteBatch.Draw(orbTexture,
-                            new Rectangle(node.screenX - (int)(16 * scale), node.screenY - (int)(16 * scale), (int)(32 * scale), (int)(32 * scale)), new Rectangle(0, 0, 64, 64),
-                            node.color);
+                        float scale = node.scale;
+                        DrawOrb(node, node.screenX - (int)(16 * scale), node.screenY - (int)(16 * scale), (int)(32 * scale));
                     }
                 }
                 else if (gameState == State.REGENERATE)
@@ -139,26 +183,18 @@ namespace PuzzleBox
                     float scale = node.scale * animationPercentage;
                     if (scale > node.scale) scale = node.scale;
                     if (Matcher.IsWildCard(node))
-                        spriteBatch.Draw(orbTexture,
-                            new Rectangle(node.screenX - (int)(16 * scale), node.screenY - (int)(16 * scale), (int)(32 * scale), (int)(32 * scale)), new Rectangle(0, 0, 64, 64),
-                            node.color);
+                    {
+                        DrawOrb(node, node.screenX - (int)(16 * scale), node.screenY - (int)(16 * scale), (int)(32 * scale));
+                    }
                     else
-                    {                        
-                        spriteBatch.Draw(orbTexture,
-                            new Rectangle(node.screenX - (int)(16 * node.scale), node.screenY - (int)(16 * node.scale), (int)(32 * node.scale), (int)(32 * node.scale)), new Rectangle(0, 0, 64, 64),
-                            node.color);
+                    {
+                        DrawOrb(node, node.screenX - (int)(16 * node.scale), node.screenY - (int)(16 * node.scale), (int)(32 * node.scale));
                     }
                 }
             }
             else
             {
-                spriteBatch.Draw(orbTexture,
-                    new Rectangle(node.screenX - (int)(16 * node.scale), node.screenY - (int)(16 * node.scale), (int)(32 * node.scale), (int)(32 * node.scale)), new Rectangle(0, 0, 64, 64),
-                    node.color);
-                if (node.bonus == 2)
-                    spriteBatch.Draw(doubleTexture,
-                        new Rectangle(node.screenX - (int)(16 * node.scale), node.screenY - (int)(16 * node.scale), (int)(32 * node.scale), (int)(32 * node.scale)), new Rectangle(0, 0, 64, 64),
-                        node.color);
+                DrawOrb(node, node.screenX - (int)(16 * node.scale), node.screenY - (int)(16 * node.scale), (int)(32 * node.scale));
             }
         }
     }

@@ -9,15 +9,21 @@ namespace PuzzleBox
 {
     class MasterGrid
     {
-        private PuzzleNode[,] arr = new PuzzleNode[7, 7];
-        public List<PuzzleNode>[,] queues = new List<PuzzleNode>[7, 7];
+        private static int gridSize = Game1.gridSize;
+        private static int boxSize = Game1.boxSize;
+        private static int boxOffset = Game1.boxOffset;
+
+        private PuzzleNode[,] arr = new PuzzleNode[gridSize, gridSize];
+        public List<PuzzleNode>[,] queues = new List<PuzzleNode>[gridSize, gridSize];
 
         public MasterGrid()
         {
+
             //AllBlue();
-            //Test();
+            //Cross();
             //Edges();
             RandomSetup();
+            //WildCross();
         }
 
         public PuzzleNode this[int x, int y]
@@ -34,9 +40,21 @@ namespace PuzzleBox
 
         private void AllBlue()
         {
-            for (int x = 0; x < 7; x++)
+            for (int x = 0; x < gridSize; x++)
             {
-                for (int y = 0; y < 7; y++)
+                for (int y = 0; y < gridSize; y++)
+                {
+                    if (x == 0 || x == gridSize - 1 || y == 0 || y == gridSize-1)
+                    {
+                        queues[x, y] = new List<PuzzleNode>();
+                        for (int i = 0; i < 10; i++)
+                            queues[x, y].Add(new PuzzleNode());
+                    }
+                }
+            }
+            for (int x = 0; x < gridSize; x++)
+            {
+                for (int y = 0; y < gridSize; y++)
                 {
                     arr[x, y] = new PuzzleNode(Color.Blue);
                 }
@@ -69,13 +87,13 @@ namespace PuzzleBox
             queues[3, 6].Add(new PuzzleNode(Color.LightGreen));
         }
 
-        private void Test()
+        private void Cross()
         {
-            for (int y = 0; y < 7; y++)
+            for (int y = 0; y < gridSize; y++)
             {
                 arr[3, y] = new PuzzleNode(Color.Yellow);
             }
-            for (int x = 0; x < 7; x++)
+            for (int x = 0; x < gridSize; x++)
             {
                 arr[x, 3] = new PuzzleNode(Color.Orange);
             }
@@ -85,23 +103,36 @@ namespace PuzzleBox
             arr[4, 5] = new PuzzleNode(Color.Green);
         }
 
+        private void WildCross()
+        {
+            for (int y = 0; y < gridSize; y++)
+            {
+                arr[3, y] = new PuzzleNode(Color.White);
+            }
+            for (int x = 0; x < gridSize; x++)
+            {
+                arr[x, 3] = new PuzzleNode(Color.Yellow);
+            }            
+        }
+
+
         private void RandomSetup()
         {
             Random r = new Random();
-            for (int x = 0; x < 7; x++)
-            {                
-                for (int y = 0; y < 7; y++)
+            for (int x = 0; x < gridSize; x++)
+            {
+                for (int y = 0; y < gridSize; y++)
                 {
-                    if (x < 2 && y < 2 ||
-                        x > 4 && y > 4 ||
-                        x < 2 && y > 4 ||
-                        x > 4 && y < 2)
+                    if (x < boxOffset && y < boxOffset ||
+                        x >= boxOffset + boxSize && y >= boxOffset + boxSize ||
+                        x < boxOffset && y >= boxOffset + boxSize ||
+                        x >= boxOffset+boxSize && y < boxOffset)
                     {
                         arr[x, y] = new PuzzleNode(Color.Black);
                         continue;
                     }
                     arr[x, y] = new PuzzleNode();
-                    if (x == 0 || x == 6 || y == 0 || y == 6)
+                    if (x == 0 || x == gridSize - 1 || y == 0 || y == gridSize - 1)
                     {
                         queues[x, y] = new List<PuzzleNode>();
                         for (int i = 0; i < 10; i++)

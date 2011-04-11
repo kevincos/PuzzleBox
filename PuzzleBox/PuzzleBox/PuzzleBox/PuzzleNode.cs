@@ -17,8 +17,8 @@ namespace PuzzleBox
         }
 
         public static bool Match(PuzzleNode p1, PuzzleNode p2)
-        {
-            if (p1.color == Color.White || p1.color == Color.Gray || p1.color == Color.Brown || p1.color == Color.Tan || p1.color == Color.Black) return false;
+        {     
+            if (p1.color == Color.Gray || p1.color == Color.Black) return false;
             return p1.color == p2.color;
         }
 
@@ -51,8 +51,24 @@ namespace PuzzleBox
 
             }
             v = r.Next(0, 10);
+            
             if (v == 5)
                 this.bonus = 2;
+            else if (v == 3)
+            {
+                this.moveCountdownOrb = true;
+                this.countdown = 10;
+            }
+            else if (v == 4)
+            {
+                this.timeCountdownOrb = true;
+                this.countdown = 10000;
+            }
+            else if (v == 2)
+            {
+                this.toggleOrb = true;
+                this.toggleColor = Color.Gray;
+            }            
         }
 
         public PuzzleNode(Color color)
@@ -86,11 +102,17 @@ namespace PuzzleBox
         }
 
         public Color color;
+        public Color toggleColor = Color.Gray;
+        public bool toggleOrb;
+        public bool moveCountdownOrb;
+        public int countdown;
+        public bool timeCountdownOrb;                
         public int screenX;
         public int screenY;
         public int bonus = 1;
         public float distance;
         public float scale;
+        public bool front = false;
         public bool marked = false;
         public bool scoring = false;
         public bool replace_left = false;

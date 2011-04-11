@@ -9,11 +9,14 @@ namespace PuzzleBox
 {
     class PuzzleBox
     {
-        private PuzzleNode[, ,] arr = new PuzzleNode[3, 3, 3];
+        private static int size = Game1.boxSize;
+
+        private PuzzleNode[, ,] arr = new PuzzleNode[size, size, size];
 
         public PuzzleBox()
         {
             //AllRed();
+            //WildCross();
             //Cross();
             //Edges();
             RandomSetup();
@@ -33,17 +36,29 @@ namespace PuzzleBox
 
         private void Cross()
         {
-            for (int z = 0; z < 3; z++)
+            for (int z = 0; z < size; z++)
             {
                 arr[0, 1, z] = new PuzzleNode(Color.Yellow);
             }
-            for (int z = 0; z < 3; z++)
+            for (int z = 0; z < size; z++)
             {
                 arr[2, 1, z] = new PuzzleNode(Color.Orange);
             }
             arr[0, 0, 0] = new PuzzleNode(Color.Green);
             arr[0, 2, 2] = new PuzzleNode(Color.Pink);
             arr[0, 2, 1] = new PuzzleNode(Color.Pink);
+        }
+
+        private void WildCross()
+        {
+            for (int z = 0; z < size; z++)
+            {
+                arr[0, 1, z] = new PuzzleNode(Color.White);
+            }
+            for (int z = 0; z < size; z++)
+            {
+                arr[2, 1, z] = new PuzzleNode(Color.Yellow);
+            }
         }
 
         private void Edges()
@@ -57,11 +72,11 @@ namespace PuzzleBox
 
         private void AllRed()
         {
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < size; x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < size; y++)
                 {
-                    for (int z = 0; z < 3; z++)
+                    for (int z = 0; z < size; z++)
                     {
                         arr[x, y, z] = new PuzzleNode(Color.Red);
                     }
@@ -73,11 +88,11 @@ namespace PuzzleBox
         {
             Random r = new Random();
 
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < size; x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < size; y++)
                 {
-                    for (int z = 0; z < 3; z++)
+                    for (int z = 0; z < size; z++)
                     {
                         arr[x, y, z] = new PuzzleNode();
                     }
@@ -97,32 +112,32 @@ namespace PuzzleBox
 
         public void Rotate(ROTATION r)
         {
-            PuzzleNode[, ,] newArr = new PuzzleNode[3, 3, 3];
-            for (int x = 0; x < 3; x++)
+            PuzzleNode[, ,] newArr = new PuzzleNode[size, size, size];
+            for (int x = 0; x < size; x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < size; y++)
                 {
-                    for (int z = 0; z < 3; z++)
+                    for (int z = 0; z < size; z++)
                     {
                         switch (r)
                         {
                             case (ROTATION.POSZ):
-                                newArr[x, y, z] = arr[y, 2 - x, z];
+                                newArr[x, y, z] = arr[y, size-1 - x, z];
                                 break;
                             case (ROTATION.NEGZ):
-                                newArr[x, y, z] = arr[2 - y, x, z];
+                                newArr[x, y, z] = arr[size - 1 - y, x, z];
                                 break;
                             case (ROTATION.POSY):
-                                newArr[x, y, z] = arr[2 - z, y, x];
+                                newArr[x, y, z] = arr[size - 1 - z, y, x];
                                 break;
                             case (ROTATION.NEGY):
-                                newArr[x, y, z] = arr[z, y, 2 - x];
+                                newArr[x, y, z] = arr[z, y, size - 1 - x];
                                 break;
                             case (ROTATION.NEGX):
-                                newArr[x, y, z] = arr[x, 2 - z, y];
+                                newArr[x, y, z] = arr[x, size - 1 - z, y];
                                 break;
                             case (ROTATION.POSX):
-                                newArr[x, y, z] = arr[x, z, 2 - y];
+                                newArr[x, y, z] = arr[x, z, size - 1 - y];
                                 break;
                             default:
                                 newArr[x, y, z] = arr[x, y, z];

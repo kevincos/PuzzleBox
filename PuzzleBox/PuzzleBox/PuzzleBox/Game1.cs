@@ -17,6 +17,7 @@ namespace PuzzleBox
         VERIFY,
         DESTROY,
         REGENERATE,
+        MOVECOMPLETE,
         ROTATEPOSX,
         ROTATENEGX,
         ROTATEPOSY,
@@ -38,6 +39,10 @@ namespace PuzzleBox
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         #region Member Variables
+        // Game dimensions
+        public static int gridSize = 7;
+        public static int boxSize = 3;
+        public static int boxOffset = 2;
         // Graphics
         GraphicsDeviceManager graphics;
 
@@ -70,7 +75,7 @@ namespace PuzzleBox
         public static int screenSizeX = 800;
         public static int screenSizeY = 400;
         float scale = 1.5f;
-        float baseDistance;
+        public static float baseDistance;
         float tiltScale = 1.5f;
         public static int screenCenterX;
         public static int screenCenterY;
@@ -105,7 +110,10 @@ namespace PuzzleBox
             OrbRenderer.orbFragmentLeftTexture = Content.Load<Texture2D>("orb-fragment-left");
             OrbRenderer.orbFragmentRightTexture = Content.Load<Texture2D>("orb-fragment-right");
             OrbRenderer.orbFragmentTopTexture = Content.Load<Texture2D>("orb-fragment-top");
+            OrbRenderer.numbersTexture = Content.Load<Texture2D>("numbers");
             OrbRenderer.doubleTexture = Content.Load<Texture2D>("double");
+            OrbRenderer.toggleTexture = Content.Load<Texture2D>("toggle");
+            OrbRenderer.highlightTexture = Content.Load<Texture2D>("highlight");
         }
 
         protected override void UnloadContent()
@@ -128,6 +136,11 @@ namespace PuzzleBox
                 if (animateTime > maxAnimateTime*maxSlideDistance)
                     animateTime = maxAnimateTime * maxSlideDistance;
             }
+            if (gameState == State.MOVECOMPLETE)
+            {
+                Matcher.UpdateMoveCountdown(puzzleBox, masterGrid);
+                gameState = State.VERIFY;
+            }
             if (gameState == State.VERIFY)
             {
                 maxSlideDistance = Matcher.Solve(puzzleBox, masterGrid);
@@ -135,12 +148,13 @@ namespace PuzzleBox
                 {
                     if (!Matcher.HasValidMove(puzzleBox, masterGrid))
                     {
-                        Matcher.Reset(puzzleBox, masterGrid);
-                        gameState = State.REGENERATE;
+                        //Matcher.Reset(puzzleBox, masterGrid);
+                        //gameState = State.REGENERATE;
+                        gameState = State.VERIFY;
                         animateTime = 0;
                     }
                     else
-                    {
+                    {                        
                         gameState = State.READY;
                         animateTime = 0;
                     }
@@ -192,6 +206,7 @@ namespace PuzzleBox
                 this.Exit();
             if (gameState == State.READY)
             {
+                Matcher.UpdateTimeCountdown(puzzleBox, masterGrid, gameTime.ElapsedGameTime.Milliseconds);
                 if (Keyboard.GetState().IsKeyDown(Keys.Left))
                     gameState = State.ROTATEPOSY;
                 if (Keyboard.GetState().IsKeyDown(Keys.Right))
@@ -242,7 +257,7 @@ namespace PuzzleBox
                         theta = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.POSY);
                         animateTime = 0;
-                        gameState = State.VERIFY;                        
+                        gameState = State.MOVECOMPLETE;                        
                     }
                     break;
                 case State.ROTATEPOSY:
@@ -252,7 +267,7 @@ namespace PuzzleBox
                         theta = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.NEGY);
                         animateTime = 0;
-                        gameState = State.VERIFY;                        
+                        gameState = State.MOVECOMPLETE;                        
                     }
                     break;
                 case State.ROTATENEGX:
@@ -268,7 +283,7 @@ namespace PuzzleBox
                         phi = 0;
                         firstHalf = true;
                         animateTime = 0;
-                        gameState = State.VERIFY;                        
+                        gameState = State.MOVECOMPLETE;                        
                     }
                     break;
                 case State.ROTATEPOSX:
@@ -284,7 +299,7 @@ namespace PuzzleBox
                         phi = 0;
                         firstHalf = true;                        
                         animateTime = 0;
-                        gameState = State.VERIFY;                        
+                        gameState = State.MOVECOMPLETE;                        
                     }
                     break;
                 case State.ROTATENEGZ:
@@ -295,7 +310,7 @@ namespace PuzzleBox
                         animateTime = 0;
                         psi = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.POSX);
-                        gameState = State.VERIFY;                        
+                        gameState = State.MOVECOMPLETE;                        
                     }
                     break;
                 case State.ROTATEPOSZ:
@@ -306,7 +321,7 @@ namespace PuzzleBox
                         animateTime = 0;
                         psi = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.NEGX);
-                        gameState = State.VERIFY;                        
+                        gameState = State.MOVECOMPLETE;                        
                     }                    
                     break;
                 default:
@@ -336,11 +351,11 @@ namespace PuzzleBox
 
             #region AddOrbsToZBuffer
             zBuffer = new List<PuzzleNode>();
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < boxSize; x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < boxSize; y++)
                 {
-                    for (int z = 0; z < 3; z++)
+                    for (int z = 0; z < boxSize; z++)
                     {
                         float animatedX = (float)x;
                         float animatedZ = (float)z;
@@ -358,22 +373,23 @@ namespace PuzzleBox
                             puzzleBox[x, y, z].screenY = screenCenterY + CameraUtils.GetScreenY(v, cameraBasePos, u, p) + (int)(shift.Y / screenSizeX * distance);
                             puzzleBox[x, y, z].distance = distance;
                             puzzleBox[x, y, z].scale = scale;
+                            
                             zBuffer.Add(puzzleBox[x, y, z]);
                         }
                     }
                 }
             }      
-            for (int x = 0; x < 7; x++)
+            for (int x = 0; x < gridSize; x++)
             {
-                for (int y = 0; y < 7; y++)
+                for (int y = 0; y < gridSize; y++)
                 {
                     // Avoid rendering orbs in corners and center.
-                    if ((x < 2 && y < 2) ||
-                        (x < 2 && y > 4) ||
-                        (x > 4 && y < 2) ||
-                        (x > 4 && y > 4))
+                    if ((x < boxOffset && y < boxOffset) ||
+                        (x < boxOffset && y >= boxOffset+boxSize) ||
+                        (x >= boxOffset + boxSize && y < boxOffset) ||
+                        (x >= boxOffset + boxSize && y >= boxOffset + boxSize))
                         continue;
-                    if (x > 1 && x < 5 && y > 1 && y < 5)
+                    if (x >= boxOffset && x < boxOffset + boxSize && y >= boxOffset && y < boxOffset + boxSize)
                         continue;
                     
                     {
@@ -393,7 +409,7 @@ namespace PuzzleBox
                             zBuffer.Add(masterGrid[x, y]);
                         }
                     }
-                    if (x == 0 || x == 6 || y == 0 || y == 6)
+                    if (x == 0 || x == gridSize-1 || y == 0 || y == gridSize-1)
                     {
                         if (masterGrid.queues[x, y] != null)
                         {
@@ -422,7 +438,7 @@ namespace PuzzleBox
             #region OrbRendering
             zBuffer.Sort();
             foreach (PuzzleNode p in zBuffer)
-            {
+            {                
                 OrbRenderer.DrawOrb(p, gameState, 1f * animateTime / maxAnimateTime);
             }
             #endregion
