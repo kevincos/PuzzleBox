@@ -21,6 +21,8 @@ namespace PuzzleBox
         public static Texture2D toggleTexture;
         public static Texture2D doubleTexture;
         public static Texture2D highlightTexture;
+        public static Texture2D backgroundTexture;
+        public static Texture2D vortexTexture;
 
         public static void DrawFragments(Fragment frag)
         {
@@ -78,6 +80,22 @@ namespace PuzzleBox
             }
             return slideY;
         }
+
+        public static void DrawBackground()
+        {
+            spriteBatch.Draw(backgroundTexture,
+                new Rectangle(0, 0, Game1.screenSizeX, Game1.screenSizeY), null,
+                Color.White);
+        }
+
+        public static void DrawVortex(int x, int y)
+        {
+            spriteBatch.Draw(vortexTexture,
+                new Rectangle(x, y, 128, 128), null,
+                Color.White);
+        }
+
+
 
         public static void DrawOrb(PuzzleNode node, int x, int y, int size)
         {

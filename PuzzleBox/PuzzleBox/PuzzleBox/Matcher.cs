@@ -12,6 +12,7 @@ namespace PuzzleBox
         private static int gridSize = Game1.gridSize;
         private static int boxSize = Game1.boxSize;
         private static int boxOffset = Game1.boxOffset;
+        private static int centerIndex = Game1.centerGridIndex;
 
         public static bool IsWildCard(PuzzleNode p)
         {
@@ -25,9 +26,9 @@ namespace PuzzleBox
 
         private static bool StartEndHelper(int start, int end)
         {
-            if (end < 3 || start > 4)
+            if (end <= boxOffset || start >= boxOffset+boxSize)
                 return false;
-            if (start > 1 && end < 6)
+            if (start >= boxOffset && end <= boxOffset+boxSize)
                 return false;
             return (end - start > 1);                
         }
@@ -36,27 +37,27 @@ namespace PuzzleBox
         {
             p.marked = true;
             p.scoring = true;
-            if (start < 2 && end > 5)
+            if (start < boxOffset && end > boxOffset+boxSize)
             {
-                if (y <= 3)
+                if (y <= centerIndex)
                 {
                     p.replace_top = true;
-                    p.replace_distance = 4 - start;
+                    p.replace_distance = 1+centerIndex - start;
                 }
-                if (y >= 3)
+                if (y >= centerIndex)
                 {
                     p.replace_bottom = true;
-                    p.replace_distance = end - 3;
+                    p.replace_distance = end - centerIndex;
                 }
             }
             else
             {
-                if (start < 2)
+                if (start < boxOffset)
                 {
                     p.replace_top = true;
                     p.replace_distance = end - start;
                 }
-                if (end > 5)
+                if (end > boxOffset+boxSize)
                 {
                     p.replace_bottom = true;
                     p.replace_distance = end - start;
@@ -68,27 +69,27 @@ namespace PuzzleBox
         {
             p.marked = true;
             p.scoring = true;
-            if (start < 2 && end > 5)
+            if (start < boxOffset && end > boxSize+boxOffset)
             {
-                if (x <= 3)
+                if (x <= centerIndex)
                 {
-                    p.replace_distance = 4 - start;
+                    p.replace_distance = centerIndex+1 - start;
                     p.replace_left = true;
                 }
-                if (x >= 3)
+                if (x >= centerIndex)
                 {
-                    p.replace_distance = end - 3;
+                    p.replace_distance = end - centerIndex;
                     p.replace_right = true;
                 }
             }
             else
             {
-                if (start < 2)
+                if (start < boxOffset)
                 {
                     p.replace_distance = end - start;
                     p.replace_left = true;
                 }
-                if (end > 5)
+                if (end > boxOffset+boxSize)
                 {
                     p.replace_distance = end - start;
                     p.replace_right = true;
@@ -106,13 +107,13 @@ namespace PuzzleBox
             }
             else if (p.replace_bottom)
             {
-                if (y + p.replace_distance < 7)
+                if (y + p.replace_distance < gridSize)
                     p.replace_orb = grid[x, y + p.replace_distance];
                 else
                 {
-                    int queueDepth = y + p.replace_distance - 7;
-                    if (queueDepth < grid.queues[x, 6].Count)
-                        p.replace_orb = grid.queues[x, 6][queueDepth];
+                    int queueDepth = y + p.replace_distance - gridSize;
+                    if (queueDepth < grid.queues[x, gridSize-1].Count)
+                        p.replace_orb = grid.queues[x, gridSize-1][queueDepth];
                     else
                         p.replace_orb = new PuzzleNode(Color.Black);
                 }
@@ -145,13 +146,13 @@ namespace PuzzleBox
             }
             else if (p.replace_right)
             {
-                if (x + p.replace_distance < 7)
+                if (x + p.replace_distance < gridSize)
                     p.replace_orb = grid[x + p.replace_distance, y];
                 else
                 {
-                    int queueDepth = x + p.replace_distance - 7;
-                    if (queueDepth < grid.queues[6, y].Count)
-                        p.replace_orb = grid.queues[6, y][queueDepth];
+                    int queueDepth = x + p.replace_distance - gridSize;
+                    if (queueDepth < grid.queues[gridSize-1, y].Count)
+                        p.replace_orb = grid.queues[gridSize-1, y][queueDepth];
                     else
                         p.replace_orb = new PuzzleNode(Color.Black);
                 }
@@ -159,7 +160,6 @@ namespace PuzzleBox
             else
             {
                 p.replace_orb = new PuzzleNode(Color.Black);
-                //p = new PuzzleNode();
             }
 
             p.replace_orb.replace_distance = p.replace_distance;
@@ -173,23 +173,21 @@ namespace PuzzleBox
         //Identifies all scoring matches and marks them.
         public static int Solve(PuzzleBox box, MasterGrid grid)
         {            
-            bool[,] solved = new bool[7, 7];
-
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < boxSize; x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < boxSize; y++)
                 {
-                    grid[x + 2, y + 2] = box[0, y, x];
+                    grid[x + boxOffset, y + boxOffset] = box[0, y, x];
                 }
             }
 
             // Marking vertical lines
-            for (int x = 2; x < 5; x++)
+            for (int x = boxOffset; x < boxOffset+boxSize; x++)
             {
                 int start_index = 0;
                 int end_index = 0;
                 PuzzleNode lastNode = new PuzzleNode(Color.Black);
-                for (int y = 0; y < 7; y++)
+                for (int y = 0; y < gridSize; y++)
                 {
                     if (grid[x, y] == null)
                         continue;
@@ -222,12 +220,12 @@ namespace PuzzleBox
             }
 
             // Marking horizontal lines
-            for (int y = 2; y < 5; y++)
+            for (int y = boxOffset; y < boxOffset+boxSize; y++)
             {
                 int start_index = 0;
                 int end_index = 0;
                 PuzzleNode lastNode = new PuzzleNode(Color.Black);
-                for (int x = 0; x < 7; x++)
+                for (int x = 0; x < gridSize; x++)
                 {
                     if (grid[x, y] == null)
                         continue;
@@ -260,13 +258,13 @@ namespace PuzzleBox
             }
 
             // Extend wildcard markings
-            for (int x = 0; x < 7; x++)
+            for (int x = 0; x < gridSize; x++)
             {
-                for (int y = 0; y < 7; y++)
+                for (int y = 0; y < gridSize; y++)
                 {
                     if (IsWildCard(grid[x, y]))
                     {
-                        for (int i = x; i < 7; i++)
+                        for (int i = x; i < gridSize; i++)
                         {
                             if (grid[i, y].marked)
                                 grid[i, y].replace_right = true;
@@ -280,7 +278,7 @@ namespace PuzzleBox
                             else
                                 break;
                         }
-                        for (int i = y; i < 7; i++)
+                        for (int i = y; i < gridSize; i++)
                         {
                             if (grid[x, i].marked)
                                 grid[x, i].replace_bottom = true;
@@ -298,13 +296,13 @@ namespace PuzzleBox
                 }
             }
             // Mark non-scoring orbs as needing to be replaced
-            for (int x = 2; x < 5; x++)
+            for (int x = boxOffset; x < boxOffset+boxSize; x++)
             {
-                for (int y = 0; y < 7; y++)
+                for (int y = 0; y < gridSize; y++)
                 {
                     if (grid[x, y].replace_bottom && !IsWildCard(grid[x, y]))
                     {
-                        for (int i = y; i < 7; i++)
+                        for (int i = y; i < gridSize; i++)
                         {
                             grid[x,i].marked = true;
                             grid[x,i].replace_bottom = true;
@@ -313,7 +311,7 @@ namespace PuzzleBox
                         break;
                     }
                 }
-                for (int y = 6; y >=0; y--)
+                for (int y = gridSize-1; y >=0; y--)
                 {
                     if (grid[x, y].replace_top && !IsWildCard(grid[x, y]))
                     {
@@ -327,13 +325,13 @@ namespace PuzzleBox
                     }
                 }
             }
-            for (int y = 2; y < 5; y++)
+            for (int y = boxOffset; y < boxOffset+boxSize; y++)
             {
-                for (int x = 0; x < 7; x++)
+                for (int x = 0; x < gridSize; x++)
                 {
                     if (grid[x, y].replace_right && !IsWildCard(grid[x, y]))
                     {
-                        for (int i = x; i < 7; i++)
+                        for (int i = x; i < gridSize; i++)
                         {
                             grid[i, y].marked = true;
                             grid[i, y].replace_right = true;
@@ -342,7 +340,7 @@ namespace PuzzleBox
                         break;
                     }
                 }
-                for (int x = 6; x >= 0; x--)
+                for (int x = gridSize-1; x >= 0; x--)
                 {
                     if (grid[x, y].replace_left && !IsWildCard(grid[x, y]))
                     {
@@ -358,13 +356,13 @@ namespace PuzzleBox
             }
 
             // fix replace distances
-            for (int x = 0; x < 7; x++)
+            for (int x = 0; x < gridSize; x++)
             {
-                for (int y = 0; y < 7; y++)
+                for (int y = 0; y < gridSize; y++)
                 {
                     if (IsWildCard(grid[x, y]))
                     {
-                        for (int i = x; i < 7; i++)
+                        for (int i = x; i < gridSize; i++)
                         {
                             if (grid[i, y].marked)
                                 grid[i, y].replace_distance--;
@@ -378,7 +376,7 @@ namespace PuzzleBox
                             else
                                 break;
                         }
-                        for (int i = y; i < 7; i++)
+                        for (int i = y; i < gridSize; i++)
                         {
                             if (grid[x, i].marked)
                                 grid[x, i].replace_distance--;
@@ -397,31 +395,67 @@ namespace PuzzleBox
             }
 
             int max_distance = 0;
-            for (int x = 0; x < 7; x++)
+            for (int x = 0; x < gridSize; x++)
             {
-                for (int y = 0; y < 7; y++)
+                for (int y = 0; y < gridSize; y++)
                 {
                     if (grid[x, y].replace_distance > max_distance) max_distance = grid[x, y].replace_distance;
                 }
             }
 
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < boxSize; x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < boxSize; y++)
                 {
-                    box[0, y, x] = grid[x + 2, y + 2];
+                    box[0, y, x] = grid[x + boxOffset, y + boxOffset];
                 }
             }
             return max_distance;        
         }
 
+        public static int CalculateScore(PuzzleBox box, MasterGrid grid)
+        {
+            int totalScore = 0;
+            for (int x = 0; x < boxSize; x++)
+            {
+                for (int y = 0; y < boxSize; y++)
+                {
+                    grid[x + boxOffset, y + boxOffset]=box[0, y, x];
+                }
+            }
+            //vert
+            for (int x = 0; x < gridSize; x++)
+            {
+                for (int y = 0; y < gridSize; y++)
+                {
+                    if (grid[x, y].scoring)
+                        totalScore += 10;
+                }
+            }
+            //horiz
+            for (int y = 0; y < gridSize; y++)
+            {
+                for (int x = 0; x < gridSize; x++)
+                {
+                }
+            }
+            for (int x = 0; x < boxSize; x++)
+            {
+                for (int y = 0; y < boxSize; y++)
+                {
+                    box[0, y, x] = grid[x + boxOffset, y + boxOffset];
+                }
+            }
+            return totalScore;
+        }
+
         public static void UpdateMoveCountdown(PuzzleBox box, MasterGrid grid)
         {
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < boxSize; x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < boxSize; y++)
                 {
-                    for (int z = 0; z < 3; z++)
+                    for (int z = 0; z < boxSize; z++)
                     {
                         if (box[x, y, z].moveCountdownOrb)
                         {
@@ -446,11 +480,11 @@ namespace PuzzleBox
 
         public static void UpdateTimeCountdown(PuzzleBox box, MasterGrid grid, int elapsedTime)
         {
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < boxSize; x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < boxSize; y++)
                 {
-                    for (int z = 0; z < 3; z++)
+                    for (int z = 0; z < boxSize; z++)
                     {
                         if (box[x, y, z].timeCountdownOrb)
                         {
@@ -475,11 +509,11 @@ namespace PuzzleBox
             HashSet<Color> sideColorsGrid = new HashSet<Color>();
             HashSet<Color> cornerColorsGrid = new HashSet<Color>();
             // Get potential box colors
-            for (int x = 0; x < 3; x ++)
+            for (int x = 0; x < boxSize; x++)
             {
-                for (int y = 0; y < 3; y ++)
+                for (int y = 0; y < boxSize; y++)
                 {
-                    for (int z = 0; z < 3; z ++)
+                    for (int z = 0; z < boxSize; z++)
                     {
                         int centerCount = 0;
                         if (x == 1) centerCount++;
@@ -516,21 +550,21 @@ namespace PuzzleBox
         // Clears state. Called when returning to ready state.
         public static void Clear(PuzzleBox box, MasterGrid grid)
         {
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < boxSize; x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < boxSize; y++)
                 {
-                    for (int z = 0; z < 3; z++)
+                    for (int z = 0; z < boxSize; z++)
                     {
                         box[x, y, z].ClearMarking();
                     }
                 }
             }
-            for (int x = 0; x < 7; x++)
+            for (int x = 0; x < gridSize; x++)
             {
-                for (int y = 0; y < 7; y++)
+                for (int y = 0; y < gridSize; y++)
                 {
-                    if (x == 0 || x == 6 || y == 0 || y == 6)
+                    if (x == 0 || x == gridSize-1 || y == 0 || y == gridSize-1)
                     {
                         for (int i = 0; i < grid[x, y].replace_distance; i++)
                         {
@@ -546,20 +580,20 @@ namespace PuzzleBox
         // Completely randomizes the entire box and grid.
         public static void Reset(PuzzleBox box, MasterGrid grid)
         {
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < boxSize; x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < boxSize; y++)
                 {
-                    for (int z = 0; z < 3; z++)
+                    for (int z = 0; z < boxSize; z++)
                     {
                         box[x, y, z] = new PuzzleNode();
                         box[x, y, z].marked = true;
                     }
                 }
             }
-            for (int x = 0; x < 7; x++)
+            for (int x = 0; x < gridSize; x++)
             {
-                for (int y = 0; y < 7; y++)
+                for (int y = 0; y < gridSize; y++)
                 {
                     grid[x, y] = new PuzzleNode();
                     grid[x, y].marked = true;
@@ -571,17 +605,17 @@ namespace PuzzleBox
         public static bool Replace(PuzzleBox box, MasterGrid grid)
         {
             bool anythingChanged = false;
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < boxSize; x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < boxSize; y++)
                 {
-                    grid[x + 2, y + 2] = box[0, y, x];
+                    grid[x + boxOffset, y + boxOffset] = box[0, y, x];
                 }
             }
 
-            for (int x = 0; x < 7; x++)
+            for (int x = 0; x < gridSize; x++)
             {
-                for (int y = 0; y < 7; y++)
+                for (int y = 0; y < gridSize; y++)
                 {
                     if (grid[x, y].marked == true)
                     {
@@ -591,9 +625,9 @@ namespace PuzzleBox
                 }
             }
 
-            for (int x = 0; x < 7; x++)
+            for (int x = 0; x < gridSize; x++)
             {
-                for (int y = 0; y < 7; y++)
+                for (int y = 0; y < gridSize; y++)
                 {
                     if(grid[x,y].marked==true)
                     {
@@ -603,11 +637,11 @@ namespace PuzzleBox
                 }
             }
 
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < boxSize; x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < boxSize; y++)
                 {
-                    box[0, y, x] = grid[x + 2, y + 2];
+                    box[0, y, x] = grid[x + boxOffset, y + boxOffset];
                 }
             }
             return anythingChanged;
