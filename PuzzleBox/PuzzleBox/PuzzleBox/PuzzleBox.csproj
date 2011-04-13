@@ -117,6 +117,7 @@
     <Compile Include="OrbRenderer.cs" />
     <Compile Include="PuzzleBox.cs" />
     <Compile Include="PuzzleNode.cs" />
+    <Compile Include="Scorer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

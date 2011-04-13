@@ -23,6 +23,13 @@ namespace PuzzleBox
         public static Texture2D highlightTexture;
         public static Texture2D backgroundTexture;
         public static Texture2D vortexTexture;
+        public static SpriteFont spriteFont;
+
+        public static void DrawScoreBonus(ScoringSet set)
+        {
+            set.CalculateScore();
+            spriteBatch.DrawString(spriteFont, "+"+set.score, new Vector2(set.drawX, set.drawY), set.color);
+        }
 
         public static void DrawFragments(Fragment frag)
         {

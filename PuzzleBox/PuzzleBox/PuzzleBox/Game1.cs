@@ -50,7 +50,7 @@ namespace PuzzleBox
 
         // Effects
         List<Fragment> fragmentList;
-        SpriteFont spriteFont;
+        List<ScoringSet> scoreList;
 
         // Game state
         PuzzleBox puzzleBox;
@@ -102,11 +102,12 @@ namespace PuzzleBox
             puzzleBox = new PuzzleBox();
             masterGrid = new MasterGrid();
             fragmentList = new List<Fragment>();
+            scoreList = new List<ScoringSet>();
         }
 
         protected override void LoadContent()
         {
-            spriteFont = Content.Load<SpriteFont>("SpriteFont1");
+            OrbRenderer.spriteFont = Content.Load<SpriteFont>("SpriteFont1");
             OrbRenderer.spriteBatch = new SpriteBatch(GraphicsDevice);
             OrbRenderer.orbTexture = Content.Load<Texture2D>("orb");
             OrbRenderer.orbCrackedLeftTexture = Content.Load<Texture2D>("orb-cracked-left");
@@ -150,7 +151,13 @@ namespace PuzzleBox
             }
             if (gameState == State.VERIFY)
             {
-                maxSlideDistance = Matcher.Solve(puzzleBox, masterGrid);
+                foreach (ScoringSet s in Matcher.Solve(puzzleBox, masterGrid))
+                {
+                    s.CalculateScore();
+                    currentScore += s.score;
+                    scoreList.Add(s);
+                }
+                maxSlideDistance = Matcher.GetMaxReplaceDistance(puzzleBox, masterGrid);
                 if (0 == maxSlideDistance)
                 {                       
                     gameState = State.READY;
@@ -158,7 +165,6 @@ namespace PuzzleBox
                 }
                 else
                 {
-                    currentScore += Matcher.CalculateScore(puzzleBox, masterGrid);
                     gameState = State.DESTROY;
                     animateTime = 0;
                 }
@@ -225,6 +231,14 @@ namespace PuzzleBox
                 if (false == fragmentList[i].Update(gameTime))
                 {
                     fragmentList.RemoveAt(i);
+                }
+            }
+            // Update scoring animation positions
+            for (int i = 0; i < scoreList.Count; i++)
+            {
+                if (false == scoreList[i].Update(gameTime))
+                {
+                    scoreList.RemoveAt(i);
                 }
             }
 
@@ -477,10 +491,15 @@ namespace PuzzleBox
             {
                 OrbRenderer.DrawFragments(f);
             }
+
+            foreach (ScoringSet s in scoreList)
+            {
+                OrbRenderer.DrawScoreBonus(s);
+            }
             #endregion
 
             String message = "Score: " + currentScore;
-            OrbRenderer.spriteBatch.DrawString(spriteFont, message, new Vector2(670,440),Color.LightGreen);
+            OrbRenderer.spriteBatch.DrawString(OrbRenderer.spriteFont, message, new Vector2(670,440),Color.LightGreen);
             
             OrbRenderer.spriteBatch.End();
 

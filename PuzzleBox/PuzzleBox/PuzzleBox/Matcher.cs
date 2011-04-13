@@ -33,6 +33,40 @@ namespace PuzzleBox
             return (end - start > 1);                
         }
 
+        private static ScoringSet CreateScoreHelperVert(int start, int end, int x, PuzzleNode p)
+        {
+            ScoringSet s = new ScoringSet();
+            s.start = start;
+            s.end = end;
+            s.drawX = p.screenX;
+            s.drawY = p.screenY;
+            s.color = p.color;
+            s.x = x;
+            s.y = -1;
+            if (start < boxOffset)
+                s.drawY -= 50;
+            else
+                s.drawY += 50;
+            return s;
+        }
+
+        private static ScoringSet CreateScoreHelperHoriz(int start, int end, int y, PuzzleNode p)
+        {
+            ScoringSet s = new ScoringSet();
+            s.start = start;
+            s.end = end;
+            s.drawX = p.screenX;
+            s.drawY = p.screenY;
+            s.color = p.color;
+            s.x = -1;
+            s.y = y;
+            if (start < boxOffset)            
+                s.drawX -= 50;            
+            else
+                s.drawX += 50;
+            return s;
+        }
+
         private static void MarkHelperVert(int start, int end, int y, PuzzleNode p)
         {
             p.marked = true;
@@ -171,7 +205,7 @@ namespace PuzzleBox
         }
 
         //Identifies all scoring matches and marks them.
-        public static int Solve(PuzzleBox box, MasterGrid grid)
+        public static List<ScoringSet> Solve(PuzzleBox box, MasterGrid grid)
         {            
             for (int x = 0; x < boxSize; x++)
             {
@@ -180,6 +214,8 @@ namespace PuzzleBox
                     grid[x + boxOffset, y + boxOffset] = box[0, y, x];
                 }
             }
+
+            List<ScoringSet> scoringSets = new List<ScoringSet>();
 
             // Marking vertical lines
             for (int x = boxOffset; x < boxOffset+boxSize; x++)
@@ -200,11 +236,18 @@ namespace PuzzleBox
                     {
                         lastNode = grid[x, y];
                         if (StartEndHelper(start_index, end_index))
-                        {                            
+                        {
+                            ScoringSet s;
+                            if (start_index < boxOffset)
+                                s = CreateScoreHelperVert(start_index, end_index, x, grid[x, start_index]);
+                            else
+                                s = CreateScoreHelperVert(start_index, end_index, x, grid[x, y]);
                             for (int i = start_index; i < end_index; i++)
                             {
+                                s.multiplier *= grid[x, i].bonus;
                                 MarkHelperVert(start_index, end_index, i, grid[x, i]);
                             }
+                            scoringSets.Add(s);
                         }
                         start_index = y;
                         end_index = y + 1;
@@ -212,10 +255,13 @@ namespace PuzzleBox
                 }
                 if (StartEndHelper(start_index, end_index))
                 {
+                    ScoringSet s = CreateScoreHelperVert(start_index, end_index, x, grid[x, end_index-1]);
                     for (int i = start_index; i < end_index; i++)
                     {
+                        s.multiplier *= grid[x, i].bonus;
                         MarkHelperVert(start_index, end_index, i, grid[x, i]);
                     }
+                    scoringSets.Add(s);
                 }
             }
 
@@ -239,10 +285,17 @@ namespace PuzzleBox
                         lastNode = grid[x, y];
                         if (StartEndHelper(start_index, end_index))
                         {
+                            ScoringSet s;
+                            if(start_index < boxOffset)
+                                s = CreateScoreHelperHoriz(start_index, end_index, y, grid[start_index, y]);                                                    
+                            else
+                                s = CreateScoreHelperHoriz(start_index, end_index, y, grid[x, y]);                                                    
                             for (int i = start_index; i < end_index; i++)
                             {
+                                s.multiplier *= grid[i, y].bonus;
                                 MarkHelperHoriz(start_index, end_index, i, grid[i, y]);
                             }
+                            scoringSets.Add(s);
                         }
                         start_index = x;
                         end_index = x + 1;
@@ -250,10 +303,14 @@ namespace PuzzleBox
                 }
                 if (StartEndHelper(start_index, end_index))
                 {
+                    ScoringSet s = CreateScoreHelperHoriz(start_index, end_index, y, grid[end_index-1, y]);  
+                                                                              
                     for (int i = start_index; i < end_index; i++)
                     {
+                        s.multiplier *= grid[i, y].bonus;
                         MarkHelperHoriz(start_index, end_index, i, grid[i, y]);
                     }
+                    scoringSets.Add(s);
                 }
             }
 
@@ -394,6 +451,26 @@ namespace PuzzleBox
                 }
             }
 
+            for (int x = 0; x < boxSize; x++)
+            {
+                for (int y = 0; y < boxSize; y++)
+                {
+                    box[0, y, x] = grid[x + boxOffset, y + boxOffset];
+                }
+            }
+            return scoringSets;        
+        }
+
+        public static int GetMaxReplaceDistance(PuzzleBox box, MasterGrid grid)
+        {
+            for (int x = 0; x < boxSize; x++)
+            {
+                for (int y = 0; y < boxSize; y++)
+                {
+                    grid[x + boxOffset, y + boxOffset] = box[0, y, x];
+                }
+            }
+
             int max_distance = 0;
             for (int x = 0; x < gridSize; x++)
             {
@@ -410,45 +487,9 @@ namespace PuzzleBox
                     box[0, y, x] = grid[x + boxOffset, y + boxOffset];
                 }
             }
-            return max_distance;        
+            return max_distance;     
         }
-
-        public static int CalculateScore(PuzzleBox box, MasterGrid grid)
-        {
-            int totalScore = 0;
-            for (int x = 0; x < boxSize; x++)
-            {
-                for (int y = 0; y < boxSize; y++)
-                {
-                    grid[x + boxOffset, y + boxOffset]=box[0, y, x];
-                }
-            }
-            //vert
-            for (int x = 0; x < gridSize; x++)
-            {
-                for (int y = 0; y < gridSize; y++)
-                {
-                    if (grid[x, y].scoring)
-                        totalScore += 10;
-                }
-            }
-            //horiz
-            for (int y = 0; y < gridSize; y++)
-            {
-                for (int x = 0; x < gridSize; x++)
-                {
-                }
-            }
-            for (int x = 0; x < boxSize; x++)
-            {
-                for (int y = 0; y < boxSize; y++)
-                {
-                    box[0, y, x] = grid[x + boxOffset, y + boxOffset];
-                }
-            }
-            return totalScore;
-        }
-
+        
         public static void UpdateMoveCountdown(PuzzleBox box, MasterGrid grid)
         {
             for (int x = 0; x < boxSize; x++)
