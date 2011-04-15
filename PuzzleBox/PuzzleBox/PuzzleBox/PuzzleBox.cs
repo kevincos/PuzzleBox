@@ -9,7 +9,9 @@ namespace PuzzleBox
 {
     class PuzzleBox
     {
-        private static int size = Game1.boxSize;
+        private static int size = Engine.boxSize;
+
+        public int activeZ = 0;
 
         private PuzzleNode[, ,] arr = new PuzzleNode[size, size, size];
 

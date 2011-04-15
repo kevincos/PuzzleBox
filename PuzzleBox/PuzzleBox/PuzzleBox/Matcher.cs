@@ -9,10 +9,32 @@ namespace PuzzleBox
 {
     class Matcher
     {
-        private static int gridSize = Game1.gridSize;
-        private static int boxSize = Game1.boxSize;
-        private static int boxOffset = Game1.boxOffset;
-        private static int centerIndex = Game1.centerGridIndex;
+        private static int gridSize = Engine.gridSize;
+        private static int boxSize = Engine.boxSize;
+        private static int boxOffset = Engine.boxOffset;
+        private static int centerIndex = Engine.centerGridIndex;
+
+        private static void AddBoxToGrid(PuzzleBox box, MasterGrid grid)
+        {
+            for (int x = 0; x < boxSize; x++)
+            {
+                for (int y = 0; y < boxSize; y++)
+                {
+                    grid[x + boxOffset, y + boxOffset] = box[box.activeZ, y, x];
+                }
+            }
+        }
+
+        private static void SetBoxFromGrid(PuzzleBox box, MasterGrid grid)
+        {
+            for (int x = 0; x < boxSize; x++)
+            {
+                for (int y = 0; y < boxSize; y++)
+                {
+                    box[box.activeZ, y, x] = grid[x + boxOffset, y + boxOffset];
+                }
+            }
+        }
 
         public static bool IsWildCard(PuzzleNode p)
         {
@@ -201,22 +223,20 @@ namespace PuzzleBox
             p.replace_orb.replace_bottom = p.replace_bottom;
             p.replace_orb.replace_left = p.replace_left;
             p.replace_orb.replace_right = p.replace_right;
+            if (p.replace_orb == null)
+                p.replace_orb.bonus = 9;
             return p;
         }
 
         //Identifies all scoring matches and marks them.
         public static List<ScoringSet> Solve(PuzzleBox box, MasterGrid grid)
-        {            
-            for (int x = 0; x < boxSize; x++)
-            {
-                for (int y = 0; y < boxSize; y++)
-                {
-                    grid[x + boxOffset, y + boxOffset] = box[0, y, x];
-                }
-            }
+        {
+            Matcher.AddBoxToGrid(box, grid);
 
             List<ScoringSet> scoringSets = new List<ScoringSet>();
 
+            // Marking orbs
+            #region InitialOrbMarking
             // Marking vertical lines
             for (int x = boxOffset; x < boxOffset+boxSize; x++)
             {
@@ -313,8 +333,10 @@ namespace PuzzleBox
                     scoringSets.Add(s);
                 }
             }
+            #endregion
 
             // Extend wildcard markings
+            #region ExtendWildcardMarkings
             for (int x = 0; x < gridSize; x++)
             {
                 for (int y = 0; y < gridSize; y++)
@@ -344,7 +366,7 @@ namespace PuzzleBox
                         }
                         for (int i = y; i >= 0; i--)
                         {
-                            if (grid[x,i].marked)
+                            if (grid[x, i].marked)
                                 grid[x,i].replace_top = true;
                             else
                                 break;
@@ -352,7 +374,10 @@ namespace PuzzleBox
                     }
                 }
             }
+            #endregion
+
             // Mark non-scoring orbs as needing to be replaced
+            #region MarkNonScoringOrbsForReplacement
             for (int x = boxOffset; x < boxOffset+boxSize; x++)
             {
                 for (int y = 0; y < gridSize; y++)
@@ -411,8 +436,10 @@ namespace PuzzleBox
                     }
                 }
             }
+            #endregion
 
             // fix replace distances
+            #region FixReplaceDistances
             for (int x = 0; x < gridSize; x++)
             {
                 for (int y = 0; y < gridSize; y++)
@@ -450,26 +477,15 @@ namespace PuzzleBox
                     }
                 }
             }
+            #endregion
 
-            for (int x = 0; x < boxSize; x++)
-            {
-                for (int y = 0; y < boxSize; y++)
-                {
-                    box[0, y, x] = grid[x + boxOffset, y + boxOffset];
-                }
-            }
+            Matcher.SetBoxFromGrid(box, grid);
             return scoringSets;        
         }
 
         public static int GetMaxReplaceDistance(PuzzleBox box, MasterGrid grid)
         {
-            for (int x = 0; x < boxSize; x++)
-            {
-                for (int y = 0; y < boxSize; y++)
-                {
-                    grid[x + boxOffset, y + boxOffset] = box[0, y, x];
-                }
-            }
+            AddBoxToGrid(box, grid);
 
             int max_distance = 0;
             for (int x = 0; x < gridSize; x++)
@@ -480,13 +496,7 @@ namespace PuzzleBox
                 }
             }
 
-            for (int x = 0; x < boxSize; x++)
-            {
-                for (int y = 0; y < boxSize; y++)
-                {
-                    box[0, y, x] = grid[x + boxOffset, y + boxOffset];
-                }
-            }
+            SetBoxFromGrid(box, grid);
             return max_distance;     
         }
         
@@ -646,13 +656,7 @@ namespace PuzzleBox
         public static bool Replace(PuzzleBox box, MasterGrid grid)
         {
             bool anythingChanged = false;
-            for (int x = 0; x < boxSize; x++)
-            {
-                for (int y = 0; y < boxSize; y++)
-                {
-                    grid[x + boxOffset, y + boxOffset] = box[0, y, x];
-                }
-            }
+            AddBoxToGrid(box, grid);
 
             for (int x = 0; x < gridSize; x++)
             {
@@ -678,13 +682,7 @@ namespace PuzzleBox
                 }
             }
 
-            for (int x = 0; x < boxSize; x++)
-            {
-                for (int y = 0; y < boxSize; y++)
-                {
-                    box[0, y, x] = grid[x + boxOffset, y + boxOffset];
-                }
-            }
+            SetBoxFromGrid(box, grid);
             return anythingChanged;
         }
     }

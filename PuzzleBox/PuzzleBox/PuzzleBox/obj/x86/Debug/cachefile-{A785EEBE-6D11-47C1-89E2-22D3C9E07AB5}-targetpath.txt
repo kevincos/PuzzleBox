@@ -12,3 +12,13 @@ Content\highlight.xnb
 Content\background.xnb
 Content\vortex.xnb
 Content\SpriteFont1.xnb
+Content\collect.xnb
+Content\help.xnb
+Content\mainmenu.xnb
+Content\puzzle.xnb
+Content\survival.xnb
+Content\timeattack.xnb
+Content\title.xnb
+Content\paused.xnb
+Content\resume.xnb
+Content\returntomenu.xnb

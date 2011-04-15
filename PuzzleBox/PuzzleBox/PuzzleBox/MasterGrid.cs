@@ -9,9 +9,9 @@ namespace PuzzleBox
 {
     class MasterGrid
     {
-        private static int gridSize = Game1.gridSize;
-        private static int boxSize = Game1.boxSize;
-        private static int boxOffset = Game1.boxOffset;
+        private static int gridSize = Engine.gridSize;
+        private static int boxSize = Engine.boxSize;
+        private static int boxOffset = Engine.boxOffset;
 
         private PuzzleNode[,] arr = new PuzzleNode[gridSize, gridSize];
         public List<PuzzleNode>[,] queues = new List<PuzzleNode>[gridSize, gridSize];

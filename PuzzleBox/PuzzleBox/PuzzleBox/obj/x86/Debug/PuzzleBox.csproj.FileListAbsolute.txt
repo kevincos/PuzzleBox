@@ -38,3 +38,13 @@ C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\Sp
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\background.xnb
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\vortex.xnb
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\SpriteFont1.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\collect.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\help.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\mainmenu.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\puzzle.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\survival.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\timeattack.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\title.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\paused.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\resume.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\returntomenu.xnb

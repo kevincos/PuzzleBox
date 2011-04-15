@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -18,6 +19,8 @@ namespace PuzzleBox
         DESTROY,
         REGENERATE,
         MOVECOMPLETE,
+        PUSH,
+        PULL,
         ROTATEPOSX,
         ROTATENEGX,
         ROTATEPOSY,
@@ -33,11 +36,17 @@ namespace PuzzleBox
         APPEARING
     }
 
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
-    public class Game1 : Microsoft.Xna.Framework.Game
+    public enum GameStopCause
     {
+        NONE,
+        PAUSE,
+        WIN,
+        LOSE
+    }
+
+    class Engine
+    {
+
         #region Member Variables
         // Game dimensions
         public static int gridSize = 5;
@@ -45,8 +54,6 @@ namespace PuzzleBox
         public static int boxOffset = 1;
         public static int centerBoxIndex = (boxSize - 1) / 2;
         public static int centerGridIndex = boxOffset + centerBoxIndex;
-        // Graphics
-        GraphicsDeviceManager graphics;
 
         // Effects
         List<Fragment> fragmentList;
@@ -73,63 +80,28 @@ namespace PuzzleBox
         Vector3 u_0;
         Vector3 left;
         Vector3 u;
-        
+
         // Screen display
         public static int spacing = 60;
-        public static int screenSizeX = 800;
-        public static int screenSizeY = 400;
+
         float scale = 1.5f;
         public static float baseDistance;
+        public static int cubeDistance = 0;
+        public static int cubeDistanceGoal = 0;
         float tiltScale = 1.5f;
-        public static int screenCenterX;
-        public static int screenCenterY;
+
         List<PuzzleNode> zBuffer;
         #endregion
 
-        public Game1()
+        public Engine()
         {
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-        }
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-            screenSizeX = GraphicsDevice.Viewport.Width;
-            screenSizeY = GraphicsDevice.Viewport.Height;
-            screenCenterX = screenSizeX / 2;
-            screenCenterY = screenSizeY / 2;            
             puzzleBox = new PuzzleBox();
             masterGrid = new MasterGrid();
             fragmentList = new List<Fragment>();
             scoreList = new List<ScoringSet>();
         }
 
-        protected override void LoadContent()
-        {
-            OrbRenderer.spriteFont = Content.Load<SpriteFont>("SpriteFont1");
-            OrbRenderer.spriteBatch = new SpriteBatch(GraphicsDevice);
-            OrbRenderer.orbTexture = Content.Load<Texture2D>("orb");
-            OrbRenderer.orbCrackedLeftTexture = Content.Load<Texture2D>("orb-cracked-left");
-            OrbRenderer.orbCrackedRightTexture = Content.Load<Texture2D>("orb-cracked-right");
-            OrbRenderer.orbCrackedTopTexture = Content.Load<Texture2D>("orb-cracked-top");
-            OrbRenderer.orbFragmentLeftTexture = Content.Load<Texture2D>("orb-fragment-left");
-            OrbRenderer.orbFragmentRightTexture = Content.Load<Texture2D>("orb-fragment-right");
-            OrbRenderer.orbFragmentTopTexture = Content.Load<Texture2D>("orb-fragment-top");
-            OrbRenderer.numbersTexture = Content.Load<Texture2D>("numbers");
-            OrbRenderer.doubleTexture = Content.Load<Texture2D>("double");
-            OrbRenderer.toggleTexture = Content.Load<Texture2D>("toggle");
-            OrbRenderer.highlightTexture = Content.Load<Texture2D>("highlight");
-            OrbRenderer.backgroundTexture = Content.Load<Texture2D>("background");
-            OrbRenderer.vortexTexture = Content.Load<Texture2D>("vortex");
-        }
-
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
-        }
-
-        protected override void Update(GameTime gameTime)
+        public GameStopCause Update(GameTime gameTime)
         {
             // Game state flow
             if (gameState == State.DESTROY)
@@ -141,7 +113,7 @@ namespace PuzzleBox
             if (gameState == State.REGENERATE)
             {
                 animateTime += gameTime.ElapsedGameTime.Milliseconds;
-                if (animateTime > maxAnimateTime*maxSlideDistance)
+                if (animateTime > maxAnimateTime * maxSlideDistance)
                     animateTime = maxAnimateTime * maxSlideDistance;
             }
             if (gameState == State.MOVECOMPLETE)
@@ -159,7 +131,7 @@ namespace PuzzleBox
                 }
                 maxSlideDistance = Matcher.GetMaxReplaceDistance(puzzleBox, masterGrid);
                 if (0 == maxSlideDistance)
-                {                       
+                {
                     gameState = State.READY;
                     animateTime = 0;
                 }
@@ -175,42 +147,39 @@ namespace PuzzleBox
                 {
                     for (int y = 0; y < gridSize; y++)
                     {
-                        if(masterGrid[x,y].marked)
+                        if (masterGrid[x, y].marked)
                         {
-                            fragmentList.Add(new Fragment(masterGrid[x, y].screenX, masterGrid[x, y].screenY, screenSizeX, screenSizeY, masterGrid[x, y].scale, masterGrid[x, y].color));
+                            fragmentList.Add(new Fragment(masterGrid[x, y].screenX, masterGrid[x, y].screenY, Game.screenSizeX, Game.screenSizeY, masterGrid[x, y].scale, masterGrid[x, y].color));
                         }
                     }
                 }
                 for (int y = 0; y < boxSize; y++)
                 {
                     for (int z = 0; z < boxSize; z++)
-                    {                            
+                    {
                         if (puzzleBox[0, y, z].marked)
                         {
-                            fragmentList.Add(new Fragment(puzzleBox[0, y, z].screenX, puzzleBox[0, y, z].screenY, screenSizeX, screenSizeY, puzzleBox[0,y,z].scale, puzzleBox[0, y, z].color));
+                            fragmentList.Add(new Fragment(puzzleBox[0, y, z].screenX, puzzleBox[0, y, z].screenY, Game.screenSizeX, Game.screenSizeY, puzzleBox[0, y, z].scale, puzzleBox[0, y, z].color));
                         }
                     }
                 }
                 // Regenerate orbs
-                Matcher.Replace(puzzleBox, masterGrid);                
+                Matcher.Replace(puzzleBox, masterGrid);
                 gameState = State.REGENERATE;
                 animateTime = 0;
             }
-            if (gameState == State.REGENERATE && animateTime == maxAnimateTime*maxSlideDistance)
+            if (gameState == State.REGENERATE && animateTime == maxAnimateTime * maxSlideDistance)
             {
                 // Clear orbs                
                 Matcher.Clear(puzzleBox, masterGrid);
                 gameState = State.VERIFY;
             }
 
-            // Controls
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                this.Exit();
             if (gameState == State.READY)
             {
                 Matcher.UpdateTimeCountdown(puzzleBox, masterGrid, gameTime.ElapsedGameTime.Milliseconds);
+                if (Keyboard.GetState().IsKeyDown(Keys.P))
+                    return GameStopCause.PAUSE;
                 if (Keyboard.GetState().IsKeyDown(Keys.Left))
                     gameState = State.ROTATEPOSY;
                 if (Keyboard.GetState().IsKeyDown(Keys.Right))
@@ -223,10 +192,26 @@ namespace PuzzleBox
                     gameState = State.ROTATEPOSZ;
                 if (Keyboard.GetState().IsKeyDown(Keys.A))
                     gameState = State.ROTATENEGZ;
-            }            
+                if (Keyboard.GetState().IsKeyDown(Keys.Q))
+                {
+                    if (cubeDistance < spacing * 2)
+                    {
+                        cubeDistanceGoal = cubeDistance + spacing;
+                        gameState = State.PUSH;
+                    }
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.W))
+                {
+                    if (cubeDistance > 0)
+                    {
+                        cubeDistanceGoal = cubeDistance - spacing;
+                        gameState = State.PULL;
+                    }
+                }
+            }
 
             // Update fragment animation positions
-            for(int i = 0; i < fragmentList.Count; i++)
+            for (int i = 0; i < fragmentList.Count; i++)
             {
                 if (false == fragmentList[i].Update(gameTime))
                 {
@@ -241,51 +226,69 @@ namespace PuzzleBox
                     scoreList.RemoveAt(i);
                 }
             }
+            return GameStopCause.NONE;
 
-
-            base.Update(gameTime);
         }
 
-        protected override void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkBlue);            
-            OrbRenderer.spriteBatch.Begin();
-
-            OrbRenderer.DrawBackground();
             
+            OrbRenderer.DrawBackground();
+
             // Calculate tilt data
-            Vector2 shift = new Vector2(screenCenterX - Mouse.GetState().X, screenCenterY - Mouse.GetState().Y);
-            if (shift.Length() > (1.0f * screenSizeX) / 4f * tiltScale)
+            Vector2 shift = new Vector2(Game.screenCenterX - Mouse.GetState().X, Game.screenCenterY - Mouse.GetState().Y);
+            if (shift.Length() > (1.0f * Game.screenSizeX) / 4f * tiltScale)
             {
                 shift.Normalize();
-                shift = shift * (1.0f * screenSizeX) / 4f * tiltScale;
+                shift = shift * (1.0f * Game.screenSizeX) / 4f * tiltScale;
             }
 
-            OrbRenderer.DrawVortex(180 +(int)(shift.X / screenSizeX * -90f), -35+ (int)(shift.Y / screenSizeX * -90f));
-            OrbRenderer.DrawVortex(325 + (int)(shift.X / screenSizeX * -90f), -35+(int)(shift.Y / screenSizeX * -90f));
-            OrbRenderer.DrawVortex(475 + (int)(shift.X / screenSizeX * -90f), -35+(int)(shift.Y / screenSizeX * -90f));
-            OrbRenderer.DrawVortex(180 + (int)(shift.X / screenSizeX * -90f), 375 + (int)(shift.Y / screenSizeX * -90f));
-            OrbRenderer.DrawVortex(325 + (int)(shift.X / screenSizeX * -90f), 375 + (int)(shift.Y / screenSizeX * -90f));
-            OrbRenderer.DrawVortex(475 + (int)(shift.X / screenSizeX * -90f), 375 + (int)(shift.Y / screenSizeX * -90f));
-            OrbRenderer.DrawVortex(120 + (int)(shift.X / screenSizeX * -90f), 170 + (int)(shift.Y / screenSizeX * -90f));
-            OrbRenderer.DrawVortex(120 + (int)(shift.X / screenSizeX * -90f), 25 + (int)(shift.Y / screenSizeX * -90f));
-            OrbRenderer.DrawVortex(120 + (int)(shift.X / screenSizeX * -90f), 315 + (int)(shift.Y / screenSizeX * -90f));
-            OrbRenderer.DrawVortex(535 + (int)(shift.X / screenSizeX * -90f), 170 + (int)(shift.Y / screenSizeX * -90f));
-            OrbRenderer.DrawVortex(535 + (int)(shift.X / screenSizeX * -90f), 25 + (int)(shift.Y / screenSizeX * -90f));
-            OrbRenderer.DrawVortex(535 + (int)(shift.X / screenSizeX * -90f), 315 + (int)(shift.Y / screenSizeX * -90f));
+            int vortexShiftX = (int)(shift.X / Game.screenSizeX * -90f);
+            int vortexShiftY = (int)(shift.Y / Game.screenSizeX * -90f);
+
+            OrbRenderer.DrawVortex(180 + vortexShiftX, -35 + vortexShiftY);
+            OrbRenderer.DrawVortex(325 + vortexShiftX, -35 + vortexShiftY);
+            OrbRenderer.DrawVortex(475 + vortexShiftX, -35 + vortexShiftY);
+            OrbRenderer.DrawVortex(180 + vortexShiftX, 375 + vortexShiftY);
+            OrbRenderer.DrawVortex(325 + vortexShiftX, 375 + vortexShiftY);
+            OrbRenderer.DrawVortex(475 + vortexShiftX, 375 + vortexShiftY);
+            OrbRenderer.DrawVortex(120 + vortexShiftX, 170 + vortexShiftY);
+            OrbRenderer.DrawVortex(120 + vortexShiftX, 25 + vortexShiftY);
+            OrbRenderer.DrawVortex(120 + vortexShiftX, 315 + vortexShiftY);
+            OrbRenderer.DrawVortex(535 + vortexShiftX, 170 + vortexShiftY);
+            OrbRenderer.DrawVortex(535 + vortexShiftX, 25 + vortexShiftY);
+            OrbRenderer.DrawVortex(535 + vortexShiftX, 315 + vortexShiftY);
 
 
             #region RotationControls
             switch (gameState)
             {
+                case State.PULL:
+                    cubeDistance -= 5;
+                    if (cubeDistance <= cubeDistanceGoal)
+                    {
+                        cubeDistance = cubeDistanceGoal;
+                        puzzleBox.activeZ--;
+                        gameState = State.MOVECOMPLETE;
+                    }
+                    break;
+                case State.PUSH:
+                    cubeDistance += 5;
+                    if (cubeDistance >= cubeDistanceGoal)
+                    {
+                        cubeDistance = cubeDistanceGoal;
+                        puzzleBox.activeZ++;
+                        gameState = State.MOVECOMPLETE;
+                    }
+                    break;
                 case State.ROTATENEGY:
-                    theta += rotateSpeed;                    
+                    theta += rotateSpeed;
                     if (theta > Math.PI / 2)
                     {
                         theta = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.POSY);
                         animateTime = 0;
-                        gameState = State.MOVECOMPLETE;                        
+                        gameState = State.MOVECOMPLETE;
                     }
                     break;
                 case State.ROTATEPOSY:
@@ -295,62 +298,62 @@ namespace PuzzleBox
                         theta = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.NEGY);
                         animateTime = 0;
-                        gameState = State.MOVECOMPLETE;                        
+                        gameState = State.MOVECOMPLETE;
                     }
                     break;
                 case State.ROTATENEGX:
-                    phi += rotateSpeed;                    
+                    phi += rotateSpeed;
                     if (firstHalf && phi > Math.PI / 4)
                     {
-                        phi = -(float)Math.PI/4;                            
+                        phi = -(float)Math.PI / 4;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.NEGZ);
-                        firstHalf = false;                        
+                        firstHalf = false;
                     }
                     if (!firstHalf && phi > 0)
                     {
                         phi = 0;
                         firstHalf = true;
                         animateTime = 0;
-                        gameState = State.MOVECOMPLETE;                        
+                        gameState = State.MOVECOMPLETE;
                     }
                     break;
                 case State.ROTATEPOSX:
                     phi -= rotateSpeed;
                     if (firstHalf && phi < -Math.PI / 4)
                     {
-                        phi = (float)Math.PI/4;
+                        phi = (float)Math.PI / 4;
                         firstHalf = false;
-                        puzzleBox.Rotate(PuzzleBox.ROTATION.POSZ);                        
+                        puzzleBox.Rotate(PuzzleBox.ROTATION.POSZ);
                     }
                     if (!firstHalf && phi < 0)
                     {
                         phi = 0;
-                        firstHalf = true;                        
+                        firstHalf = true;
                         animateTime = 0;
-                        gameState = State.MOVECOMPLETE;                        
+                        gameState = State.MOVECOMPLETE;
                     }
                     break;
                 case State.ROTATENEGZ:
                     psi -= rotateSpeed;
-                    if(psi < -Math.PI/2)
+                    if (psi < -Math.PI / 2)
                     {
                         psi = (float)-Math.PI / 2;
                         animateTime = 0;
                         psi = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.POSX);
-                        gameState = State.MOVECOMPLETE;                        
+                        gameState = State.MOVECOMPLETE;
                     }
                     break;
                 case State.ROTATEPOSZ:
                     psi += rotateSpeed;
-                    if(psi > Math.PI/2)
+                    if (psi > Math.PI / 2)
                     {
                         psi = (float)Math.PI / 2;
                         animateTime = 0;
                         psi = 0;
                         puzzleBox.Rotate(PuzzleBox.ROTATION.NEGX);
-                        gameState = State.MOVECOMPLETE;                        
-                    }                    
+                        gameState = State.MOVECOMPLETE;
+                    }
                     break;
                 default:
                     break;
@@ -358,7 +361,7 @@ namespace PuzzleBox
             #endregion
 
             #region CameraProcessing
-            cameraBasePos = new Vector3(cameraDistance * (float)Math.Cos(theta) * (float)Math.Sin(Math.PI/2-phi),
+            cameraBasePos = new Vector3(cameraDistance * (float)Math.Cos(theta) * (float)Math.Sin(Math.PI / 2 - phi),
                 cameraDistance * (float)Math.Cos(Math.PI / 2 - phi),
                 cameraDistance * (float)Math.Sin(theta) * (float)Math.Sin(Math.PI / 2 - phi));
 
@@ -368,13 +371,13 @@ namespace PuzzleBox
             v.Normalize();
             left = Vector3.Cross(u_0, v);
             left.Normalize();
-            u = (float)Math.Sin(psi)*left + (float)Math.Cos(psi)*u_0;
+            u = (float)Math.Sin(psi) * left + (float)Math.Cos(psi) * u_0;
             u.Normalize();
             left = Vector3.Cross(u, v);
             left.Normalize();
             if (gameState == State.READY)
                 baseDistance = CameraUtils.GetDistance(v, cameraBasePos, new Vector3(-spacing, 0, 0));
-            
+
             #endregion
 
             #region AddOrbsToZBuffer
@@ -390,36 +393,36 @@ namespace PuzzleBox
                         float animatedY = (float)y;
                         if (gameState == State.REGENERATE)
                         {
-                            animatedZ = OrbRenderer.GetSlideX(z, puzzleBox[x, y,z], 1f * animateTime / maxAnimateTime);
+                            animatedZ = OrbRenderer.GetSlideX(z, puzzleBox[x, y, z], 1f * animateTime / maxAnimateTime);
                             animatedY = OrbRenderer.GetSlideY(y, puzzleBox[x, y, z], 1f * animateTime / maxAnimateTime);
                         }
                         //if (!(animatedY < -2f || animatedY > 4f || animatedZ < -2f || animatedZ > 4f))
                         {
                             Vector3 p = new Vector3((animatedX - centerBoxIndex) * spacing, (animatedY - centerBoxIndex) * spacing, (animatedZ - centerBoxIndex) * spacing);
-                            int distance = (int)CameraUtils.GetDistance(v, cameraBasePos, p);
-                            puzzleBox[x, y, z].screenX = screenCenterX + CameraUtils.GetScreenX(v, cameraBasePos, u, p) + (int)(shift.X / screenSizeX * distance);
-                            puzzleBox[x, y, z].screenY = screenCenterY + CameraUtils.GetScreenY(v, cameraBasePos, u, p) + (int)(shift.Y / screenSizeX * distance);
+                            int distance = (int)CameraUtils.GetDistance(v, cameraBasePos, p) + cubeDistance;
+                            puzzleBox[x, y, z].screenX = Game.screenCenterX + CameraUtils.GetScreenX(v, cameraBasePos, u, p) + (int)(shift.X / Game.screenSizeX * distance);
+                            puzzleBox[x, y, z].screenY = Game.screenCenterY + CameraUtils.GetScreenY(v, cameraBasePos, u, p) + (int)(shift.Y / Game.screenSizeX * distance);
                             puzzleBox[x, y, z].distance = distance;
                             puzzleBox[x, y, z].scale = scale;
-                            
+
                             zBuffer.Add(puzzleBox[x, y, z]);
                         }
                     }
                 }
-            }      
+            }
             for (int x = 0; x < gridSize; x++)
             {
                 for (int y = 0; y < gridSize; y++)
                 {
                     // Avoid rendering orbs in corners and center.
                     if ((x < boxOffset && y < boxOffset) ||
-                        (x < boxOffset && y >= boxOffset+boxSize) ||
+                        (x < boxOffset && y >= boxOffset + boxSize) ||
                         (x >= boxOffset + boxSize && y < boxOffset) ||
                         (x >= boxOffset + boxSize && y >= boxOffset + boxSize))
                         continue;
                     if (x >= boxOffset && x < boxOffset + boxSize && y >= boxOffset && y < boxOffset + boxSize)
                         continue;
-                    
+
                     {
                         float animatedX = (float)x;
                         float animatedY = (float)y;
@@ -430,28 +433,28 @@ namespace PuzzleBox
                         }
                         //if (!(animatedX > 6f || animatedX < 0f || animatedY < 0f || animatedY > 6f))
                         {
-                            masterGrid[x, y].screenX = (int)(screenCenterX + (animatedX - centerGridIndex) * spacing + (shift.X / screenSizeX * baseDistance));
-                            masterGrid[x, y].screenY = (int)(screenCenterY + (animatedY - centerGridIndex) * spacing + (shift.Y / screenSizeX * baseDistance));
+                            masterGrid[x, y].screenX = (int)(Game.screenCenterX + (animatedX - centerGridIndex) * spacing + (shift.X / Game.screenSizeX * baseDistance));
+                            masterGrid[x, y].screenY = (int)(Game.screenCenterY + (animatedY - centerGridIndex) * spacing + (shift.Y / Game.screenSizeX * baseDistance));
                             masterGrid[x, y].distance = baseDistance;
                             masterGrid[x, y].scale = scale;
                             zBuffer.Add(masterGrid[x, y]);
                         }
                     }
-                    if (x == 0 || x == gridSize-1 || y == 0 || y == gridSize-1)
+                    if (x == 0 || x == gridSize - 1 || y == 0 || y == gridSize - 1)
                     {
                         if (masterGrid.queues[x, y] != null)
                         {
-                            for (int z = 0; z < Math.Min(masterGrid.queues[x, y].Count,5); z++)
-                            {                                
+                            for (int z = 0; z < Math.Min(masterGrid.queues[x, y].Count, 5); z++)
+                            {
                                 float distance = baseDistance - 40 * (z + 1);
-                                if (masterGrid[x,y].marked && gameState == State.REGENERATE)
+                                if (masterGrid[x, y].marked && gameState == State.REGENERATE)
                                 {
                                     distance = distance + 40 * (1f * animateTime / maxAnimateTime);
                                 }
                                 if (distance <= baseDistance)
                                 {
-                                    masterGrid.queues[x, y][z].screenX = screenCenterX + (x - centerGridIndex) * spacing + (int)(shift.X / screenSizeX * distance);
-                                    masterGrid.queues[x, y][z].screenY = screenCenterY + (y - centerGridIndex) * spacing + (int)(shift.Y / screenSizeX * distance);
+                                    masterGrid.queues[x, y][z].screenX = Game.screenCenterX + (x - centerGridIndex) * spacing + (int)(shift.X / Game.screenSizeX * distance);
+                                    masterGrid.queues[x, y][z].screenY = Game.screenCenterY + (y - centerGridIndex) * spacing + (int)(shift.Y / Game.screenSizeX * distance);
                                     int modifier = (int)(Math.Sqrt(baseDistance - distance) * spacing / 10);
                                     if (x > centerGridIndex)
                                         masterGrid.queues[x, y][z].screenX += modifier;
@@ -464,8 +467,8 @@ namespace PuzzleBox
 
                                     float scaleModifier = 1f;
                                     if (baseDistance > distance)
-                                        scaleModifier = 90 / (75+baseDistance - distance);
-                                    
+                                        scaleModifier = 90 / (75 + baseDistance - distance);
+
 
                                     masterGrid.queues[x, y][z].distance = distance;
                                     masterGrid.queues[x, y][z].scale = scale * scaleModifier;
@@ -481,7 +484,7 @@ namespace PuzzleBox
             #region OrbRendering
             zBuffer.Sort();
             foreach (PuzzleNode p in zBuffer)
-            {                
+            {
                 OrbRenderer.DrawOrb(p, gameState, 1f * animateTime / maxAnimateTime);
             }
             #endregion
@@ -499,11 +502,8 @@ namespace PuzzleBox
             #endregion
 
             String message = "Score: " + currentScore;
-            OrbRenderer.spriteBatch.DrawString(OrbRenderer.spriteFont, message, new Vector2(670,440),Color.LightGreen);
-            
-            OrbRenderer.spriteBatch.End();
+            Game.spriteBatch.DrawString(OrbRenderer.spriteFont, message, new Vector2(670, 440), Color.LightGreen);
 
-            base.Draw(gameTime);
         }
     }
 }
