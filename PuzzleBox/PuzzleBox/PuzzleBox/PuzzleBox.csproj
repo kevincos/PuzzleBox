@@ -110,6 +110,7 @@
     <Compile Include="CameraUtils.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Fragment.cs" />
+    <Compile Include="LifeBar.cs" />
     <Compile Include="MasterGrid.cs" />
     <Compile Include="Matcher.cs" />
     <Compile Include="Menu.cs" />
@@ -119,7 +120,9 @@
     <Compile Include="OrbRenderer.cs" />
     <Compile Include="PuzzleBox.cs" />
     <Compile Include="PuzzleNode.cs" />
+    <Compile Include="Rubric.cs" />
     <Compile Include="Scorer.cs" />
+    <Compile Include="Timer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

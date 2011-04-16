@@ -22,53 +22,66 @@ namespace PuzzleBox
             return p1.color == p2.color;
         }
 
+        public static void SetSeed(int seed)
+        {
+            r = new Random(seed);
+        }
+        
         public PuzzleNode()
         {            
-            int v = r.Next(0, 6);
+            int v = r.Next(0, Game.currentSettings.numColors);
             switch (v)
             {
                 case 0:
-                    this.color = Color.Red;
-                    break;
-                case 1:
-                    this.color = Color.Green;
-                    break;
-                case 2:
-                    this.color = Color.Orange;
-                    break;
-                case 3:
-                    this.color = Color.Magenta;
-                    break;
-                case 4:
                     this.color = Color.Blue;
                     break;
-                case 5:
+                case 1:
                     this.color = Color.Yellow;
+                    break;
+                case 2:
+                    this.color = Color.Red;
+                    break;
+                case 3:
+                    this.color = Color.Green;
+                    break;
+                case 4:
+                    this.color = Color.Magenta;
+                    break;
+                case 5:
+                    this.color = Color.Orange;
                     break;
                 default:
                     this.color = Color.Black;
                     break;
 
-            }
-            v = r.Next(0, 10);
-            
-            if (v == 5)
-                this.bonus = 2;
-            else if (v == 3)
-            {
-                this.moveCountdownOrb = true;
-                this.countdown = 10;
-            }
-            else if (v == 4)
-            {
-                this.timeCountdownOrb = true;
-                this.countdown = 10000;
-            }
-            else if (v == 2)
-            {
-                this.toggleOrb = true;
-                this.toggleColor = Color.Gray;
             }            
+            if (Game.currentSettings.mode == GameMode.TimeAttack)
+            {
+                int toggleThreshold = Game.currentSettings.toggleFreq * 10;
+                int timerThreshold = toggleThreshold + Game.currentSettings.timerFreq * 10;
+                int counterThreshold = timerThreshold + Game.currentSettings.counterFreq * 10;
+                float complete = Math.Min(1.35f, 1.0f-(1f*Engine.timer.timeRemaining) / (1f*Game.currentSettings.totalTime));
+                toggleThreshold = (int)(toggleThreshold * complete);
+                timerThreshold = (int)(timerThreshold * complete);
+                counterThreshold = (int)(counterThreshold * complete);
+                v = r.Next(0, 100);
+                if (v < toggleThreshold)
+                {
+                    this.toggleColor = Color.Gray;
+                    this.toggleOrb = true;
+                }
+                else if (v >= toggleThreshold && v < timerThreshold)
+                {
+                    this.moveCountdownOrb = true;
+                    this.countdown = 10;
+                }
+                else if (v >= timerThreshold && v < counterThreshold)
+                {
+                    this.timeCountdownOrb = true;
+                    this.countdown = 10000;
+                }
+                
+            }
         }
 
         public PuzzleNode(Color color)

@@ -40,6 +40,7 @@ namespace PuzzleBox
     {
         NONE,
         PAUSE,
+        END,
         WIN,
         LOSE
     }
@@ -60,13 +61,16 @@ namespace PuzzleBox
         List<ScoringSet> scoreList;
 
         // Game state
+        public static Countdown timer;
+        public static LifeBar lifebar;
+        public static Rubric rubric;
         PuzzleBox puzzleBox;
         MasterGrid masterGrid;
         State gameState = State.READY;
         int animateTime = 0;
         int maxAnimateTime = 250;
         int maxSlideDistance = 0;
-        int currentScore = 0;
+        public int currentScore = 0;
 
         // Camera
         float cameraDistance = 50f;
@@ -86,8 +90,8 @@ namespace PuzzleBox
 
         float scale = 1.5f;
         public static float baseDistance;
-        public static int cubeDistance = 0;
-        public static int cubeDistanceGoal = 0;
+        public static int cubeDistance;
+        public static int cubeDistanceGoal;
         float tiltScale = 1.5f;
 
         List<PuzzleNode> zBuffer;
@@ -95,14 +99,28 @@ namespace PuzzleBox
 
         public Engine()
         {
+            cubeDistance = 0;
+            cubeDistanceGoal = 0;
+            timer = new Countdown(Game.currentSettings.totalTime, 650, 450);
+            timer.enabled = true;
+            lifebar = new LifeBar();
+            lifebar.enabled = false;
+            rubric = new Rubric();
+            rubric.enabled = false;
+
+            
             puzzleBox = new PuzzleBox();
             masterGrid = new MasterGrid();
             fragmentList = new List<Fragment>();
-            scoreList = new List<ScoringSet>();
+            scoreList = new List<ScoringSet>();            
         }
 
         public GameStopCause Update(GameTime gameTime)
         {
+            if (false == timer.Update(gameTime))
+                return GameStopCause.END;
+            if (false == lifebar.Update(gameTime))
+                return GameStopCause.END;
             // Game state flow
             if (gameState == State.DESTROY)
             {
@@ -502,7 +520,11 @@ namespace PuzzleBox
             #endregion
 
             String message = "Score: " + currentScore;
-            Game.spriteBatch.DrawString(OrbRenderer.spriteFont, message, new Vector2(670, 440), Color.LightGreen);
+            Game.spriteBatch.DrawString(Game.spriteFont, message, new Vector2(650, 420), Color.LightGreen);
+
+            lifebar.Draw();
+            timer.Draw();
+            rubric.Draw();
 
         }
     }
