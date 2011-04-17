@@ -26,8 +26,12 @@ namespace PuzzleBox
         {
             r = new Random(seed);
         }
-        
-        public PuzzleNode()
+
+        public PuzzleNode() : this(false)
+        {            
+        }
+
+        public PuzzleNode(bool initialCreate)
         {            
             int v = r.Next(0, Game.currentSettings.numColors);
             switch (v)
@@ -55,15 +59,11 @@ namespace PuzzleBox
                     break;
 
             }            
-            if (Game.currentSettings.mode == GameMode.TimeAttack)
+            if (initialCreate==false && Game.currentSettings.mode == GameMode.TimeAttack)
             {
                 int toggleThreshold = Game.currentSettings.toggleFreq * 10;
                 int timerThreshold = toggleThreshold + Game.currentSettings.timerFreq * 10;
                 int counterThreshold = timerThreshold + Game.currentSettings.counterFreq * 10;
-                float complete = Math.Min(1.35f, 1.0f-(1f*Engine.timer.timeRemaining) / (1f*Game.currentSettings.totalTime));
-                toggleThreshold = (int)(toggleThreshold * complete);
-                timerThreshold = (int)(timerThreshold * complete);
-                counterThreshold = (int)(counterThreshold * complete);
                 v = r.Next(0, 100);
                 if (v < toggleThreshold)
                 {

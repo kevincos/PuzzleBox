@@ -49,6 +49,10 @@ namespace PuzzleBox
     {
 
         #region Member Variables
+
+        public static bool automated = false;
+        Random automator;
+            
         // Game dimensions
         public static int gridSize = 5;
         public static int boxSize = 3;
@@ -99,6 +103,8 @@ namespace PuzzleBox
 
         public Engine()
         {
+            Logger.ClearLogger();
+            automator = new Random();
             cubeDistance = 0;
             cubeDistanceGoal = 0;
             timer = new Countdown(Game.currentSettings.totalTime, 650, 450);
@@ -117,8 +123,13 @@ namespace PuzzleBox
 
         public GameStopCause Update(GameTime gameTime)
         {
+            Matcher.UpdateTimeCountdown(puzzleBox, masterGrid,gameTime.ElapsedGameTime.Milliseconds);
             if (false == timer.Update(gameTime))
+            {
+                Logger.totalScore = currentScore;
+                Logger.LogGame();
                 return GameStopCause.END;
+            }
             if (false == lifebar.Update(gameTime))
                 return GameStopCause.END;
             // Game state flow
@@ -144,6 +155,7 @@ namespace PuzzleBox
                 foreach (ScoringSet s in Matcher.Solve(puzzleBox, masterGrid))
                 {
                     s.CalculateScore();
+                    s.LogScore();
                     currentScore += s.score;
                     scoreList.Add(s);
                 }
@@ -196,34 +208,63 @@ namespace PuzzleBox
             if (gameState == State.READY)
             {
                 Matcher.UpdateTimeCountdown(puzzleBox, masterGrid, gameTime.ElapsedGameTime.Milliseconds);
-                if (Keyboard.GetState().IsKeyDown(Keys.P))
-                    return GameStopCause.PAUSE;
-                if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                    gameState = State.ROTATEPOSY;
-                if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                    gameState = State.ROTATENEGY;
-                if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                    gameState = State.ROTATEPOSX;
-                if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                    gameState = State.ROTATENEGX;
-                if (Keyboard.GetState().IsKeyDown(Keys.S))
-                    gameState = State.ROTATEPOSZ;
-                if (Keyboard.GetState().IsKeyDown(Keys.A))
-                    gameState = State.ROTATENEGZ;
-                if (Keyboard.GetState().IsKeyDown(Keys.Q))
+                if (automated == false)
                 {
-                    if (cubeDistance < spacing * 2)
+                    if (Keyboard.GetState().IsKeyDown(Keys.P))
+                        return GameStopCause.PAUSE;
+                    if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                        gameState = State.ROTATEPOSY;
+                    if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                        gameState = State.ROTATENEGY;
+                    if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                        gameState = State.ROTATEPOSX;
+                    if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                        gameState = State.ROTATENEGX;
+                    if (Keyboard.GetState().IsKeyDown(Keys.S))
+                        gameState = State.ROTATEPOSZ;
+                    if (Keyboard.GetState().IsKeyDown(Keys.A))
+                        gameState = State.ROTATENEGZ;
+                    if (Keyboard.GetState().IsKeyDown(Keys.Q))
                     {
-                        cubeDistanceGoal = cubeDistance + spacing;
-                        gameState = State.PUSH;
+                        if (cubeDistance < spacing * 2)
+                        {
+                            cubeDistanceGoal = cubeDistance + spacing;
+                            gameState = State.PUSH;
+                        }
+                    }
+                    if (Keyboard.GetState().IsKeyDown(Keys.W))
+                    {
+                        if (cubeDistance > 0)
+                        {
+                            cubeDistanceGoal = cubeDistance - spacing;
+                            gameState = State.PULL;
+                        }
                     }
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.W))
+                else
                 {
-                    if (cubeDistance > 0)
+                    int x = automator.Next(0, 8);
+                    if (x == 0) gameState = State.ROTATEPOSY;
+                    if (x == 1) gameState = State.ROTATEPOSZ;
+                    if (x == 2) gameState = State.ROTATEPOSX;
+                    if (x == 3) gameState = State.ROTATENEGX;
+                    if (x == 4) gameState = State.ROTATENEGY;
+                    if (x == 5) gameState = State.ROTATENEGZ;
+                    if (x == 6)
                     {
-                        cubeDistanceGoal = cubeDistance - spacing;
-                        gameState = State.PULL;
+                        if (cubeDistance > 0)
+                        {
+                            cubeDistanceGoal = cubeDistance - spacing;
+                            gameState = State.PULL;
+                        }
+                    }
+                    if (x == 7)
+                    {
+                        if (cubeDistance < spacing * 2)
+                        {
+                            cubeDistanceGoal = cubeDistance + spacing;
+                            gameState = State.PUSH;
+                        }
                     }
                 }
             }

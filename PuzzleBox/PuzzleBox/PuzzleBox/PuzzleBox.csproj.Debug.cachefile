@@ -11,7 +11,6 @@ Content\toggle.xnb
 Content\highlight.xnb
 Content\background.xnb
 Content\vortex.xnb
-Content\SpriteFont1.xnb
 Content\collect.xnb
 Content\help.xnb
 Content\mainmenu.xnb
@@ -39,3 +38,4 @@ Content\lifebar.xnb
 Content\pointer.xnb
 Content\minus.xnb
 Content\plus.xnb
+Content\SpriteFont1.xnb

@@ -54,6 +54,7 @@ namespace PuzzleBox
         public Game()
         {
             graphics = new GraphicsDeviceManager(this);
+            Logger.Init();
             Content.RootDirectory = "Content";
             currentSettings = new Settings();
             p1engine = new Engine();
@@ -135,7 +136,11 @@ namespace PuzzleBox
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                Logger.CloseLogger();
                 this.Exit();
+            }
+
 
             if (metaState == MetaState.GamePlay)
             {
@@ -174,16 +179,24 @@ namespace PuzzleBox
             }
             else if (metaState == MetaState.GameOver_TimeAttack)
             {
-                MenuResult result = timeAttackGameOverMenu.Update(gameTime);
-                if (result == MenuResult.GoToMainMenu)
-                {                    
-                    metaState = MetaState.MainMenu;
-                    System.Threading.Thread.Sleep(100);
-                }
-                if (result == MenuResult.StartTimeAttack)
+                if (Engine.automated == true)
                 {
                     p1engine = new Engine();
                     metaState = MetaState.GamePlay;
+                }
+                else
+                {
+                    MenuResult result = timeAttackGameOverMenu.Update(gameTime);
+                    if (result == MenuResult.GoToMainMenu)
+                    {
+                        metaState = MetaState.MainMenu;
+                        System.Threading.Thread.Sleep(100);
+                    }
+                    if (result == MenuResult.StartTimeAttack)
+                    {
+                        p1engine = new Engine();
+                        metaState = MetaState.GamePlay;
+                    }
                 }
             }
             else if (metaState == MetaState.MainMenu)

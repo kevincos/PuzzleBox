@@ -24,6 +24,35 @@ namespace PuzzleBox
         {            
         }
 
+        public void LogScore()
+        {
+            int matchLength = this.end - this.start;
+            int newScore = 10 * matchLength;
+            if (matchLength >= 3)
+                newScore = newScore * 2;
+            
+            if (matchLength == 2)
+            {
+                Logger.numDoubles++;
+                Logger.pointsFromDoubles += newScore;
+            }
+            if (matchLength == 3)
+            {
+                Logger.numTriples++;
+                Logger.pointsFromTriples += newScore;
+            }
+            if (matchLength == 4)
+            {
+                Logger.numQuads++;
+                Logger.pointsFromQuads += newScore;
+            }
+            if (matchLength == 5)
+            {
+                Logger.numFullLines++;
+                Logger.pointsFromFullLines += newScore;
+            }
+        }
+
         public void CalculateScore()
         {
             int matchLength = this.end-this.start;

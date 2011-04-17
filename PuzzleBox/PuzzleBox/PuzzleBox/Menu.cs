@@ -15,7 +15,7 @@ namespace PuzzleBox
     public class Settings
     {
         public int numColors = 5;
-        public int toggleFreq = 2;
+        public int toggleFreq = 0;
         public int counterFreq = 2;
         public int timerFreq =2;
         public int totalTime = 120000;        

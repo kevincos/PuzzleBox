@@ -96,7 +96,7 @@ namespace PuzzleBox
                 {
                     for (int z = 0; z < size; z++)
                     {
-                        arr[x, y, z] = new PuzzleNode();
+                        arr[x, y, z] = new PuzzleNode(true);
                     }
                 }
             }

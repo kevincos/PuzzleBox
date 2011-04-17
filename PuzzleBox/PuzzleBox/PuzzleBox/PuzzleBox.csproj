@@ -111,6 +111,7 @@
     <Compile Include="Engine.cs" />
     <Compile Include="Fragment.cs" />
     <Compile Include="LifeBar.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="MasterGrid.cs" />
     <Compile Include="Matcher.cs" />
     <Compile Include="Menu.cs" />
