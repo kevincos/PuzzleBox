@@ -52,7 +52,19 @@ namespace PuzzleBox
                     this.color = Color.Magenta;
                     break;
                 case 5:
-                    this.color = Color.Orange;
+                    this.color = Color.DarkOrange;
+                    break;
+                case 6:
+                    this.color = Color.GreenYellow;
+                    break;
+                case 7:
+                    this.color = Color.DarkViolet;
+                    break;
+                case 8:
+                    this.color = Color.DarkTurquoise;
+                    break;
+                case 9:
+                    this.color = Color.White;
                     break;
                 default:
                     this.color = Color.Black;

@@ -343,28 +343,28 @@ namespace PuzzleBox
                 {
                     if (IsWildCard(grid[x, y]))
                     {
-                        for (int i = x; i < gridSize; i++)
+                        for (int i = x+1; i < gridSize; i++)
                         {
                             if (grid[i, y].marked)
                                 grid[i, y].replace_right = true;
                             else
                                 break;
                         }
-                        for (int i = x; i >= 0; i--)
+                        for (int i = x-1; i >= 0; i--)
                         {
                             if (grid[i, y].marked)
                                 grid[i, y].replace_left = true;
                             else
                                 break;
                         }
-                        for (int i = y; i < gridSize; i++)
+                        for (int i = y+1; i < gridSize; i++)
                         {
                             if (grid[x, i].marked)
                                 grid[x, i].replace_bottom = true;
                             else
                                 break;
                         }
-                        for (int i = y; i >= 0; i--)
+                        for (int i = y-1; i >= 0; i--)
                         {
                             if (grid[x, i].marked)
                                 grid[x,i].replace_top = true;
@@ -446,34 +446,38 @@ namespace PuzzleBox
                 {
                     if (IsWildCard(grid[x, y]))
                     {
-                        for (int i = x; i < gridSize; i++)
-                        {
-                            if (grid[i, y].marked)
-                                grid[i, y].replace_distance--;
-                            else
-                                break;
-                        }
-                        for (int i = x; i >= 0; i--)
-                        {
-                            if (grid[i, y].marked)
-                                grid[i, y].replace_distance--;
-                            else
-                                break;
-                        }
-                        for (int i = y; i < gridSize; i++)
-                        {
-                            if (grid[x, i].marked)
-                                grid[x, i].replace_distance--;
-                            else
-                                break;
-                        }
-                        for (int i = y; i >= 0; i--)
-                        {
-                            if (grid[x, i].marked)
-                                grid[x, i].replace_distance--;
-                            else
-                                break;
-                        }
+                        if(grid[x,y].replace_right)
+                            for (int i = x; i < gridSize; i++)
+                            {
+                                if (grid[i, y].marked)
+                                    grid[i, y].replace_distance--;
+                                else
+                                    break;
+                            }
+                        if(grid[x,y].replace_left)
+                            for (int i = x; i >= 0; i--)
+                            {
+                                if (grid[i, y].marked)
+                                    grid[i, y].replace_distance--;
+                                else
+                                    break;
+                            }
+                        if(grid[x,y].replace_bottom)
+                            for (int i = y; i < gridSize; i++)
+                            {
+                                if (grid[x, i].marked)
+                                    grid[x, i].replace_distance--;
+                                else
+                                    break;
+                            }
+                        if(grid[x,y].replace_top)
+                            for (int i = y; i >= 0; i--)
+                            {
+                                if (grid[x, i].marked)
+                                    grid[x, i].replace_distance--;
+                                else
+                                    break;
+                            }
                     }
                 }
             }
@@ -492,6 +496,8 @@ namespace PuzzleBox
             {
                 for (int y = 0; y < gridSize; y++)
                 {
+                    if (IsWildCard(grid[x, y]) == true && max_distance == 0)
+                        max_distance = 1;                    
                     if (grid[x, y].replace_distance > max_distance) max_distance = grid[x, y].replace_distance;
                 }
             }
@@ -557,6 +563,7 @@ namespace PuzzleBox
         {            
             HashSet<Color> sideColorsBox = new HashSet<Color>();
             HashSet<Color> cornerColorsBox = new HashSet<Color>();
+            HashSet<Color> faceColorsBox = new HashSet<Color>();
             HashSet<Color> sideColorsGrid = new HashSet<Color>();
             HashSet<Color> cornerColorsGrid = new HashSet<Color>();
             // Get potential box colors
@@ -574,28 +581,31 @@ namespace PuzzleBox
                             cornerColorsBox.Add(box[x, y, z].color);
                         if(centerCount==1)
                             sideColorsBox.Add(box[x, y, z].color);
+                        if (centerCount == 2)
+                            faceColorsBox.Add(box[x, y, z].color);
                     }
                 }
             }            
             // Get potential grid colors
-            cornerColorsGrid.Add(grid[2, 1].color);
-            cornerColorsGrid.Add(grid[2, 5].color);
-            sideColorsGrid.Add(grid[3, 1].color);
-            sideColorsGrid.Add(grid[3, 5].color);
-            cornerColorsGrid.Add(grid[4, 1].color);
-            cornerColorsGrid.Add(grid[4, 5].color);
-
-
-            cornerColorsGrid.Add(grid[1, 2].color);
-            cornerColorsGrid.Add(grid[5, 2].color);
-            sideColorsGrid.Add(grid[1, 3].color);
-            sideColorsGrid.Add(grid[5, 3].color);
+            cornerColorsGrid.Add(grid[1, 0].color);
+            cornerColorsGrid.Add(grid[3, 0].color);
+            sideColorsGrid.Add(grid[2, 0].color);
+            sideColorsGrid.Add(grid[2, 4].color);
             cornerColorsGrid.Add(grid[1, 4].color);
-            cornerColorsGrid.Add(grid[5, 4].color);
+            cornerColorsGrid.Add(grid[3, 4].color);
 
-            sideColorsGrid.IntersectWith(sideColorsBox);
-            cornerColorsGrid.IntersectWith(cornerColorsBox);
-            return (sideColorsGrid.Count > 0 || cornerColorsGrid.Count > 0);
+            cornerColorsGrid.Add(grid[0,1].color);
+            cornerColorsGrid.Add(grid[0,3].color);
+            sideColorsGrid.Add(grid[0,2].color);
+            sideColorsGrid.Add(grid[4,2].color);
+            cornerColorsGrid.Add(grid[4, 1].color);
+            cornerColorsGrid.Add(grid[4, 3].color);
+            
+            faceColorsBox.IntersectWith(sideColorsGrid);
+            sideColorsBox.IntersectWith(cornerColorsGrid);
+            sideColorsBox.IntersectWith(sideColorsGrid);
+            cornerColorsBox.IntersectWith(cornerColorsGrid);
+            return (sideColorsBox.Count > 0 || cornerColorsBox.Count > 0 || faceColorsBox.Count > 0);
         }
 
         // Clears state. Called when returning to ready state.
@@ -637,8 +647,13 @@ namespace PuzzleBox
                 {
                     for (int z = 0; z < boxSize; z++)
                     {
-                        box[x, y, z] = new PuzzleNode();
-                        box[x, y, z].marked = true;
+                        if (box[x, y, z].moveCountdownOrb == true) box[x, y, z].color = Color.Gray;
+                        if (box[x, y, z].timeCountdownOrb == true) box[x, y, z].color = Color.Gray;
+                        if (box[x, y, z].color != Color.Gray)
+                        {
+                            box[x, y, z] = new PuzzleNode();
+                            box[x, y, z].marked = true;
+                        }
                     }
                 }
             }

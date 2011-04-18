@@ -97,10 +97,10 @@ namespace PuzzleBox
             {
                 arr[x, 3] = new PuzzleNode(Color.Orange);
             }
-            arr[2, 1] = new PuzzleNode(Color.Pink);
-            arr[1, 2] = new PuzzleNode(Color.Pink);
-            arr[5, 4] = new PuzzleNode(Color.Green);
-            arr[4, 5] = new PuzzleNode(Color.Green);
+            arr[1, 0] = new PuzzleNode(Color.Pink);
+            arr[0, 1] = new PuzzleNode(Color.Pink);
+            arr[4, 3] = new PuzzleNode(Color.Green);
+            arr[3, 4] = new PuzzleNode(Color.Green);
         }
 
         private void WildCross()
@@ -135,8 +135,15 @@ namespace PuzzleBox
                     if (x == 0 || x == gridSize - 1 || y == 0 || y == gridSize - 1)
                     {
                         queues[x, y] = new List<PuzzleNode>();
+                        Color prevColor = Color.Black;
                         for (int i = 0; i < 10; i++)
-                            queues[x, y].Add(new PuzzleNode());
+                        {
+                            PuzzleNode p = new PuzzleNode();
+                            while(p.color==prevColor)
+                                p = new PuzzleNode();
+                            queues[x, y].Add(p);
+                            prevColor = p.color;
+                        }
                     }
                 }
             }

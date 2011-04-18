@@ -17,8 +17,10 @@ namespace PuzzleBox
         READY,
         VERIFY,
         DESTROY,
+        VANISH,
         REGENERATE,
         MOVECOMPLETE,
+        NEWSET,
         PUSH,
         PULL,
         ROTATEPOSX,
@@ -133,12 +135,12 @@ namespace PuzzleBox
             if (false == lifebar.Update(gameTime))
                 return GameStopCause.END;
             // Game state flow
-            if (gameState == State.DESTROY)
+            if (gameState == State.DESTROY || gameState == State.VANISH || gameState == State.NEWSET)
             {
                 animateTime += gameTime.ElapsedGameTime.Milliseconds;
                 if (animateTime > maxAnimateTime)
                     animateTime = maxAnimateTime;
-            }
+            }            
             if (gameState == State.REGENERATE)
             {
                 animateTime += gameTime.ElapsedGameTime.Milliseconds;
@@ -162,8 +164,16 @@ namespace PuzzleBox
                 maxSlideDistance = Matcher.GetMaxReplaceDistance(puzzleBox, masterGrid);
                 if (0 == maxSlideDistance)
                 {
-                    gameState = State.READY;
-                    animateTime = 0;
+                    if (!Matcher.HasValidMove(puzzleBox, masterGrid))
+                    {
+                        Matcher.Reset(puzzleBox, masterGrid);
+                        gameState = State.VANISH;
+                    }
+                    else
+                    {
+                        gameState = State.READY;
+                        animateTime = 0;
+                    }
                 }
                 else
                 {
@@ -196,6 +206,17 @@ namespace PuzzleBox
                 // Regenerate orbs
                 Matcher.Replace(puzzleBox, masterGrid);
                 gameState = State.REGENERATE;
+                animateTime = 0;
+            }
+            if (gameState == State.VANISH && animateTime == maxAnimateTime)
+            {
+                gameState = State.NEWSET;
+                animateTime = 0;
+            }
+            if (gameState == State.NEWSET && animateTime == maxAnimateTime)
+            {
+                Matcher.Clear(puzzleBox, masterGrid);
+                gameState = State.READY;
                 animateTime = 0;
             }
             if (gameState == State.REGENERATE && animateTime == maxAnimateTime * maxSlideDistance)
@@ -503,14 +524,14 @@ namespace PuzzleBox
                     {
                         if (masterGrid.queues[x, y] != null)
                         {
-                            for (int z = 0; z < Math.Min(masterGrid.queues[x, y].Count, 5); z++)
+                            for (int z = 0; z < Math.Min(masterGrid.queues[x, y].Count, 50); z++)
                             {
                                 float distance = baseDistance - 40 * (z + 1);
                                 if (masterGrid[x, y].marked && gameState == State.REGENERATE)
                                 {
-                                    distance = distance + 40 * (1f * animateTime / maxAnimateTime);
+                                    distance = distance + 40 * Math.Min(1f * animateTime / maxAnimateTime, masterGrid[x,y].replace_distance);
                                 }
-                                if (distance <= baseDistance)
+                                if (distance <= baseDistance && distance >= baseDistance - 40 * 5)
                                 {
                                     masterGrid.queues[x, y][z].screenX = Game.screenCenterX + (x - centerGridIndex) * spacing + (int)(shift.X / Game.screenSizeX * distance);
                                     masterGrid.queues[x, y][z].screenY = Game.screenCenterY + (y - centerGridIndex) * spacing + (int)(shift.Y / Game.screenSizeX * distance);

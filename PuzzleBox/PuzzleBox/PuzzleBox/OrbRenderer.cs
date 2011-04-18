@@ -145,10 +145,12 @@ namespace PuzzleBox
             highlightColer.R = (Byte)(Math.Max(0,(1 - .03 * delta)) * highlightColer.R);
             highlightColer.G = (Byte)(Math.Max(0, (1 - .03 * delta)) * highlightColer.G);
             highlightColer.B = (Byte)(Math.Max(0, (1 - .03 * delta)) * highlightColer.B);
-            Game.spriteBatch.Draw(highlightTexture,
-                new Rectangle(node.screenX - (int)(21 * node.scale), node.screenY - (int)(21 * node.scale), (int)(42 * node.scale), (int)(42 * node.scale)), new Rectangle(0, 0, 64, 64),
-                highlightColer);   
-
+            if(!(node.marked==true && (gameState == State.VANISH || gameState == State.NEWSET)))
+            {
+                Game.spriteBatch.Draw(highlightTexture,
+                    new Rectangle(node.screenX - (int)(21 * node.scale), node.screenY - (int)(21 * node.scale), (int)(42 * node.scale), (int)(42 * node.scale)), new Rectangle(0, 0, 64, 64),
+                    highlightColer);   
+            }
             if (node.marked)
             {
                 //if (gameState == State.VANSIH)
@@ -202,6 +204,18 @@ namespace PuzzleBox
                         float scale = node.scale;
                         DrawOrb(node, node.screenX - (int)(16 * scale), node.screenY - (int)(16 * scale), (int)(32 * scale));
                     }
+                }
+                else if (gameState == State.VANISH)
+                {
+                    float scale = node.scale * (1f-animationPercentage);
+                    if (scale < 0) scale = 0;
+                    DrawOrb(node, node.screenX - (int)(16 * scale), node.screenY - (int)(16 * scale), (int)(32 * scale));
+                }
+                else if (gameState == State.NEWSET)
+                {
+                    float scale = node.scale * animationPercentage;
+                    if (scale < 0) scale = 0;
+                    DrawOrb(node, node.screenX - (int)(16 * scale), node.screenY - (int)(16 * scale), (int)(32 * scale));
                 }
                 else if (gameState == State.REGENERATE)
                 {

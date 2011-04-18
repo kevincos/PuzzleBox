@@ -16,8 +16,8 @@ namespace PuzzleBox
     {
         public int numColors = 5;
         public int toggleFreq = 0;
-        public int counterFreq = 2;
-        public int timerFreq =2;
+        public int counterFreq = 0;
+        public int timerFreq =0;
         public int totalTime = 120000;        
         public GameMode mode = GameMode.TimeAttack;
     }
@@ -100,9 +100,9 @@ namespace PuzzleBox
         int scoreX = -1;
         int scoreY = -1;
         int numColors = 6;
-        int toggleFreq = 2;
-        int counterFreq = 2;
-        int timerFreq = 2;
+        int toggleFreq = 0;
+        int counterFreq = 0;
+        int timerFreq = 0;
 
         MenuState state = MenuState.Ready;
 
@@ -182,10 +182,20 @@ namespace PuzzleBox
                             p = new PuzzleNode(Color.Green);
                         else if (j == 4)
                             p = new PuzzleNode(Color.Magenta);
+                        else if (j == 5)
+                            p = new PuzzleNode(Color.DarkOrange);
+                        else if (j == 6)
+                            p = new PuzzleNode(Color.GreenYellow);
+                        else if (j == 7)
+                            p = new PuzzleNode(Color.DarkViolet);
+                        else if (j == 8)
+                            p = new PuzzleNode(Color.DarkTurquoise);
+                        else if (j == 9)
+                            p = new PuzzleNode(Color.White);
                         else
-                            p = new PuzzleNode(Color.Orange);
-                        
-                        p.screenX = optionListX + 250 + j * 50;
+                            p = new PuzzleNode(Color.Black);
+
+                        p.screenX = optionListX + 250 + j * 45;
                         p.screenY = optionListY + 25 + i * 50;
 
                         p.distance = 50;
@@ -259,7 +269,7 @@ namespace PuzzleBox
                     if (optionList[selectedIndex].type == MenuType.ColorSelect)
                     {
                         numColors++;
-                        if (numColors > 6) numColors = 1;
+                        if (numColors > 10) numColors = 1;
                     }
                     if (optionList[selectedIndex].type == MenuType.TimerFreq)
                     {
