@@ -39,3 +39,4 @@ Content\pointer.xnb
 Content\minus.xnb
 Content\plus.xnb
 Content\SpriteFont1.xnb
+Content\clocknumbers.xnb

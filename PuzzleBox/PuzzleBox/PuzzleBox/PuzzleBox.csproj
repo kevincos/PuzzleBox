@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CameraUtils.cs" />
+    <Compile Include="LevelLoader.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Fragment.cs" />
     <Compile Include="LifeBar.cs" />

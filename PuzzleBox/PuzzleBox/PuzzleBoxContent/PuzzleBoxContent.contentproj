@@ -42,6 +42,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clocknumbers.png">
+      <Name>clocknumbers</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="orb.png">
       <Name>orb</Name>
       <Importer>TextureImporter</Importer>

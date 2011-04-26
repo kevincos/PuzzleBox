@@ -18,7 +18,8 @@ namespace PuzzleBox
         public int toggleFreq = 0;
         public int counterFreq = 0;
         public int timerFreq =0;
-        public int totalTime = 120000;        
+        public int totalTime = 120000;
+        public int grayOrbStart = 18;
         public GameMode mode = GameMode.TimeAttack;
     }
 

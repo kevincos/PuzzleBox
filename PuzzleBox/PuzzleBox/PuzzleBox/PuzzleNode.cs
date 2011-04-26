@@ -27,73 +27,101 @@ namespace PuzzleBox
             r = new Random(seed);
         }
 
-        public PuzzleNode() : this(false)
-        {            
+        public string ToString()
+        {
+            return this.color.R + 
+                "-" + this.color.G + 
+                "-" + this.color.B + 
+                "-" + this.toggleOrb + 
+                "-" + this.moveCountdownOrb + 
+                "-" + this.timeCountdownOrb + 
+                "-" + this.toggleColor.R + 
+                "-" + this.toggleColor.G + 
+                "-" + this.toggleColor.B + 
+                "-" + this.countdown;
         }
 
-        public PuzzleNode(bool initialCreate)
-        {            
+        public PuzzleNode(string s)
+        {
+            string[] data = s.Split('-');
+            Color c = Color.White;
+            Color tc = Color.White;
+            c.R = Convert.ToByte(data[0]);
+            c.G = Convert.ToByte(data[1]);
+            c.B = Convert.ToByte(data[2]);
+            tc.R = Convert.ToByte(data[6]);
+            tc.G = Convert.ToByte(data[7]);
+            tc.B = Convert.ToByte(data[8]);
+            this.color = c;
+            this.toggleColor = tc;
+            this.toggleOrb = Convert.ToBoolean(data[3]);
+            this.moveCountdownOrb = Convert.ToBoolean(data[4]);
+            this.timeCountdownOrb = Convert.ToBoolean(data[5]);
+            this.countdown = Convert.ToInt32(data[9]);
+        }
+
+        public static Color RandomColor()
+        {
+            if (r == null)
+                r = new Random();
             int v = r.Next(0, Game.currentSettings.numColors);
             switch (v)
             {
                 case 0:
-                    this.color = Color.Blue;
-                    break;
+                    return Color.Blue;
                 case 1:
-                    this.color = Color.Yellow;
-                    break;
+                    return Color.Yellow;
                 case 2:
-                    this.color = Color.Red;
-                    break;
+                    return Color.Red;
                 case 3:
-                    this.color = Color.Green;
-                    break;
+                    return Color.Green;
                 case 4:
-                    this.color = Color.Magenta;
-                    break;
+                    return Color.Magenta;
                 case 5:
-                    this.color = Color.DarkOrange;
-                    break;
+                    return Color.DarkOrange;
                 case 6:
-                    this.color = Color.GreenYellow;
-                    break;
+                    return Color.Brown;
                 case 7:
-                    this.color = Color.DarkViolet;
-                    break;
+                    return Color.DarkViolet;
                 case 8:
-                    this.color = Color.DarkTurquoise;
-                    break;
+                    return Color.DarkTurquoise;
                 case 9:
-                    this.color = Color.White;
-                    break;
+                    return Color.White;
                 default:
-                    this.color = Color.Black;
-                    break;
+                    return Color.Black;
+            }     
+        }
 
-            }            
-            if (initialCreate==false && Game.currentSettings.mode == GameMode.TimeAttack)
+        public PuzzleNode()
+        {
+            this.color = PuzzleNode.RandomColor();
+
+            int toggleThreshold = Game.currentSettings.toggleFreq * 30;
+            int timerThreshold =  Game.currentSettings.timerFreq * 30;
+            int counterThreshold = Game.currentSettings.counterFreq * 30;
+            int normal = (int)Math.Max(100 - toggleThreshold - timerThreshold - counterThreshold, 1f / 9f * (toggleThreshold + timerThreshold + counterThreshold));
+            int total = toggleThreshold + timerThreshold + counterThreshold + normal;
+            float scalingFactor = 1f;
+            if (total > 100) scalingFactor = total / 100f;
+            toggleThreshold = (int)(toggleThreshold / scalingFactor);
+            timerThreshold = (int)(timerThreshold / scalingFactor);
+            counterThreshold = (int)(counterThreshold / scalingFactor);
+            int v = r.Next(0, 100);
+            if (v < toggleThreshold)
             {
-                int toggleThreshold = Game.currentSettings.toggleFreq * 10;
-                int timerThreshold = toggleThreshold + Game.currentSettings.timerFreq * 10;
-                int counterThreshold = timerThreshold + Game.currentSettings.counterFreq * 10;
-                v = r.Next(0, 100);
-                if (v < toggleThreshold)
-                {
-                    this.toggleColor = Color.Gray;
-                    this.toggleOrb = true;
-                }
-                else if (v >= toggleThreshold && v < timerThreshold)
-                {
-                    this.moveCountdownOrb = true;
-                    this.countdown = 10;
-                }
-                else if (v >= timerThreshold && v < counterThreshold)
-                {
-                    this.timeCountdownOrb = true;
-                    this.countdown = 10000;
-                }
-                
+                this.toggleColor = PuzzleNode.RandomColor();
+                this.toggleOrb = true;
             }
+            else if (v >= toggleThreshold && v < toggleThreshold+timerThreshold)
+            {
+                this.moveCountdownOrb = true;
+                this.countdown = 10;
+            }
+            else if (v >= toggleThreshold + timerThreshold && v < toggleThreshold + timerThreshold+ counterThreshold)
+            {
+                this.timeCountdownOrb = true;
+                this.countdown = 15000;
+            }                            
         }
 
         public PuzzleNode(Color color)
@@ -137,6 +165,7 @@ namespace PuzzleBox
         public int bonus = 1;
         public float distance;
         public float scale;
+        public bool selected = false;
         public bool front = false;
         public bool marked = false;
         public bool scoring = false;

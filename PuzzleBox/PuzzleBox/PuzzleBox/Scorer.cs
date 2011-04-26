@@ -29,8 +29,11 @@ namespace PuzzleBox
             int matchLength = this.end - this.start;
             int newScore = 10 * matchLength;
             if (matchLength >= 3)
+                newScore = newScore * 10;
+            if (matchLength >= 4)
                 newScore = newScore * 2;
-            
+            if(matchLength >= 5)
+                newScore = newScore * 2;
             if (matchLength == 2)
             {
                 Logger.numDoubles++;
@@ -56,9 +59,13 @@ namespace PuzzleBox
         public void CalculateScore()
         {
             int matchLength = this.end-this.start;
-            int newScore = 10 * matchLength;            
-            if(matchLength>=3)
-                newScore = newScore*2;
+            int newScore = 10 * matchLength;
+            if (matchLength >= 3)
+                newScore = newScore * 5;
+            if (matchLength >= 4)
+                newScore = newScore * 2;
+            if (matchLength >= 5)
+                newScore = newScore * 2;
             this.score = newScore * this.multiplier;
         }
 

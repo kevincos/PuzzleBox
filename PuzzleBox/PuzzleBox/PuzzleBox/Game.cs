@@ -118,6 +118,7 @@ namespace PuzzleBox
             OrbRenderer.orbFragmentRightTexture = Content.Load<Texture2D>("orb-fragment-right");
             OrbRenderer.orbFragmentTopTexture = Content.Load<Texture2D>("orb-fragment-top");
             OrbRenderer.numbersTexture = Content.Load<Texture2D>("numbers");
+            OrbRenderer.clocknumbersTexture = Content.Load<Texture2D>("clocknumbers");
             OrbRenderer.doubleTexture = Content.Load<Texture2D>("double");
             OrbRenderer.toggleTexture = Content.Load<Texture2D>("toggle");
             OrbRenderer.highlightTexture = Content.Load<Texture2D>("highlight");
@@ -179,7 +180,7 @@ namespace PuzzleBox
             }
             else if (metaState == MetaState.GameOver_TimeAttack)
             {
-                if (Engine.automated == true)
+                if (Engine.mode == ControlMode.AUTOMATED)
                 {
                     p1engine = new Engine();
                     metaState = MetaState.GamePlay;

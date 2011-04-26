@@ -505,6 +505,26 @@ namespace PuzzleBox
             SetBoxFromGrid(box, grid);
             return max_distance;     
         }
+
+        public static void UpdateToggleState(PuzzleBox box, MasterGrid grid)
+        {
+            for (int x = 0; x < boxSize; x++)
+            {
+                for (int y = 0; y < boxSize; y++)
+                {
+                    for (int z = 0; z < boxSize; z++)
+                    {
+                        if (box[x, y, z].toggleOrb)
+                        {
+                            Color temp = box[x, y, z].color;
+                            box[x, y, z].color = box[x, y, z].toggleColor;
+                            box[x, y, z].toggleColor = temp;
+
+                        }
+                    }
+                }
+            }
+        }
         
         public static void UpdateMoveCountdown(PuzzleBox box, MasterGrid grid)
         {
@@ -522,13 +542,6 @@ namespace PuzzleBox
                                 box[x, y, z].moveCountdownOrb = false;
                                 box[x, y, z].color = Color.Gray;
                             }
-                        }
-                        if (box[x, y, z].toggleOrb)
-                        {
-                            Color temp = box[x, y, z].color;
-                            box[x, y, z].color = box[x, y, z].toggleColor;
-                            box[x, y, z].toggleColor = temp;
-
                         }
                     }
                 }
@@ -560,8 +573,9 @@ namespace PuzzleBox
 
         // Checks if any valid move exists.
         public static bool HasValidMove(PuzzleBox box, MasterGrid grid)
-        {            
-            HashSet<Color> sideColorsBox = new HashSet<Color>();
+        {
+            HashSet<Color> sideColorsBox1 = new HashSet<Color>();
+            HashSet<Color> sideColorsBox2 = new HashSet<Color>();
             HashSet<Color> cornerColorsBox = new HashSet<Color>();
             HashSet<Color> faceColorsBox = new HashSet<Color>();
             HashSet<Color> sideColorsGrid = new HashSet<Color>();
@@ -573,39 +587,68 @@ namespace PuzzleBox
                 {
                     for (int z = 0; z < boxSize; z++)
                     {
+                        PuzzleNode p = box[x,y,z];
                         int centerCount = 0;
                         if (x == 1) centerCount++;
                         if (y == 1) centerCount++;
                         if (z == 1) centerCount++;
-                        if(centerCount==0)
-                            cornerColorsBox.Add(box[x, y, z].color);
-                        if(centerCount==1)
-                            sideColorsBox.Add(box[x, y, z].color);
+                        if (centerCount == 0)
+                        {
+                            cornerColorsBox.Add(p.color);
+                            if(p.toggleOrb)
+                                cornerColorsBox.Add(p.toggleColor);
+                        }
+                        if (centerCount == 1)
+                        {
+                            sideColorsBox1.Add(p.color);
+                            sideColorsBox2.Add(p.color);
+                            if (p.toggleOrb)
+                            {
+                                sideColorsBox1.Add(p.toggleColor);
+                                sideColorsBox2.Add(p.toggleColor);                            
+                            }
+                        }
                         if (centerCount == 2)
-                            faceColorsBox.Add(box[x, y, z].color);
+                        {                            
+                            faceColorsBox.Add(p.color);
+                            if (p.toggleOrb)
+                                faceColorsBox.Add(p.toggleColor);
+                        }
                     }
                 }
             }            
             // Get potential grid colors
             cornerColorsGrid.Add(grid[1, 0].color);
+            if (grid[1, 0].toggleOrb) cornerColorsGrid.Add(grid[1, 0].toggleColor);
             cornerColorsGrid.Add(grid[3, 0].color);
+            if (grid[3, 0].toggleOrb) cornerColorsGrid.Add(grid[3, 0].toggleColor);
             sideColorsGrid.Add(grid[2, 0].color);
+            if (grid[2, 0].toggleOrb) cornerColorsGrid.Add(grid[2, 0].toggleColor);
             sideColorsGrid.Add(grid[2, 4].color);
+            if (grid[2, 4].toggleOrb) cornerColorsGrid.Add(grid[2, 4].toggleColor);
             cornerColorsGrid.Add(grid[1, 4].color);
+            if (grid[1, 4].toggleOrb) cornerColorsGrid.Add(grid[1, 4].toggleColor);
             cornerColorsGrid.Add(grid[3, 4].color);
+            if (grid[3, 4].toggleOrb) cornerColorsGrid.Add(grid[3, 4].toggleColor);
 
             cornerColorsGrid.Add(grid[0,1].color);
+            if (grid[0, 1].toggleOrb) cornerColorsGrid.Add(grid[0, 1].toggleColor);
             cornerColorsGrid.Add(grid[0,3].color);
+            if (grid[0, 3].toggleOrb) cornerColorsGrid.Add(grid[0, 3].toggleColor);
             sideColorsGrid.Add(grid[0,2].color);
+            if (grid[0, 2].toggleOrb) cornerColorsGrid.Add(grid[0, 2].toggleColor);
             sideColorsGrid.Add(grid[4,2].color);
+            if (grid[4, 2].toggleOrb) cornerColorsGrid.Add(grid[4, 2].toggleColor);
             cornerColorsGrid.Add(grid[4, 1].color);
+            if (grid[4, 1].toggleOrb) cornerColorsGrid.Add(grid[4, 1].toggleColor);
             cornerColorsGrid.Add(grid[4, 3].color);
+            if (grid[4, 3].toggleOrb) cornerColorsGrid.Add(grid[4, 3].toggleColor);
             
             faceColorsBox.IntersectWith(sideColorsGrid);
-            sideColorsBox.IntersectWith(cornerColorsGrid);
-            sideColorsBox.IntersectWith(sideColorsGrid);
+            sideColorsBox1.IntersectWith(cornerColorsGrid);
+            sideColorsBox2.IntersectWith(sideColorsGrid);
             cornerColorsBox.IntersectWith(cornerColorsGrid);
-            return (sideColorsBox.Count > 0 || cornerColorsBox.Count > 0 || faceColorsBox.Count > 0);
+            return (sideColorsBox1.Count > 0 || sideColorsBox2.Count > 0 || cornerColorsBox.Count > 0 || faceColorsBox.Count > 0);
         }
 
         // Clears state. Called when returning to ready state.
@@ -630,7 +673,10 @@ namespace PuzzleBox
                         for (int i = 0; i < grid[x, y].replace_distance; i++)
                         {
                             grid.queues[x, y].RemoveAt(0);
-                            grid.queues[x, y].Add(new PuzzleNode());
+                            PuzzleNode p = new PuzzleNode();
+                            while (p.color == grid.queues[x,y][grid.queues[x,y].Count-1].color)
+                                p = new PuzzleNode();
+                            grid.queues[x, y].Add(p);
                         }
                     } 
                     grid[x, y].ClearMarking();
@@ -647,14 +693,26 @@ namespace PuzzleBox
                 {
                     for (int z = 0; z < boxSize; z++)
                     {
-                        if (box[x, y, z].moveCountdownOrb == true) box[x, y, z].color = Color.Gray;
-                        if (box[x, y, z].timeCountdownOrb == true) box[x, y, z].color = Color.Gray;
-                        if (box[x, y, z].color != Color.Gray)
-                        {
+                        //if (box[x, y, z].moveCountdownOrb == true) box[x, y, z].color = Color.Gray;
+                        //if (box[x, y, z].timeCountdownOrb == true) box[x, y, z].color = Color.Gray;
+
                             box[x, y, z] = new PuzzleNode();
                             box[x, y, z].marked = true;
-                        }
+                        //}
                     }
+                }
+            }
+            Random r = new Random();
+            for (int i = 0; i < Game.currentSettings.grayOrbStart;)
+            {
+                int x = r.Next(3);
+                int y = r.Next(3);
+                int z = r.Next(3);
+                if (box[x, y, z].color != Color.Gray)
+                {
+                    box[x, y, z] = new PuzzleNode(Color.Gray);
+                    box[x, y, z].marked = true;
+                    i++;
                 }
             }
             for (int x = 0; x < gridSize; x++)

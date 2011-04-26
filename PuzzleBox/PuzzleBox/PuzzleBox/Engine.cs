@@ -47,13 +47,24 @@ namespace PuzzleBox
         LOSE
     }
 
+    public enum ControlMode
+    {
+        NORMAL,
+        AUTOMATED,
+        EDITOR
+    }
+
     class Engine
     {
 
         #region Member Variables
 
-        public static bool automated = false;
+        public static ControlMode mode = ControlMode.EDITOR;
         Random automator;
+        public PuzzleNode selectedNode = null;
+        public List<PuzzleNode> selectedQueue = null;
+        int selectedDepth = 0;
+        int editorCooldown = 0;
             
         // Game dimensions
         public static int gridSize = 5;
@@ -95,7 +106,7 @@ namespace PuzzleBox
         public static int spacing = 60;
 
         float scale = 1.5f;
-        public static float baseDistance;
+        public static float baseDistance = 110f;
         public static int cubeDistance;
         public static int cubeDistanceGoal;
         float tiltScale = 1.5f;
@@ -119,21 +130,34 @@ namespace PuzzleBox
             
             puzzleBox = new PuzzleBox();
             masterGrid = new MasterGrid();
+            LevelLoader.LoadLevel(puzzleBox, masterGrid);
             fragmentList = new List<Fragment>();
-            scoreList = new List<ScoringSet>();            
+            scoreList = new List<ScoringSet>();
+            //if (mode != ControlMode.EDITOR)
+            //{
+              //  Matcher.Reset(puzzleBox, masterGrid);
+//                gameState = State.NEWSET;
+  //          }
+    //        else
+                gameState = State.READY;
+            animateTime = 0;
+                
         }
 
         public GameStopCause Update(GameTime gameTime)
         {
-            Matcher.UpdateTimeCountdown(puzzleBox, masterGrid,gameTime.ElapsedGameTime.Milliseconds);
-            if (false == timer.Update(gameTime))
+            if (mode != ControlMode.EDITOR)
             {
-                Logger.totalScore = currentScore;
-                Logger.LogGame();
-                return GameStopCause.END;
+                Matcher.UpdateTimeCountdown(puzzleBox, masterGrid, gameTime.ElapsedGameTime.Milliseconds);
+                /*if (false == timer.Update(gameTime))
+                {
+                    Logger.totalScore = currentScore;
+                    Logger.LogGame();
+                    return GameStopCause.END;
+                }
+                if (false == lifebar.Update(gameTime))
+                    return GameStopCause.END;*/
             }
-            if (false == lifebar.Update(gameTime))
-                return GameStopCause.END;
             // Game state flow
             if (gameState == State.DESTROY || gameState == State.VANISH || gameState == State.NEWSET)
             {
@@ -149,8 +173,12 @@ namespace PuzzleBox
             }
             if (gameState == State.MOVECOMPLETE)
             {
-                Matcher.UpdateMoveCountdown(puzzleBox, masterGrid);
-                gameState = State.VERIFY;
+                if (mode == ControlMode.EDITOR) gameState = State.READY;
+                else
+                {
+                    Matcher.UpdateToggleState(puzzleBox, masterGrid);      
+                    gameState = State.VERIFY;
+                }
             }
             if (gameState == State.VERIFY)
             {
@@ -171,6 +199,7 @@ namespace PuzzleBox
                     }
                     else
                     {
+                        Matcher.UpdateMoveCountdown(puzzleBox, masterGrid);                
                         gameState = State.READY;
                         animateTime = 0;
                     }
@@ -228,11 +257,15 @@ namespace PuzzleBox
 
             if (gameState == State.READY)
             {
-                Matcher.UpdateTimeCountdown(puzzleBox, masterGrid, gameTime.ElapsedGameTime.Milliseconds);
-                if (automated == false)
+                if(mode!=ControlMode.EDITOR)               
+                    Matcher.UpdateTimeCountdown(puzzleBox, masterGrid, gameTime.ElapsedGameTime.Milliseconds);
+                if (mode == ControlMode.NORMAL)
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.P))
                         return GameStopCause.PAUSE;
+                }
+                if (mode == ControlMode.NORMAL || mode == ControlMode.EDITOR)
+                {
                     if (Keyboard.GetState().IsKeyDown(Keys.Left))
                         gameState = State.ROTATEPOSY;
                     if (Keyboard.GetState().IsKeyDown(Keys.Right))
@@ -262,7 +295,7 @@ namespace PuzzleBox
                         }
                     }
                 }
-                else
+                if (mode == ControlMode.AUTOMATED)
                 {
                     int x = automator.Next(0, 8);
                     if (x == 0) gameState = State.ROTATEPOSY;
@@ -287,6 +320,298 @@ namespace PuzzleBox
                             gameState = State.PUSH;
                         }
                     }
+                }
+                if (mode == ControlMode.EDITOR)
+                {
+                    editorCooldown-=gameTime.ElapsedGameTime.Milliseconds;
+                    if (editorCooldown < 0) editorCooldown = 0;
+                    if (editorCooldown == 0)
+                    {
+                        if (Keyboard.GetState().IsKeyDown(Keys.NumPad1))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = puzzleBox[puzzleBox.activeZ, 2, 0];
+                            selectedQueue = null;
+                            selectedNode.selected = true;
+
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.NumPad2))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = puzzleBox[puzzleBox.activeZ, 2, 1];
+                            selectedQueue = null;
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.NumPad3))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = puzzleBox[puzzleBox.activeZ, 2, 2];
+                            selectedQueue = null;
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.NumPad4))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = puzzleBox[puzzleBox.activeZ, 1, 0];
+                            selectedQueue = null;
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.NumPad5))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = puzzleBox[puzzleBox.activeZ, 1, 1];
+                            selectedQueue = null;
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.NumPad6))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = puzzleBox[puzzleBox.activeZ, 1, 2];
+                            selectedQueue = null;
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.NumPad7))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = puzzleBox[puzzleBox.activeZ, 0, 0];
+                            selectedQueue = null;
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.NumPad8))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = puzzleBox[puzzleBox.activeZ, 0, 1];
+                            selectedQueue = null;
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.NumPad9))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = puzzleBox[puzzleBox.activeZ, 0, 2];
+                            selectedQueue = null;
+                            selectedNode.selected = true;
+                        }
+
+                        if (Keyboard.GetState().IsKeyDown(Keys.Insert))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = masterGrid[1, 0];
+                            selectedQueue = masterGrid.queues[1, 0]; ;
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Home))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = masterGrid[2, 0];
+                            selectedQueue = masterGrid.queues[2, 0]; ;
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.PageUp))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = masterGrid[3, 0];
+                            selectedQueue = masterGrid.queues[3, 0]; ;
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Delete))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = masterGrid[1, 4];
+                            selectedQueue = masterGrid.queues[1, 4]; ;
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.End))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = masterGrid[2, 4];
+                            selectedQueue = masterGrid.queues[2, 4]; ;
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.PageDown))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = masterGrid[3, 4];
+                            selectedQueue = masterGrid.queues[3, 4]; ;
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.OemCloseBrackets))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = masterGrid[4, 1];
+                            selectedQueue = masterGrid.queues[4, 1];
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.OemQuotes))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = masterGrid[4, 2];
+                            selectedQueue = masterGrid.queues[4, 2];
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.OemQuestion))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = masterGrid[4, 3];
+                            selectedQueue = masterGrid.queues[4, 3];
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.OemOpenBrackets))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = masterGrid[0, 1];
+                            selectedQueue = masterGrid.queues[0,1];
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.OemSemicolon))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = masterGrid[0, 2];
+                            selectedQueue = masterGrid.queues[0, 2];
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.OemPeriod))
+                        {
+                            puzzleBox.ClearSelection();
+                            masterGrid.ClearSelection();
+                            selectedNode = masterGrid[0, 3];
+                            selectedQueue = masterGrid.queues[0, 3];
+                            selectedNode.selected = true;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.M))
+                        {
+                            if (selectedQueue != null)
+                            {
+                                puzzleBox.ClearSelection();
+                                masterGrid.ClearSelection();
+                                selectedDepth++;
+                                if (selectedDepth >= selectedQueue.Count)
+                                    selectedDepth = selectedQueue.Count - 1;
+                                selectedNode = selectedQueue[selectedDepth];
+                                selectedNode.selected = true;
+                                editorCooldown = 250;
+                            }
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.N))
+                        {
+                            if (selectedQueue != null)
+                            {
+                                puzzleBox.ClearSelection();
+                                masterGrid.ClearSelection();
+                                selectedDepth--;
+                                if (selectedDepth < 0) selectedDepth = 0;
+                                selectedNode = selectedQueue[selectedDepth];
+                                selectedNode.selected = true;
+                                editorCooldown = 250;
+                            }
+                        }
+                         
+                        if (Keyboard.GetState().IsKeyDown(Keys.R))
+                        {
+                            selectedNode.color = Color.Red;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.G))
+                        {
+                            selectedNode.color = Color.Green;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.B))
+                        {
+                            selectedNode.color = Color.Blue;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Y))
+                        {
+                            selectedNode.color = Color.Yellow;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.P))
+                        {
+                            selectedNode.color = Color.Magenta;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.O))
+                        {
+                            selectedNode.color = Color.DarkOrange;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.X))
+                        {
+                            selectedNode.color = Color.Gray;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.F10))
+                        {
+                            LevelLoader.SaveLevel(puzzleBox, masterGrid);
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.F5))
+                        {
+                            mode = ControlMode.NORMAL;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.F))
+                        {
+                            if (selectedNode.toggleOrb == false)
+                            {
+                                selectedNode.toggleColor = Color.Gray;
+                            }
+                            selectedNode.toggleOrb = true;
+                        }
+                        
+                        if (Keyboard.GetState().IsKeyDown(Keys.C))
+                        {
+                            selectedNode.moveCountdownOrb = true;
+                            selectedNode.countdown = 10;
+                        }
+                        if(Keyboard.GetState().IsKeyDown(Keys.LeftShift)) {
+                            if(Keyboard.GetState().IsKeyDown(Keys.F))
+                            {   
+                                if (selectedNode.toggleOrb)
+                                {
+                                    Color temp = selectedNode.color;
+                                    selectedNode.color = selectedNode.toggleColor;
+                                    selectedNode.toggleColor = temp;
+                                    editorCooldown = 250;
+                                }
+                            }
+                        }
+
+                        if (Keyboard.GetState().IsKeyDown(Keys.T))
+                        {
+                            selectedNode.timeCountdownOrb = true;
+                            selectedNode.countdown = 10000;                        
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
+                        {
+                            if(selectedNode.moveCountdownOrb)
+                                selectedNode.countdown++;
+                            if (selectedNode.timeCountdownOrb)
+                                selectedNode.countdown += 1000;
+                            editorCooldown = 250;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
+                        {
+                            if (selectedNode.moveCountdownOrb)
+                                selectedNode.countdown--;
+                            if (selectedNode.timeCountdownOrb)
+                                selectedNode.countdown -= 1000; 
+                            editorCooldown = 250;
+                        }
+                    }
+
+
                 }
             }
 

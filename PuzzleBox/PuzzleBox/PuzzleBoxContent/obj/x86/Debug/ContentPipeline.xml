@@ -370,6 +370,15 @@
       <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\SpriteFont1.xnb</Output>
       <Time>2011-04-12T13:56:37.9596942-07:00</Time>
     </Item>
+    <Item>
+      <Source>clocknumbers.png</Source>
+      <Name>clocknumbers</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\clocknumbers.xnb</Output>
+      <Time>2011-04-23T14:16:23.9557281-07:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>

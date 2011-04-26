@@ -24,16 +24,21 @@ namespace PuzzleBox
         public static int numCounterOrbs;
         public static int numTimerOrbs;
         public static int numBonusOrbs;
+        public static bool loggingEnabled = false;
 
         public static void Init()
         {
-            String path = "logFile" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".txt";                
-            try
+            if (loggingEnabled)
             {
-               w = new StreamWriter(path);
-            }
-            catch(Exception e) {
-                Console.WriteLine(e);
+                String path = "logFile" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".txt";
+                try
+                {
+                    w = new StreamWriter(path);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
         }
 
@@ -57,30 +62,36 @@ namespace PuzzleBox
 
         public static void LogGame()
         {
-            try
+            if (loggingEnabled)
             {
-                w.WriteLine("GAME:\t"+DateTime.Now + "\t" + totalScore
-                    + "\t" + numDoubles
-                    + "\t" + pointsFromDoubles
-                    + "\t" + numTriples
-                    + "\t" + pointsFromTriples
-                    + "\t" + numQuads
-                    + "\t" + pointsFromQuads
-                    + "\t" + numFullLines
-                    + "\t" + pointsFromFullLines
-                    + "\t" + numGrayOrbs
-                    + "\t" + numToggleOrbs
-                    + "\t" + numCounterOrbs                    
-                    + "\t" + numTimerOrbs
-                    + "\t" + numBonusOrbs);
+                try
+                {
+                    w.WriteLine("GAME:\t" + DateTime.Now + "\t" + totalScore
+                        + "\t" + numDoubles
+                        + "\t" + pointsFromDoubles
+                        + "\t" + numTriples
+                        + "\t" + pointsFromTriples
+                        + "\t" + numQuads
+                        + "\t" + pointsFromQuads
+                        + "\t" + numFullLines
+                        + "\t" + pointsFromFullLines
+                        + "\t" + numGrayOrbs
+                        + "\t" + numToggleOrbs
+                        + "\t" + numCounterOrbs
+                        + "\t" + numTimerOrbs
+                        + "\t" + numBonusOrbs);
+                }
+                catch { }
             }
-            catch { }
         }
 
         public static void CloseLogger()
         {
-            w.Flush();
-            w.Close();
+            if (loggingEnabled)
+            {
+                w.Flush();
+                w.Close();
+            }
         }
     }
 }

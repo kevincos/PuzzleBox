@@ -96,8 +96,8 @@ namespace PuzzleBox
                 {
                     for (int z = 0; z < size; z++)
                     {
-                        arr[x, y, z] = new PuzzleNode(true);
-                        //arr[x, y, z].marked = true;
+                        arr[x, y, z] = new PuzzleNode();
+                        arr[x, y, z].marked = true;
                     }
                 }
             }
@@ -111,7 +111,21 @@ namespace PuzzleBox
             NEGY,
             POSZ,
             NEGZ
-        }        
+        }
+
+        public void ClearSelection()
+        {
+            for (int x = 0; x < size; x++)
+            {
+                for (int y = 0; y < size; y++)
+                {
+                    for (int z = 0; z < size; z++)
+                    {
+                        arr[x, y, z].selected = false;
+                    }
+                }
+            }
+        }
 
         public void Rotate(ROTATION r)
         {
