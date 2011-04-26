@@ -10,7 +10,7 @@ namespace PuzzleBox
 {
     class LevelLoader
     {
-        public static String loadPath = "puzzle6.txt";
+        public static String loadPath = "puzzle8.txt";
         public static String savePath = "newPuzzle" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".txt";
 
         public static StreamWriter w;
