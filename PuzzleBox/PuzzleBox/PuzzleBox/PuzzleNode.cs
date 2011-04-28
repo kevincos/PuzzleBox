@@ -18,7 +18,7 @@ namespace PuzzleBox
 
         public static bool Match(PuzzleNode p1, PuzzleNode p2)
         {     
-            if (p1.color == Color.Gray || p1.color == Color.Black) return false;
+            if ((p1.color.R==128 && p1.color.G ==128 && p1.color.B==128) || p1.color == Color.Black) return false;
             return p1.color == p2.color;
         }
 
@@ -27,7 +27,7 @@ namespace PuzzleBox
             r = new Random(seed);
         }
 
-        public string ToString()
+        public override string ToString()
         {
             return this.color.R + 
                 "-" + this.color.G + 
@@ -49,6 +49,10 @@ namespace PuzzleBox
             c.R = Convert.ToByte(data[0]);
             c.G = Convert.ToByte(data[1]);
             c.B = Convert.ToByte(data[2]);
+            if (c.R == 128 && c.B == 128 && c.G == 128)
+            {
+                //c.A = 192;
+            }
             tc.R = Convert.ToByte(data[6]);
             tc.G = Convert.ToByte(data[7]);
             tc.B = Convert.ToByte(data[8]);

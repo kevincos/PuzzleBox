@@ -14,13 +14,25 @@ namespace PuzzleBox
 {
     public class Settings
     {
-        public int numColors = 5;
+        public int numColors = 6;
         public int toggleFreq = 0;
         public int counterFreq = 0;
         public int timerFreq =0;
-        public int totalTime = 120000;
         public int grayOrbStart = 18;
+        public bool randomOrbs = true;
+        public string levelfilename = "";
         public GameMode mode = GameMode.TimeAttack;
+        public bool allowResets = true;
+        public bool displayScore = true;
+        public bool displayTimer = true;
+        public int timerLimit = 0;
+        public int initialTime = 120000;
+        public bool countdownTimer = true;
+        public string name = "unnamed";
+        public bool displayMoveCount = false;
+        public int availableMoves = 100;
+        public Texture2D texture = JellyfishRenderer.orangeJelly;
+        public string instructions;
     }
 
     class MenuOption
@@ -28,6 +40,8 @@ namespace PuzzleBox
         public MenuResult result;
         public MenuType type;
         public Texture2D optionText;
+        public string optionString;
+
 
         public static Texture2D menu_off;
         public static Texture2D menu_low;
@@ -38,6 +52,13 @@ namespace PuzzleBox
         {
             this.result = result;
             this.optionText = optionText;
+            this.type = MenuType.Normal;
+        }
+
+        public MenuOption(MenuResult result, string optionString)
+        {
+            this.result = result;
+            this.optionString = optionString;
             this.type = MenuType.Normal;
         }
 
@@ -58,6 +79,13 @@ namespace PuzzleBox
         TimerFreq
     }
 
+    public enum MenuClass
+    {
+        MainMenu,
+        PauseMenu,
+        ResultsMenu
+    }
+
     public enum MenuState
     {
         Ready,
@@ -72,6 +100,7 @@ namespace PuzzleBox
         MenuAction,
         GoToTimeAttack,
         GoToSurvival,
+        GoToPuzzle,
         StartTimeAttack,
         StartSurvival,
         StartCollect,
@@ -89,6 +118,7 @@ namespace PuzzleBox
         public Texture2D background;
         public Texture2D header;
 
+        MenuClass type;
         int headerX = 100;
         int headerY = 20;
         int optionListX = 90;
@@ -107,8 +137,9 @@ namespace PuzzleBox
 
         MenuState state = MenuState.Ready;
 
-        public Menu()
+        public Menu(MenuClass type)
         {
+            this.type = type;
             optionList = new List<MenuOption>();
         }
 
@@ -243,6 +274,9 @@ namespace PuzzleBox
                 String message = "Score: " + score;
                 Game.spriteBatch.DrawString(Game.spriteFont, message, new Vector2(scoreX, scoreY), Color.LightGreen);
             }
+            JellyfishRenderer.DrawJellyfish(600, 300, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.None); 
+            JellyfishRenderer.DrawJellyfish(400, 300, 100, JellyfishRenderer.doctorJellyfish, .75f, SpriteEffects.FlipHorizontally);
+            
         }
 
         public void UpdateSettings(Settings s)

@@ -9,8 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace PuzzleBox
 {
     class LevelLoader
-    {
-        public static String loadPath = "puzzle8.txt";
+    {        
         public static String savePath = "newPuzzle" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".txt";
 
         public static StreamWriter w;
@@ -21,8 +20,9 @@ namespace PuzzleBox
         private static int boxOffset = Engine.boxOffset;
         private static int centerIndex = Engine.centerGridIndex;
 
-        public static void LoadLevel(PuzzleBox box, MasterGrid grid)
+        public static void LoadLevel(string fileName, PuzzleBox box, MasterGrid grid)
         {
+            String loadPath = fileName;
             try
             {
                 r = new StreamReader(loadPath);
@@ -47,39 +47,6 @@ namespace PuzzleBox
                 if (s == null)
                     return;
                 string[] data = s.Split(',');
-                /*
-                if (data[0] == "BOX")
-                {
-                    Color c = Color.White;
-                    int x = Convert.ToInt32(data[1]);
-                    int y = Convert.ToInt32(data[2]);
-                    int z = Convert.ToInt32(data[3]);
-                    c.R = Convert.ToByte(data[4]);
-                    c.G = Convert.ToByte(data[5]);
-                    c.B = Convert.ToByte(data[6]);
-                    box[x, y, z] = new PuzzleNode(c);
-                }
-                else if (data[0] == "GRID")
-                {
-                    Color c = Color.White;
-                    int x = Convert.ToInt32(data[1]);
-                    int y = Convert.ToInt32(data[2]);
-                    c.R = Convert.ToByte(data[3]);
-                    c.G = Convert.ToByte(data[4]);
-                    c.B = Convert.ToByte(data[5]);
-                    grid[x, y] = new PuzzleNode(c);
-                }
-                else if (data[0] == "QUEUE")
-                {
-                    Color c = Color.White;
-                    int x = Convert.ToInt32(data[1]);
-                    int y = Convert.ToInt32(data[2]);
-                    int z = Convert.ToInt32(data[3]);
-                    c.R = Convert.ToByte(data[4]);
-                    c.G = Convert.ToByte(data[5]);
-                    c.B = Convert.ToByte(data[6]);
-                    grid.queues[x, y].Add(new PuzzleNode(c));
-                }*/
                 
                 if (data[0] == "BOX")
                 {

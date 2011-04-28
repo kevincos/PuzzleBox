@@ -40,3 +40,12 @@ Content\pointer.xnb
 Content\minus.xnb
 Content\plus.xnb
 Content\SpriteFont1.xnb
+Content\patientzero.xnb
+Content\baseballhat.xnb
+Content\agentjellyfish.xnb
+Content\mustashjellyfish.xnb
+Content\transparentbell.xnb
+Content\tentaclering.xnb
+Content\drjelly.xnb
+Content\nursejelly.xnb
+Content\speechbubble.xnb

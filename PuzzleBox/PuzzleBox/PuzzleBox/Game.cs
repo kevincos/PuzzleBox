@@ -17,7 +17,8 @@ namespace PuzzleBox
         Paused,
         GamePlay,
         GameOver_TimeAttack,
-        Settings_TimeAttack
+        Settings_TimeAttack,
+        Settings_Puzzle,
     }
 
     public enum GameMode
@@ -37,10 +38,11 @@ namespace PuzzleBox
 
         public static Settings currentSettings;
 
-        Menu mainMenu;
-        Menu pauseMenu;
+
+        MainMenu mainMenu;
         Menu timeAttackGameOverMenu;
-        Menu timeAttackSettingsMenu;
+        LevelSelectMenu selectMenu;
+        PauseMenu pauseMenu;
 
         MetaState metaState = MetaState.MainMenu;
         public static SpriteBatch spriteBatch;
@@ -58,10 +60,10 @@ namespace PuzzleBox
             Content.RootDirectory = "Content";
             currentSettings = new Settings();
             p1engine = new Engine();
-            mainMenu = new Menu();
-            pauseMenu = new Menu();
-            timeAttackGameOverMenu = new Menu();
-            timeAttackSettingsMenu = new Menu();
+            mainMenu = new MainMenu();
+            pauseMenu = new PauseMenu();
+            timeAttackGameOverMenu = new Menu(MenuClass.ResultsMenu);
+            selectMenu = new LevelSelectMenu();
         }
 
         protected override void Initialize()
@@ -71,6 +73,8 @@ namespace PuzzleBox
             screenSizeY = GraphicsDevice.Viewport.Height;
             screenCenterX = screenSizeX / 2;
             screenCenterY = screenSizeY / 2;            
+
+            
         }
 
         protected override void LoadContent()
@@ -80,35 +84,16 @@ namespace PuzzleBox
             MenuOption.menu_low = Content.Load<Texture2D>("low");
             MenuOption.menu_medium = Content.Load<Texture2D>("medium");
             MenuOption.menu_high = Content.Load<Texture2D>("high");
-            LifeBar.bar = Content.Load<Texture2D>("lifebar");
-            LifeBar.pointer = Content.Load<Texture2D>("pointer");
-            Rubric.plus = Content.Load<Texture2D>("plus");
-            Rubric.minus = Content.Load<Texture2D>("minus");
-            pauseMenu.background = Content.Load<Texture2D>("mainmenu");
-            pauseMenu.header = Content.Load<Texture2D>("paused");
-            pauseMenu.AddMenuItem(MenuResult.ResumeGame, Content.Load<Texture2D>("resume"));
-            pauseMenu.AddMenuItem(MenuResult.GoToMainMenu, Content.Load<Texture2D>("returntomenu"));
             mainMenu.background = Content.Load<Texture2D>("mainmenu");
             mainMenu.header = Content.Load<Texture2D>("title");
             mainMenu.AddMenuItem(MenuResult.GoToTimeAttack, Content.Load<Texture2D>("timeattack"));
-            mainMenu.AddMenuItem(MenuResult.GoToSurvival, Content.Load<Texture2D>("survival"));
-            mainMenu.AddMenuItem(MenuResult.StartCollect, Content.Load<Texture2D>("collect"));
-            mainMenu.AddMenuItem(MenuResult.StartPuzzle, Content.Load<Texture2D>("puzzle"));
-            mainMenu.AddMenuItem(MenuResult.GoToHelpMenu, Content.Load<Texture2D>("help"));
+            mainMenu.AddMenuItem(MenuResult.GoToPuzzle, Content.Load<Texture2D>("puzzle"));
             timeAttackGameOverMenu.background = Content.Load<Texture2D>("background");
             timeAttackGameOverMenu.header = Content.Load<Texture2D>("gameover");
             timeAttackGameOverMenu.AddMenuItem(MenuResult.StartTimeAttack, Content.Load<Texture2D>("replay"));
             timeAttackGameOverMenu.AddMenuItem(MenuResult.GoToTimeAttack, Content.Load<Texture2D>("newgame"));            
             timeAttackGameOverMenu.AddMenuItem(MenuResult.GoToMainMenu, Content.Load<Texture2D>("returntomenu"));
-            timeAttackSettingsMenu.background = Content.Load<Texture2D>("background");
-            timeAttackSettingsMenu.header = Content.Load<Texture2D>("timeattackheader");
-            timeAttackSettingsMenu.AddMenuItem(MenuResult.StartTimeAttack, Content.Load<Texture2D>("newgame"));
-            timeAttackSettingsMenu.AddMenuItem(MenuType.ColorSelect, Content.Load<Texture2D>("colors"));
-            timeAttackSettingsMenu.AddMenuItem(MenuType.ToggleFreq, Content.Load<Texture2D>("toggleorbs"));
-            timeAttackSettingsMenu.AddMenuItem(MenuType.CounterFreq, Content.Load<Texture2D>("counterorbs"));
-            timeAttackSettingsMenu.AddMenuItem(MenuType.TimerFreq, Content.Load<Texture2D>("timerorbs"));
-            timeAttackSettingsMenu.AddMenuItem(MenuResult.GoToMainMenu, Content.Load<Texture2D>("returntomenu"));
-
+            
             spriteFont = Content.Load<SpriteFont>("SpriteFont1");
             OrbRenderer.orbTexture = Content.Load<Texture2D>("orb");
             OrbRenderer.orbCrackedLeftTexture = Content.Load<Texture2D>("orb-cracked-left");
@@ -124,6 +109,16 @@ namespace PuzzleBox
             OrbRenderer.highlightTexture = Content.Load<Texture2D>("highlight");
             OrbRenderer.backgroundTexture = Content.Load<Texture2D>("background");
             OrbRenderer.vortexTexture = Content.Load<Texture2D>("vortex");
+            JellyfishRenderer.jellytexture = Content.Load<Texture2D>("baseballhat");
+            JellyfishRenderer.orangeJelly = Content.Load<Texture2D>("patientzero");
+            JellyfishRenderer.agentJelly = Content.Load<Texture2D>("baseballhat");
+            JellyfishRenderer.baseballJelly = Content.Load<Texture2D>("agentjellyfish");
+            JellyfishRenderer.mustacheJelly = Content.Load<Texture2D>("mustashjellyfish");
+            JellyfishRenderer.transparentBody = Content.Load<Texture2D>("transparentbell");
+            JellyfishRenderer.transparentRing = Content.Load<Texture2D>("tentaclering");
+            JellyfishRenderer.doctorJellyfish = Content.Load<Texture2D>("drjelly");
+            JellyfishRenderer.nurseJellyfish = Content.Load<Texture2D>("nursejelly");
+            JellyfishRenderer.speechBubble = Content.Load<Texture2D>("speechbubble");
         }
 
         protected override void UnloadContent()
@@ -150,7 +145,7 @@ namespace PuzzleBox
                     metaState = MetaState.Paused;
                 if (cause == GameStopCause.END)
                 {
-                    timeAttackGameOverMenu.AddScore(p1engine.currentScore, 400, 200);
+                    timeAttackGameOverMenu.AddScore(p1engine.currentScore, 100, 350);
                     metaState = MetaState.GameOver_TimeAttack;
                 }
             }
@@ -162,9 +157,9 @@ namespace PuzzleBox
                 if (result == MenuResult.ResumeGame)
                     metaState = MetaState.GamePlay;
             }
-            else if (metaState == MetaState.Settings_TimeAttack)
+            else if (metaState == MetaState.Settings_TimeAttack || metaState == MetaState.Settings_Puzzle)
             {
-                MenuResult result = timeAttackSettingsMenu.Update(gameTime);
+                MenuResult result = selectMenu.Update(gameTime);
                 if (result == MenuResult.GoToMainMenu)
                 {
                     System.Threading.Thread.Sleep(100);
@@ -172,8 +167,7 @@ namespace PuzzleBox
                 }
                 if (result == MenuResult.StartTimeAttack)
                 {
-                    timeAttackSettingsMenu.UpdateSettings(currentSettings);
-                    currentSettings.mode = GameMode.TimeAttack;
+                    currentSettings = selectMenu.GetCurrentSetttings();
                     p1engine = new Engine();
                     metaState = MetaState.GamePlay;
                 }
@@ -206,6 +200,13 @@ namespace PuzzleBox
                 if (result == MenuResult.GoToTimeAttack)
                 {                    
                     metaState = MetaState.Settings_TimeAttack;
+                    selectMenu.levelList = SettingsLoader.LoadTimeAttackLevels();
+                    System.Threading.Thread.Sleep(100);
+                }
+                if (result == MenuResult.GoToPuzzle)
+                {
+                    metaState = MetaState.Settings_Puzzle;
+                    selectMenu.levelList = SettingsLoader.LoadPuzzleLevels();
                     System.Threading.Thread.Sleep(100);
                 }
                 if (result == MenuResult.StartCollect)
@@ -230,20 +231,26 @@ namespace PuzzleBox
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkBlue);
+            Color bgColor = Color.DarkBlue;
+            bgColor.R = 14;
+            bgColor.B = 84;
+            GraphicsDevice.Clear(bgColor);
             Game.spriteBatch.Begin();
+            
+            if (metaState == MetaState.GamePlay || metaState == MetaState.Paused)            
+                p1engine.Draw(gameTime);
+
             if (metaState == MetaState.Paused)
                 pauseMenu.Draw();
-            else if (metaState == MetaState.GamePlay)
+            else if (metaState == MetaState.Settings_TimeAttack || metaState == MetaState.Settings_Puzzle)
             {
-                p1engine.Draw(gameTime);
+                selectMenu.Draw();                
             }
-            else if (metaState == MetaState.Settings_TimeAttack)
-                timeAttackSettingsMenu.Draw();
             else if (metaState == MetaState.GameOver_TimeAttack)
                 timeAttackGameOverMenu.Draw();
             else if (metaState == MetaState.MainMenu)
                 mainMenu.Draw();
+
             base.Draw(gameTime); 
             Game.spriteBatch.End();
         }

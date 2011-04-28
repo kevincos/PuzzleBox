@@ -94,11 +94,16 @@ namespace PuzzleBox
                 Color.White);
         }
 
-        public static void DrawVortex(int x, int y)
+        public static void DrawVortex(int x, int y, int opacity)
         {
+            Color c = Color.White;            
+            c.R = (Byte)(c.R * opacity / 100);
+            c.G = (Byte)(c.G * opacity / 100);
+            c.B = (Byte)(c.B * opacity / 100);
+            c.A = (Byte)(c.A * opacity / 100);
             Game.spriteBatch.Draw(vortexTexture,
                 new Rectangle(x, y, 128, 128), null,
-                Color.White);
+                c);
         }
 
 
