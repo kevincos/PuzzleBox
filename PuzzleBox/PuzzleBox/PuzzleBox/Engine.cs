@@ -305,7 +305,7 @@ namespace PuzzleBox
                         gameState = State.ROTATEPOSZ;
                     if (Keyboard.GetState().IsKeyDown(Keys.A))
                         gameState = State.ROTATENEGZ;
-                    if (Keyboard.GetState().IsKeyDown(Keys.Q))
+                    if (Keyboard.GetState().IsKeyDown(Keys.Q) || GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.B))
                     {
                         if (cubeDistance < spacing * 2)
                         {
@@ -313,7 +313,7 @@ namespace PuzzleBox
                             gameState = State.PUSH;
                         }
                     }
-                    if (Keyboard.GetState().IsKeyDown(Keys.W))
+                    if (Keyboard.GetState().IsKeyDown(Keys.W) || GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
                     {
                         if (cubeDistance > 0)
                         {

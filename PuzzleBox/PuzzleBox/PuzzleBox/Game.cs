@@ -56,6 +56,11 @@ namespace PuzzleBox
         public Game()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreparingDeviceSettings += new EventHandler<PreparingDeviceSettingsEventArgs>(graphics_PreparingDeviceSettings);
+            //this.graphics.PreferredBackBufferWidth = 800;
+            //this.graphics.PreferredBackBufferHeight = 480;
+            this.graphics.IsFullScreen = true;
+
             Logger.Init();
             Content.RootDirectory = "Content";
             currentSettings = new Settings();
@@ -64,6 +69,15 @@ namespace PuzzleBox
             pauseMenu = new PauseMenu();
             timeAttackGameOverMenu = new Menu(MenuClass.ResultsMenu);
             selectMenu = new LevelSelectMenu();
+        }
+
+        void graphics_PreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        {
+            DisplayMode displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
+            e.GraphicsDeviceInformation.PresentationParameters.BackBufferFormat = displayMode.Format;
+            e.GraphicsDeviceInformation.PresentationParameters.BackBufferWidth = displayMode.Width;
+            e.GraphicsDeviceInformation.PresentationParameters.BackBufferHeight = displayMode.Height;
+
         }
 
         protected override void Initialize()
