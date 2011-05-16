@@ -103,3 +103,12 @@ E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\te
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\drjelly.xnb
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\nursejelly.xnb
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\speechbubble.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\patientzero.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\baseballhat.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\agentjellyfish.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\mustashjellyfish.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\transparentbell.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\tentaclering.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\drjelly.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\nursejelly.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\speechbubble.xnb
