@@ -89,9 +89,13 @@ namespace PuzzleBox
             if (cooldown <= 0)
             {
                 cooldown = 0;
+                GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+                Vector2 leftStick = gamePadState.ThumbSticks.Left;
+                Vector2 rightStick = gamePadState.ThumbSticks.Right;
+                    
                 if (state == SelectMenuState.TEXT)
                 {
-                    if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                    if (Keyboard.GetState().IsKeyDown(Keys.Space) || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
                     {
                         currentTextPiece++;
                         animateTime = 0;
@@ -105,7 +109,7 @@ namespace PuzzleBox
                 }
                 if (state == SelectMenuState.READY)
                 {
-                    if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                    if (Keyboard.GetState().IsKeyDown(Keys.Left) || leftStick.X < -.95 || rightStick.X < -.95)
                     {
                         if (currentLevel > 0)
                         {
@@ -114,7 +118,7 @@ namespace PuzzleBox
                             animateTime = 0;
                         }
                     }
-                    if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                    if (Keyboard.GetState().IsKeyDown(Keys.Right) || leftStick.X > .95 || rightStick.X > .95)
                     {
                         if (currentLevel < levelList.Count - 1)
                         {
@@ -123,11 +127,11 @@ namespace PuzzleBox
                             animateTime = 0;                            
                         }
                     }
-                    if (Keyboard.GetState().IsKeyDown(Keys.B))
+                    if (Keyboard.GetState().IsKeyDown(Keys.B) || gamePadState.IsButtonDown(Buttons.B))
                     {
                         return MenuResult.GoToMainMenu;
                     }
-                    if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                    if (Keyboard.GetState().IsKeyDown(Keys.Space) || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
                     {
 
                         textPieces = levelList[currentLevel].instructions.Split('-');

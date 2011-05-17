@@ -291,11 +291,14 @@ namespace PuzzleBox
         {
             if (state == MenuState.Ready)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+                Vector2 leftStick = gamePadState.ThumbSticks.Left;
+                Vector2 rightStick = gamePadState.ThumbSticks.Right;
+                if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -.95 || rightStick.Y < -.95)
                 {
                     SelectDown();                    
                 }
-                else if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                else if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > .95 || rightStick.Y > .95)
                 {
                     SelectUp();                    
                 }
@@ -348,7 +351,7 @@ namespace PuzzleBox
                     state = MenuState.Wait;
                     state = MenuState.Wait;
                 }
-                else if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                else if (Keyboard.GetState().IsKeyDown(Keys.Space) || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
                 {
                     if (optionList[selectedIndex].type == MenuType.ColorSelect)
                     {

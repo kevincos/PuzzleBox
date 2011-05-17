@@ -85,25 +85,34 @@ namespace PuzzleBox
             }
             if (state == PauseMenuState.READY && cooldown == 0)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+                Vector2 leftStick = gamePadState.ThumbSticks.Left;
+                Vector2 rightStick = gamePadState.ThumbSticks.Right;
+                if (Keyboard.GetState().IsKeyDown(Keys.Space) || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
                 {
                     result = optionList[selectedOption].result;
                     animateTime = 0;
-                    state = PauseMenuState.NURSEOUT;
+                    state = PauseMenuState.NURSEOUT;                    
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                if (Keyboard.GetState().IsKeyDown(Keys.Right) || leftStick.X > .95 || rightStick.X > .95)
                 {
                     selectedOption++;
                     if (selectedOption >= optionList.Count())
                         selectedOption = optionList.Count() - 1;
                     cooldown = 250;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                if (Keyboard.GetState().IsKeyDown(Keys.Left) || leftStick.X < -.95 || rightStick.X < -.95)
                 {
                     selectedOption--;
                     if (selectedOption < 0)
                         selectedOption = 0;
                     cooldown = 250;
+                }
+                if (gamePadState.IsButtonDown(Buttons.B))
+                {
+                    result = MenuResult.ResumeGame;
+                    animateTime = 0;
+                    state = PauseMenuState.NURSEOUT;
                 }
             }
             return MenuResult.None;            

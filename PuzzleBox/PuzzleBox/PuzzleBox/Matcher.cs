@@ -574,12 +574,13 @@ namespace PuzzleBox
         // Checks if any valid move exists.
         public static bool HasValidMove(PuzzleBox box, MasterGrid grid)
         {
-            HashSet<Color> sideColorsBox1 = new HashSet<Color>();
-            HashSet<Color> sideColorsBox2 = new HashSet<Color>();
-            HashSet<Color> cornerColorsBox = new HashSet<Color>();
-            HashSet<Color> faceColorsBox = new HashSet<Color>();
-            HashSet<Color> sideColorsGrid = new HashSet<Color>();
-            HashSet<Color> cornerColorsGrid = new HashSet<Color>();
+
+            List<Color> sideColorsBox1 = new List<Color>();
+            List<Color> sideColorsBox2 = new List<Color>();
+            List<Color> cornerColorsBox = new List<Color>();
+            List<Color> faceColorsBox = new List<Color>();
+            List<Color> sideColorsGrid = new List<Color>();
+            List<Color> cornerColorsGrid = new List<Color>();
             // Get potential box colors
             for (int x = 0; x < boxSize; x++)
             {
@@ -644,11 +645,22 @@ namespace PuzzleBox
             cornerColorsGrid.Add(grid[4, 3].color);
             if (grid[4, 3].toggleOrb) cornerColorsGrid.Add(grid[4, 3].toggleColor);
             
-            faceColorsBox.IntersectWith(sideColorsGrid);
-            sideColorsBox1.IntersectWith(cornerColorsGrid);
-            sideColorsBox2.IntersectWith(sideColorsGrid);
-            cornerColorsBox.IntersectWith(cornerColorsGrid);
-            return (sideColorsBox1.Count > 0 || sideColorsBox2.Count > 0 || cornerColorsBox.Count > 0 || faceColorsBox.Count > 0);
+            foreach (Color c in faceColorsBox)
+            {
+                if (sideColorsGrid.Contains(c))
+                    return true;
+            }
+            foreach (Color c in sideColorsBox1)
+            {
+                if (cornerColorsGrid.Contains(c) || sideColorsGrid.Contains(c))
+                    return true;
+            }
+            foreach (Color c in cornerColorsBox)
+            {
+                if (cornerColorsGrid.Contains(c))
+                    return true;
+            }
+            return false;
         }
 
         // Clears state. Called when returning to ready state.

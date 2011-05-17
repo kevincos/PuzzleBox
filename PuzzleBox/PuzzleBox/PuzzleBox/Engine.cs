@@ -102,6 +102,7 @@ namespace PuzzleBox
         Vector3 left;
         Vector3 u;
         Vector2 shift;
+        Vector2 targetShift;
         Vector2 savedShift;
 
         // Screen display
@@ -284,7 +285,7 @@ namespace PuzzleBox
                     Matcher.UpdateTimeCountdown(puzzleBox, masterGrid, gameTime.ElapsedGameTime.Milliseconds);
                 if (mode == ControlMode.NORMAL)
                 {
-                    if (Keyboard.GetState().IsKeyDown(Keys.P))
+                    if (Keyboard.GetState().IsKeyDown(Keys.P) || GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Start))
                     {                        
                         gameState = State.PAUSING;
                         savedShift = shift;
@@ -293,19 +294,22 @@ namespace PuzzleBox
                 }
                 if (mode == ControlMode.NORMAL || mode == ControlMode.EDITOR)
                 {
-                    if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                    Vector2 stick = GamePad.GetState(PlayerIndex.One).ThumbSticks.Left;
+                    GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+                    
+                    if (Keyboard.GetState().IsKeyDown(Keys.Left) || stick.X < -.95f)
                         gameState = State.ROTATEPOSY;
-                    if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                    if (Keyboard.GetState().IsKeyDown(Keys.Right) || stick.X > .95f)
                         gameState = State.ROTATENEGY;
-                    if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                    if (Keyboard.GetState().IsKeyDown(Keys.Up) || stick.Y > .95f)
                         gameState = State.ROTATEPOSX;
-                    if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                    if (Keyboard.GetState().IsKeyDown(Keys.Down) || stick.Y < -.95f)
                         gameState = State.ROTATENEGX;
-                    if (Keyboard.GetState().IsKeyDown(Keys.S))
+                    if (Keyboard.GetState().IsKeyDown(Keys.S) || gamePadState.IsButtonDown(Buttons.Y))
                         gameState = State.ROTATEPOSZ;
-                    if (Keyboard.GetState().IsKeyDown(Keys.A))
+                    if (Keyboard.GetState().IsKeyDown(Keys.A) || gamePadState.IsButtonDown(Buttons.X))
                         gameState = State.ROTATENEGZ;
-                    if (Keyboard.GetState().IsKeyDown(Keys.Q))
+                    if (Keyboard.GetState().IsKeyDown(Keys.Q) || gamePadState.IsButtonDown(Buttons.RightShoulder) || gamePadState.IsButtonDown(Buttons.LeftShoulder))
                     {
                         if (cubeDistance < spacing * 2)
                         {
@@ -313,7 +317,7 @@ namespace PuzzleBox
                             gameState = State.PUSH;
                         }
                     }
-                    if (Keyboard.GetState().IsKeyDown(Keys.W))
+                    if (Keyboard.GetState().IsKeyDown(Keys.W) || gamePadState.IsButtonDown(Buttons.RightTrigger) || gamePadState.IsButtonDown(Buttons.LeftTrigger))
                     {
                         if (cubeDistance > 0)
                         {
@@ -668,9 +672,21 @@ namespace PuzzleBox
             OrbRenderer.DrawBackground();
 
             // Calculate tilt data
-            if (gameState != State.PAUSING && gameState != State.RESUMING)
+            if (gameState != State.PAUSING && gameState != State.RESUMING && GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Length() > .95f)
             {
-                shift = new Vector2(Game.screenCenterX - Mouse.GetState().X, Game.screenCenterY - Mouse.GetState().Y);
+                //shift = new Vector2(Game.screenCenterX - Mouse.GetState().X, Game.screenCenterY - Mouse.GetState().Y);
+                targetShift = new Vector2(GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X * Game.screenCenterX,
+                    -GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y * Game.screenCenterY);
+                if (shift != targetShift)
+                {
+                    Vector2 shiftDelta = targetShift - shift;
+                    if (shiftDelta.Length() > 100)
+                    {
+                        shiftDelta.Normalize();
+                        shiftDelta *= 100;
+                    }
+                    shift += shiftDelta;
+                }
             }
             else
             {
@@ -690,10 +706,14 @@ namespace PuzzleBox
                     if (animateTime > maxAnimateTime)
                     {
                         float f = (float)(animateTime - maxAnimateTime) / maxAnimateTime;
-                        int targetX = (Game.screenCenterX - Mouse.GetState().X);
-                        int targetY = (Game.screenCenterY - Mouse.GetState().Y);
-                        shift.X = (targetX) * f;
-                        shift.Y = (targetY +290) * f -290;
+                        // Mouse Camera
+                        //int targetX = (Game.screenCenterX - Mouse.GetState().X);
+                        //int targetY = (Game.screenCenterY - Mouse.GetState().Y);
+                        // Gamepad Camera                       
+                        targetShift = new Vector2(GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X * Game.screenCenterX,
+                            -GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y * Game.screenCenterY);
+                        shift.X = (targetShift.X) * f;
+                        shift.Y = (targetShift.Y +290) * f -290;
                     }
                     else
                         shift = new Vector2(0, -290);
