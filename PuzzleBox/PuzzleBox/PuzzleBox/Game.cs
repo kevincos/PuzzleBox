@@ -80,6 +80,8 @@ namespace PuzzleBox
             e.GraphicsDeviceInformation.PresentationParameters.BackBufferFormat = displayMode.Format;
             e.GraphicsDeviceInformation.PresentationParameters.BackBufferWidth = 1024;
             e.GraphicsDeviceInformation.PresentationParameters.BackBufferHeight = 768;
+            //e.GraphicsDeviceInformation.PresentationParameters.BackBufferWidth = 1280;
+            //e.GraphicsDeviceInformation.PresentationParameters.BackBufferHeight = 720;
         }
 
         protected override void Initialize()
@@ -105,6 +107,7 @@ namespace PuzzleBox
             mainMenu.AddMenuItem(MenuResult.GoToTimeAttack, Content.Load<Texture2D>("timeattack"));
             mainMenu.AddMenuItem(MenuResult.GoToPuzzle, Content.Load<Texture2D>("puzzle"));
             mainMenu.AddMenuItem(MenuResult.GoToMoveChallenge, Content.Load<Texture2D>("moveChallenge"));
+            mainMenu.AddMenuItem(MenuResult.Quit, Content.Load<Texture2D>("quit"));
             gameOverMenu.background = Content.Load<Texture2D>("background");
             gameOverMenu.header = Content.Load<Texture2D>("gameover");
             gameOverMenu.AddMenuItem(MenuResult.StartTimeAttack, Content.Load<Texture2D>("replay"));
@@ -131,14 +134,17 @@ namespace PuzzleBox
             OrbRenderer.vortexTexture = Content.Load<Texture2D>("vortex");
             JellyfishRenderer.jellytexture = Content.Load<Texture2D>("baseballhat");
             JellyfishRenderer.orangeJelly = Content.Load<Texture2D>("patientzero");
-            JellyfishRenderer.agentJelly = Content.Load<Texture2D>("baseballhat");
-            JellyfishRenderer.baseballJelly = Content.Load<Texture2D>("agentjellyfish");
+            JellyfishRenderer.mysteryJelly = Content.Load<Texture2D>("mysterypatient");
+            JellyfishRenderer.agentJelly = Content.Load<Texture2D>("agentjellyfish");
+            JellyfishRenderer.baseballJelly = Content.Load<Texture2D>("baseballhat");
             JellyfishRenderer.mustacheJelly = Content.Load<Texture2D>("mustashjellyfish");
             JellyfishRenderer.transparentBody = Content.Load<Texture2D>("transparentbell");
             JellyfishRenderer.transparentRing = Content.Load<Texture2D>("tentaclering");
             JellyfishRenderer.doctorJellyfish = Content.Load<Texture2D>("drjelly");
             JellyfishRenderer.nurseJellyfish = Content.Load<Texture2D>("nursejelly");
             JellyfishRenderer.speechBubble = Content.Load<Texture2D>("speechbubble");
+            SoundEffects.soundSwoosh = Content.Load<SoundEffect>("swoosh");
+            SoundEffects.soundBloop = Content.Load<SoundEffect>("bloop");
         }
 
         protected override void UnloadContent()
@@ -298,6 +304,11 @@ namespace PuzzleBox
                 if (result == MenuResult.GoToSurvival)
                 {
                     metaState = MetaState.GamePlay;
+                }
+                if (result == MenuResult.Quit)
+                {
+                    Logger.CloseLogger();
+                    this.Exit();
                 }
 
             }

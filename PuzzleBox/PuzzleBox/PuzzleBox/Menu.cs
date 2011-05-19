@@ -140,7 +140,8 @@ namespace PuzzleBox
         GoToHelpMenu,
         GoToMainMenu,
         GoToResults,
-        ResumeGame
+        ResumeGame,
+        Quit
     }
 
     class Menu

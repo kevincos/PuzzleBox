@@ -3,65 +3,49 @@
   <timeAttackLevels>
     <LevelData>
       <highScores>
-        <int>3770</int>
-        <int>2890</int>
-        <int>2720</int>
-        <int>2430</int>
-        <int>2410</int>
-      </highScores>
-      <playerNames>
-        <string>KEV</string>
-        <string>KEV</string>
-        <string>KEV</string>
-        <string>KEV</string>
-        <string>KEV</string>
-      </playerNames>
-      <played>true</played>
-      <rank>1</rank>
-    </LevelData>
-    <LevelData>
-      <highScores>
-        <int>1650</int>
+        <int>4040</int>
+        <int>2100</int>
+        <int>1420</int>
         <int>500</int>
         <int>400</int>
-        <int>300</int>
-        <int>200</int>
       </highScores>
       <playerNames>
+        <string>KRC</string>
         <string>KEV</string>
-        <string>KRC</string>
-        <string>KRC</string>
+        <string>KEV</string>
         <string>KRC</string>
         <string>KRC</string>
       </playerNames>
       <played>true</played>
+      <unlocked>true</unlocked>
       <rank>1</rank>
     </LevelData>
     <LevelData>
       <highScores>
-        <int>19970</int>
-        <int>11160</int>
-        <int>9540</int>
-        <int>6140</int>
+        <int>3450</int>
         <int>500</int>
+        <int>400</int>
+        <int>300</int>
+        <int>200</int>
       </highScores>
       <playerNames>
         <string>KEV</string>
-        <string>KEV</string>
-        <string>KEV</string>
-        <string>KEV</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
         <string>KRC</string>
       </playerNames>
       <played>true</played>
+      <unlocked>true</unlocked>
       <rank>1</rank>
     </LevelData>
     <LevelData>
       <highScores>
+        <int>12760</int>
         <int>500</int>
         <int>400</int>
         <int>300</int>
         <int>200</int>
-        <int>100</int>
       </highScores>
       <playerNames>
         <string>KRC</string>
@@ -70,389 +54,140 @@
         <string>KRC</string>
         <string>KRC</string>
       </playerNames>
-      <played>false</played>
+      <played>true</played>
+      <unlocked>true</unlocked>
       <rank>1</rank>
     </LevelData>
-    <LevelData>
-      <highScores>
-        <int>500</int>
-        <int>400</int>
-        <int>300</int>
-        <int>200</int>
-        <int>100</int>
-      </highScores>
-      <playerNames>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>false</played>
-      <rank>1</rank>
-    </LevelData>
-    <LevelData>
-      <highScores>
-        <int>500</int>
-        <int>400</int>
-        <int>300</int>
-        <int>200</int>
-        <int>100</int>
-      </highScores>
-      <playerNames>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>false</played>
-      <rank>1</rank>
-    </LevelData>
-    <LevelData>
-      <highScores>
-        <int>500</int>
-        <int>400</int>
-        <int>300</int>
-        <int>200</int>
-        <int>100</int>
-      </highScores>
-      <playerNames>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>false</played>
-      <rank>1</rank>
-    </LevelData>
-    <LevelData>
-      <highScores>
-        <int>500</int>
-        <int>400</int>
-        <int>300</int>
-        <int>200</int>
-        <int>100</int>
-      </highScores>
-      <playerNames>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>false</played>
-      <rank>1</rank>
-    </LevelData>
-    <LevelData>
-      <highScores>
-        <int>500</int>
-        <int>400</int>
-        <int>300</int>
-        <int>200</int>
-        <int>100</int>
-      </highScores>
-      <playerNames>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>false</played>
-      <rank>1</rank>
-    </LevelData>
-    <LevelData>
-      <highScores>
-        <int>500</int>
-        <int>400</int>
-        <int>300</int>
-        <int>200</int>
-        <int>100</int>
-      </highScores>
-      <playerNames>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>false</played>
-      <rank>1</rank>
-    </LevelData>
+    <LevelData xsi:nil="true" />
+    <LevelData xsi:nil="true" />
+    <LevelData xsi:nil="true" />
+    <LevelData xsi:nil="true" />
+    <LevelData xsi:nil="true" />
+    <LevelData xsi:nil="true" />
+    <LevelData xsi:nil="true" />
   </timeAttackLevels>
   <moveChallengeLevels>
     <LevelData>
       <highScores>
-        <int>2840</int>
-        <int>2460</int>
-        <int>2160</int>
-        <int>1840</int>
-        <int>1830</int>
+        <int>1670</int>
+        <int>500</int>
+        <int>400</int>
+        <int>300</int>
+        <int>200</int>
       </highScores>
       <playerNames>
-        <string>KEV</string>
-        <string>KEV</string>
-        <string>KEV</string>
-        <string>KEV</string>
-        <string>KEV</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
       </playerNames>
       <played>true</played>
+      <unlocked>true</unlocked>
       <rank>1</rank>
     </LevelData>
     <LevelData>
       <highScores>
-        <int>1710</int>
-        <int>1130</int>
-        <int>1120</int>
-        <int>940</int>
-        <int>890</int>
+        <int>2330</int>
+        <int>500</int>
+        <int>400</int>
+        <int>300</int>
+        <int>200</int>
       </highScores>
       <playerNames>
-        <string>KEV</string>
-        <string>KEV</string>
-        <string>KEV</string>
-        <string>KEV</string>
-        <string>KEV</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
       </playerNames>
       <played>true</played>
+      <unlocked>true</unlocked>
       <rank>1</rank>
     </LevelData>
     <LevelData>
       <highScores>
-        <int>11260</int>
-        <int>9540</int>
-        <int>6390</int>
-        <int>6340</int>
-        <int>5480</int>
+        <int>15390</int>
+        <int>500</int>
+        <int>400</int>
+        <int>300</int>
+        <int>200</int>
       </highScores>
       <playerNames>
-        <string>KEV</string>
-        <string>KEV</string>
-        <string>KEV</string>
-        <string>KEV</string>
-        <string>KEV</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
       </playerNames>
       <played>true</played>
+      <unlocked>true</unlocked>
       <rank>1</rank>
     </LevelData>
-    <LevelData>
-      <highScores>
-        <int>500</int>
-        <int>400</int>
-        <int>300</int>
-        <int>200</int>
-        <int>100</int>
-      </highScores>
-      <playerNames>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>false</played>
-      <rank>1</rank>
-    </LevelData>
-    <LevelData>
-      <highScores>
-        <int>500</int>
-        <int>400</int>
-        <int>300</int>
-        <int>200</int>
-        <int>100</int>
-      </highScores>
-      <playerNames>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>false</played>
-      <rank>1</rank>
-    </LevelData>
-    <LevelData>
-      <highScores>
-        <int>500</int>
-        <int>400</int>
-        <int>300</int>
-        <int>200</int>
-        <int>100</int>
-      </highScores>
-      <playerNames>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>false</played>
-      <rank>1</rank>
-    </LevelData>
-    <LevelData>
-      <highScores>
-        <int>500</int>
-        <int>400</int>
-        <int>300</int>
-        <int>200</int>
-        <int>100</int>
-      </highScores>
-      <playerNames>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>false</played>
-      <rank>1</rank>
-    </LevelData>
-    <LevelData>
-      <highScores>
-        <int>500</int>
-        <int>400</int>
-        <int>300</int>
-        <int>200</int>
-        <int>100</int>
-      </highScores>
-      <playerNames>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>false</played>
-      <rank>1</rank>
-    </LevelData>
-    <LevelData>
-      <highScores>
-        <int>500</int>
-        <int>400</int>
-        <int>300</int>
-        <int>200</int>
-        <int>100</int>
-      </highScores>
-      <playerNames>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>false</played>
-      <rank>1</rank>
-    </LevelData>
-    <LevelData>
-      <highScores>
-        <int>500</int>
-        <int>400</int>
-        <int>300</int>
-        <int>200</int>
-        <int>100</int>
-      </highScores>
-      <playerNames>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>false</played>
-      <rank>1</rank>
-    </LevelData>
+    <LevelData xsi:nil="true" />
+    <LevelData xsi:nil="true" />
+    <LevelData xsi:nil="true" />
+    <LevelData xsi:nil="true" />
+    <LevelData xsi:nil="true" />
+    <LevelData xsi:nil="true" />
+    <LevelData xsi:nil="true" />
   </moveChallengeLevels>
   <puzzleLevels>
     <LevelData>
       <highScores>
-        <int>1440</int>
-        <int>2256</int>
-        <int>2496</int>
-        <int>2912</int>
-        <int>300000</int>
-      </highScores>
-      <playerNames>
-        <string>KRC</string>
-        <string>IPC</string>
-        <string>KRC</string>
-        <string>ERC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>true</played>
-      <rank>1</rank>
-    </LevelData>
-    <LevelData>
-      <highScores>
-        <int>46848</int>
-        <int>51456</int>
+        <int>1616</int>
+        <int>1696</int>
+        <int>2928</int>
         <int>300000</int>
         <int>360000</int>
-        <int>420000</int>
       </highScores>
       <playerNames>
-        <string>KEV</string>
-        <string>KEV</string>
+        <string>KRC</string>
+        <string>KRC</string>
         <string>KRC</string>
         <string>KRC</string>
         <string>KRC</string>
       </playerNames>
       <played>true</played>
+      <unlocked>true</unlocked>
       <rank>1</rank>
     </LevelData>
     <LevelData>
       <highScores>
-        <int>25248</int>
-        <int>25376</int>
-        <int>300000</int>
-        <int>360000</int>
-        <int>420000</int>
-      </highScores>
-      <playerNames>
-        <string>KEV</string>
-        <string>BRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>true</played>
-      <rank>1</rank>
-    </LevelData>
-    <LevelData>
-      <highScores>
-        <int>36528</int>
+        <int>48784</int>
         <int>300000</int>
         <int>360000</int>
         <int>420000</int>
         <int>480000</int>
       </highScores>
       <playerNames>
-        <string>KEV</string>
+        <string>KRC</string>
         <string>KRC</string>
         <string>KRC</string>
         <string>KRC</string>
         <string>KRC</string>
       </playerNames>
       <played>true</played>
+      <unlocked>true</unlocked>
       <rank>1</rank>
     </LevelData>
     <LevelData>
       <highScores>
-        <int>61968</int>
+        <int>21920</int>
+        <int>25904</int>
         <int>300000</int>
         <int>360000</int>
         <int>420000</int>
-        <int>480000</int>
       </highScores>
       <playerNames>
-        <string>KEV</string>
+        <string>KRC</string>
         <string>KRC</string>
         <string>KRC</string>
         <string>KRC</string>
         <string>KRC</string>
       </playerNames>
       <played>true</played>
+      <unlocked>false</unlocked>
       <rank>1</rank>
     </LevelData>
     <LevelData>
@@ -471,6 +206,7 @@
         <string>KRC</string>
       </playerNames>
       <played>false</played>
+      <unlocked>false</unlocked>
       <rank>1</rank>
     </LevelData>
     <LevelData>
@@ -489,6 +225,7 @@
         <string>KRC</string>
       </playerNames>
       <played>false</played>
+      <unlocked>false</unlocked>
       <rank>1</rank>
     </LevelData>
     <LevelData>
@@ -507,24 +244,7 @@
         <string>KRC</string>
       </playerNames>
       <played>false</played>
-      <rank>1</rank>
-    </LevelData>
-    <LevelData>
-      <highScores>
-        <int>43088</int>
-        <int>300000</int>
-        <int>360000</int>
-        <int>420000</int>
-        <int>480000</int>
-      </highScores>
-      <playerNames>
-        <string>IRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-        <string>KRC</string>
-      </playerNames>
-      <played>true</played>
+      <unlocked>false</unlocked>
       <rank>1</rank>
     </LevelData>
     <LevelData>
@@ -543,6 +263,64 @@
         <string>KRC</string>
       </playerNames>
       <played>false</played>
+      <unlocked>false</unlocked>
+      <rank>1</rank>
+    </LevelData>
+    <LevelData>
+      <highScores>
+        <int>300000</int>
+        <int>360000</int>
+        <int>420000</int>
+        <int>480000</int>
+        <int>540000</int>
+      </highScores>
+      <playerNames>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
+      </playerNames>
+      <played>false</played>
+      <unlocked>false</unlocked>
+      <rank>1</rank>
+    </LevelData>
+    <LevelData>
+      <highScores>
+        <int>300000</int>
+        <int>360000</int>
+        <int>420000</int>
+        <int>480000</int>
+        <int>540000</int>
+      </highScores>
+      <playerNames>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
+      </playerNames>
+      <played>false</played>
+      <unlocked>false</unlocked>
+      <rank>1</rank>
+    </LevelData>
+    <LevelData>
+      <highScores>
+        <int>300000</int>
+        <int>360000</int>
+        <int>420000</int>
+        <int>480000</int>
+        <int>540000</int>
+      </highScores>
+      <playerNames>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
+        <string>KRC</string>
+      </playerNames>
+      <played>false</played>
+      <unlocked>false</unlocked>
       <rank>1</rank>
     </LevelData>
   </puzzleLevels>

@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CameraUtils.cs" />
+    <Compile Include="SoundEffects.cs" />
     <Compile Include="SummaryMenu.cs" />
     <Compile Include="GameOverMenu.cs" />
     <Compile Include="HighScoreTracker.cs" />

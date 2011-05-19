@@ -214,6 +214,11 @@ namespace PuzzleBox
                             levelData.highScores[i] = score;
                         }
                     }
+                    if (score >= Game.currentSettings.two_star && level < highScoreData.timeAttackLevels.Count()-1)
+                    {
+                        if(highScoreData.timeAttackLevels[level+1]!=null)
+                            highScoreData.timeAttackLevels[level + 1].unlocked = true;
+                    }
                 }
                 if (Game.currentSettings.mode == GameMode.MoveChallenge)
                 {
@@ -232,6 +237,11 @@ namespace PuzzleBox
                             rank = i;
                             levelData.highScores[i] = score;
                         }
+                    }
+                    if (score >= Game.currentSettings.two_star && level < highScoreData.moveChallengeLevels.Count() - 1)
+                    {
+                        if (highScoreData.moveChallengeLevels[level + 1] != null)
+                            highScoreData.moveChallengeLevels[level + 1].unlocked = true;
                     }
                 }
                 else if (Game.currentSettings.mode == GameMode.Puzzle)
@@ -252,9 +262,13 @@ namespace PuzzleBox
                             levelData.highScores[i] = score;
                         }
                     }
+                    if (score <= Game.currentSettings.two_star && level < highScoreData.puzzleLevels.Count() - 1)
+                    {
+                        if (highScoreData.puzzleLevels[level + 1] != null)
+                            highScoreData.puzzleLevels[level + 1].unlocked = true;
+                    }
                 }
-                
-            
+                HighScoreTracker.SaveHighScores(highScoreData);    
                 state = GameOverMenuState.DOCTORIN;
             }            
             if (state == GameOverMenuState.DOCTORIN || state == GameOverMenuState.DOCTOROUT || state == GameOverMenuState.ANIMATEDOWN || state == GameOverMenuState.ANIMATEUP)

@@ -81,13 +81,17 @@ namespace PuzzleBox
                 s.three_star = 3000;
                 levels.Add(s);
             }
-            levels[0].name = "Standard";
-            levels[1].name = "LowDensity";
-            levels[1].grayOrbStart = 24;
-            levels[1].texture = JellyfishRenderer.baseballJelly;
-            levels[2].name = "HighDensity";
+            levels[0].name = "Beginner";
+            levels[0].grayOrbStart = 24;
+            levels[0].texture = JellyfishRenderer.baseballJelly;
+            levels[0].two_star = 300;
+            levels[0].three_star = 1000;
+            levels[1].name = "Standard";
+            levels[2].name = "Advanced";
             levels[2].grayOrbStart = 0;
             levels[2].texture = JellyfishRenderer.mustacheJelly;
+            levels[2].two_star = 6000;
+            levels[2].three_star = 10000;
             return levels;
         }
 
@@ -114,11 +118,17 @@ namespace PuzzleBox
                 s.three_star = 3000;
                 levels.Add(s);
             }
-            levels[0].name = "Standard";
-            levels[1].name = "LowDensity";
-            levels[1].grayOrbStart = 24;
-            levels[2].name = "HighDensity";
-            levels[2].grayOrbStart = 0;       
+            levels[0].name = "Beginner";
+            levels[0].grayOrbStart = 24;
+            levels[0].texture = JellyfishRenderer.baseballJelly;
+            levels[0].two_star = 300;
+            levels[0].three_star = 1000;
+            levels[1].name = "Standard";
+            levels[2].name = "Advanced";
+            levels[2].grayOrbStart = 0;
+            levels[2].texture = JellyfishRenderer.mustacheJelly;
+            levels[2].two_star = 6000;
+            levels[2].three_star = 10000;  
             return levels;
         }
     }

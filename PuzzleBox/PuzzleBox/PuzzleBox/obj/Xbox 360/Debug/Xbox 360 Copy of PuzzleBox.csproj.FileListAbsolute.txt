@@ -118,3 +118,7 @@ E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\obj\Xbox 360\Debug\Resol
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\obj\Xbox 360\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\obj\Xbox 360\Debug\PuzzleBox.exe
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\obj\Xbox 360\Debug\PuzzleBox.pdb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\quit.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\mysterypatient.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\bloop.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\swoosh.xnb

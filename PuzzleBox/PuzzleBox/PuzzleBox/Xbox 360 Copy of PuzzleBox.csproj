@@ -88,6 +88,7 @@
     <Compile Include="Rubric.cs" />
     <Compile Include="Scorer.cs" />
     <Compile Include="SettingsLoader.cs" />
+    <Compile Include="SoundEffects.cs" />
     <Compile Include="SummaryMenu.cs" />
     <Compile Include="Timer.cs" />
   </ItemGroup>

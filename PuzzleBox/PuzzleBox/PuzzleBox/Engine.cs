@@ -223,6 +223,7 @@ namespace PuzzleBox
                         if (s.color == Game.currentSettings.dangerColor)
                             pendingResult = GameStopCause.LOSE_ERROR;
                     }
+                    SoundEffects.PlayScore();
                     s.CalculateScore();
                     s.LogScore();
                     currentScore += s.score;
@@ -235,6 +236,9 @@ namespace PuzzleBox
                 maxSlideDistance = Matcher.GetMaxReplaceDistance(puzzleBox, masterGrid);
                 if (0 == maxSlideDistance)
                 {
+                    if (movesRemaining == 0)
+                        return GameStopCause.END;
+                        
                     if (!Matcher.HasValidMove(puzzleBox, masterGrid))
                     {
                         if (Game.currentSettings.mode == GameMode.Puzzle)
@@ -250,8 +254,6 @@ namespace PuzzleBox
                     else
                     {
                         Matcher.UpdateMoveCountdown(puzzleBox, masterGrid);
-                        if (movesRemaining == 0)
-                            return GameStopCause.END;
                         gameState = State.READY;
                         animateTime = 0;
                     }
@@ -337,23 +339,42 @@ namespace PuzzleBox
                 {
                     Vector2 stick = GamePad.GetState(PlayerIndex.One).ThumbSticks.Left;
                     GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
-                    
+
                     if (Keyboard.GetState().IsKeyDown(Keys.Left) || stick.X < -.95f)
+                    {
+                        SoundEffects.PlayMove();
                         gameState = State.ROTATEPOSY;
+                    }
                     if (Keyboard.GetState().IsKeyDown(Keys.Right) || stick.X > .95f)
+                    {
+                        SoundEffects.PlayMove();
                         gameState = State.ROTATENEGY;
+                    }
                     if (Keyboard.GetState().IsKeyDown(Keys.Up) || stick.Y > .95f)
+                    {
+                        SoundEffects.PlayMove();
                         gameState = State.ROTATEPOSX;
+                    }
                     if (Keyboard.GetState().IsKeyDown(Keys.Down) || stick.Y < -.95f)
+                    {
+                        SoundEffects.PlayMove();
                         gameState = State.ROTATENEGX;
+                    }
                     if (Keyboard.GetState().IsKeyDown(Keys.S) || gamePadState.IsButtonDown(Buttons.Y))
+                    {
+                        SoundEffects.PlayMove();
                         gameState = State.ROTATEPOSZ;
+                    }
                     if (Keyboard.GetState().IsKeyDown(Keys.A) || gamePadState.IsButtonDown(Buttons.X))
+                    {
+                        SoundEffects.PlayMove();
                         gameState = State.ROTATENEGZ;
+                    }
                     if (Keyboard.GetState().IsKeyDown(Keys.Q) || gamePadState.IsButtonDown(Buttons.RightShoulder) || gamePadState.IsButtonDown(Buttons.LeftShoulder))
                     {
                         if (cubeDistance < spacing * 2)
                         {
+                            SoundEffects.PlayMove();
                             cubeDistanceGoal = cubeDistance + spacing;
                             gameState = State.PUSH;
                         }
@@ -362,6 +383,7 @@ namespace PuzzleBox
                     {
                         if (cubeDistance > 0)
                         {
+                            SoundEffects.PlayMove();
                             cubeDistanceGoal = cubeDistance - spacing;
                             gameState = State.PULL;
                         }

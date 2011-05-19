@@ -29,6 +29,7 @@ namespace PuzzleBox
         public int[] highScores;
         public string[] playerNames;
         public bool played;
+        public bool unlocked;
         public int rank;        
 
         public LevelData()
@@ -67,39 +68,45 @@ namespace PuzzleBox
             if (false == File.Exists(highScorePath))
             {
                 HighScoreData defaultData = new HighScoreData();
-                for(int i = 0; i < 10; i++)
+                for(int i = 0; i < 3; i++)
                 {
                     defaultData.moveChallengeLevels[i] = new LevelData();
                     defaultData.moveChallengeLevels[i].rank = 1;
                     defaultData.moveChallengeLevels[i].played = false;
+                    defaultData.moveChallengeLevels[i].unlocked = false;
                     for (int j = 0; j < 5; j++)
                     {
                         defaultData.moveChallengeLevels[i].playerNames[j] = "KRC";
                         defaultData.moveChallengeLevels[i].highScores[j] = (5-j)*100;
                     }
                 }
+                defaultData.moveChallengeLevels[0].unlocked = true;
                 for(int i = 0; i < 10; i++)
                 {
                     defaultData.puzzleLevels[i] = new LevelData();
                     defaultData.puzzleLevels[i].rank = 1;
                     defaultData.puzzleLevels[i].played = false;
+                    defaultData.puzzleLevels[i].unlocked = false;
                     for (int j = 0; j < 5; j++)
                     {
                         defaultData.puzzleLevels[i].playerNames[j] = "KRC";
                         defaultData.puzzleLevels[i].highScores[j] = (5 + j) * 60000;
                     }
                 }
-                for(int i = 0; i < 10; i++)
+                defaultData.puzzleLevels[0].unlocked = true;
+                for(int i = 0; i < 3; i++)
                 {
                     defaultData.timeAttackLevels[i] = new LevelData();
                     defaultData.timeAttackLevels[i].rank = 1;
                     defaultData.timeAttackLevels[i].played = false;
+                    defaultData.timeAttackLevels[i].unlocked = false;
                     for (int j = 0; j < 5; j++)
                     {
                         defaultData.timeAttackLevels[i].playerNames[j] = "KRC";
                         defaultData.timeAttackLevels[i].highScores[j] = (5 - j) * 100;
                     }
                 }
+                defaultData.timeAttackLevels[0].unlocked = true;
                 SaveHighScores(defaultData);
             }
         }

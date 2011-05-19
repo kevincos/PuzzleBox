@@ -129,28 +129,33 @@ namespace PuzzleBox
 
                 if (Keyboard.GetState().IsKeyDown(Keys.Space) || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
                 {
+                    SoundEffects.soundBloop.Play();
                     result = optionList[selectedIndex].result;
                     animateTime = 0;
                     state = MainMenuState.DOCTOROUT;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -.95 || rightStick.Y < -.95)
                 {
-                    state = MainMenuState.ANIMATEDOWN;
-                    animateTime = 0;
-                    selectedIndex++;
-                    if (selectedIndex >= optionList.Count())
-                        selectedIndex = optionList.Count() - 1;
-                    cooldown = 250;
+                    if (selectedIndex < optionList.Count() - 1)
+                    {
+                        SoundEffects.soundSwoosh.Play();
+                        state = MainMenuState.ANIMATEDOWN;
+                        animateTime = 0;
+                        selectedIndex++;
+                        cooldown = 250;
+                    }
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > .95 || rightStick.Y > .95)
                 {
-                    state = MainMenuState.ANIMATEUP;
-                    animateTime = 0;
-                    
-                    selectedIndex--;
-                    if (selectedIndex < 0)
-                        selectedIndex = 0;
-                    cooldown = 250;
+                    if (selectedIndex > 0)
+                    {
+                        SoundEffects.soundSwoosh.Play();
+                        state = MainMenuState.ANIMATEUP;
+                        animateTime = 0;
+
+                        selectedIndex--;
+                        cooldown = 250;
+                    }
                 }
             }
             return MenuResult.None;            

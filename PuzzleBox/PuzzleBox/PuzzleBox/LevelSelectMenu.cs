@@ -20,7 +20,7 @@ namespace PuzzleBox
             SWAPLEFT,
             SWAPRIGHT,
             DOCTORIN,
-            DOCTOROUT,
+            DOCTOROUT,            
             TEXT,
             SELECTING,
             LOAD
@@ -70,6 +70,22 @@ namespace PuzzleBox
             return levelList[currentLevel];
         }
 
+        public LevelData GetLevelData(int i)
+        {            
+            if (levelList[i].mode == GameMode.TimeAttack)
+            {
+                return highScoreData.timeAttackLevels[i];
+            }
+            else if (levelList[i].mode == GameMode.MoveChallenge)
+            {
+                return highScoreData.moveChallengeLevels[i];
+            }
+            else
+            {
+                return highScoreData.puzzleLevels[i];
+            }
+        }
+
         public MenuResult Update(GameTime gameTime)
         {
             if (state == SelectMenuState.SWAPLEFT || state == SelectMenuState.SWAPRIGHT)
@@ -113,7 +129,11 @@ namespace PuzzleBox
                 if (animateTime > 500)
                 {
                     animateTime = 0;
-                    state = SelectMenuState.SELECTING;
+                    LevelData levelData = GetLevelData(currentLevel);
+                    if (levelData.unlocked)
+                        state = SelectMenuState.SELECTING;
+                    else
+                        state = SelectMenuState.READY;
                     currentTextPiece = 0;
                 }
             }
@@ -129,6 +149,9 @@ namespace PuzzleBox
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.Space) || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
                     {
+                        LevelData levelData = GetLevelData(currentLevel);
+                        if (levelData.unlocked == false)
+                            state = SelectMenuState.DOCTOROUT;
                         currentTextPiece++;
                         animateTime = 0;
                         if (currentTextPiece == textPieces.Count())
@@ -168,10 +191,16 @@ namespace PuzzleBox
 
                         textPieces = levelList[currentLevel].instructions.Split('-');
                         if (textPieces.Count() <= 1)
-                            state = SelectMenuState.SELECTING;
+                        {
+                            LevelData levelData = GetLevelData(currentLevel);
+                            if (levelData.unlocked)
+                                state = SelectMenuState.SELECTING;
+                            else
+                                state = SelectMenuState.DOCTORIN;
+                        }
                         else
                         {
-                            state = SelectMenuState.DOCTORIN;                            
+                            state = SelectMenuState.DOCTORIN;
                         }
                         animateTime = 0;
                     }
@@ -181,7 +210,9 @@ namespace PuzzleBox
         }
 
         public void Draw()
-        {          
+        {
+            if (highScoreData == null)
+                highScoreData = HighScoreTracker.LoadHighScores();
             for (int i = 0; i < levelList.Count; i++)
             {
                 int t = (i-currentLevel) * 100;
@@ -211,8 +242,12 @@ namespace PuzzleBox
                         
                     }
                 }
-                if(i==currentLevel || state==SelectMenuState.DOCTORIN || state==SelectMenuState.READY || state == SelectMenuState.SWAPRIGHT || state == SelectMenuState.SWAPLEFT)
+
+                LevelData levelData = GetLevelData(i);   
+                if(levelData.unlocked)
                     JellyfishRenderer.DrawJellyfish(x + selectedJellyX, selectedJellyY + y, 100, levelList[i].texture, scale);
+                else
+                    JellyfishRenderer.DrawJellyfish(x + selectedJellyX, selectedJellyY + y, 100, JellyfishRenderer.mysteryJelly, scale);
             }
             if (state == SelectMenuState.DOCTORIN)
             {
@@ -245,8 +280,7 @@ namespace PuzzleBox
                     Game.spriteBatch.DrawString(Game.spriteFont, "Timer Orb %: " + levelList[currentLevel].timerFreq, new Vector2(infoX, infoY + 4 * infoLine), Color.LightGreen);
 
                     Game.spriteBatch.DrawString(Game.spriteFont, "High Scores", new Vector2(highScoreX, highScoreY), Color.LightGreen);
-                    if (highScoreData == null)
-                        highScoreData = HighScoreTracker.LoadHighScores();
+
                     LevelData levelData = highScoreData.timeAttackLevels[currentLevel];
                     for (int i = 1; i < 6; i++)
                     {
@@ -344,12 +378,22 @@ namespace PuzzleBox
             }
             if (state == SelectMenuState.TEXT)
             {
-                if(textPieces[currentTextPiece].Split(':')[0]=="D")
-                    JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
+                LevelData levelData = GetLevelData(currentLevel);         
+                if (levelData.unlocked)
+                {
+                    if (textPieces[currentTextPiece].Split(':')[0] == "D")
+                        JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
+                    else
+                        JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
+                    String text = textPieces[currentTextPiece].Split(':')[1];
+                    Game.spriteBatch.DrawString(Game.spriteFont, text, new Vector2(speechX - 250, speechY - 15), Color.Black);
+                }
                 else
-                    JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
-                String text = textPieces[currentTextPiece].Split(':')[1];
-                Game.spriteBatch.DrawString(Game.spriteFont, text, new Vector2(speechX-250, speechY-15), Color.Black);
+                {
+                    JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
+                    Game.spriteBatch.DrawString(Game.spriteFont, "Earn two stars on the previous jellyfish \nto unlock this patient!", new Vector2(speechX - 250, speechY - 15), Color.Black);
+                }
+
             }
             
         }
