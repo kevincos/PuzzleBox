@@ -28,11 +28,16 @@ namespace PuzzleBox
         List<MenuOption> optionList;
         int cooldown = 0;
 
+        int nurseX = 150;
+        int nurseY = 400;
+        int speechX = 512;
+        int speechY = 600;
+
         public PauseMenu()
         {
             optionList = new List<MenuOption>();
             optionList.Add(new MenuOption(MenuResult.ResumeGame, "Resume"));
-            optionList.Add(new MenuOption(MenuResult.ResumeGame, "Restart"));
+            optionList.Add(new MenuOption(MenuResult.Replay, "Restart"));
             optionList.Add(new MenuOption(MenuResult.GoToMainMenu, "Main Menu"));
         }
 
@@ -40,26 +45,26 @@ namespace PuzzleBox
         {            
             if (state == PauseMenuState.NURSEIN)
             {
-                JellyfishRenderer.DrawJellyfish(-200 + 300*animateTime/250, 300, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally); 
+                JellyfishRenderer.DrawJellyfish(nurseX - 300 + 300 * animateTime / 250, nurseY, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally); 
             }
             if (state == PauseMenuState.NURSEOUT)
             {
-                JellyfishRenderer.DrawJellyfish(100 - 300 * animateTime / 250, 300, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally); 
+                JellyfishRenderer.DrawJellyfish(nurseX - 300 * animateTime / 250, nurseY, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally); 
             }
             if (state == PauseMenuState.READY)
             {
-                JellyfishRenderer.DrawJellyfish(100, 300, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
-                JellyfishRenderer.DrawSpeechBubble(340, 425, 100, SpriteEffects.None);
-                Game.spriteBatch.DrawString(Game.spriteFont, "Doctor?", new Vector2(80, 425), Color.Black);
+                JellyfishRenderer.DrawJellyfish(nurseX, nurseY, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
+                JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
+                Game.spriteBatch.DrawString(Game.spriteFont, "Doctor?", new Vector2(speechX-250, speechY-5), Color.Black);
                 for (int i = 0; i < optionList.Count(); i++)
                 {
                     if (i == selectedOption)
                     {
-                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(230 + 100 * i, 425), Color.Blue);
+                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX-75 + 100 * i, speechY-5), Color.Blue);
                     }
                     else
                     {
-                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(230 + 100 * i, 425), Color.Black);
+                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX-75 + 100 * i, speechY-5), Color.Black);
                     }
                 }                
             }

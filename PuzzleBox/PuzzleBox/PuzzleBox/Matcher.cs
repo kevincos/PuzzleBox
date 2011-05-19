@@ -647,21 +647,59 @@ namespace PuzzleBox
             
             foreach (Color c in faceColorsBox)
             {
+                if (c == Color.Gray || c == Game.currentSettings.dangerColor)
+                    continue;
                 if (sideColorsGrid.Contains(c))
                     return true;
             }
             foreach (Color c in sideColorsBox1)
             {
+                if (c == Color.Gray || c == Game.currentSettings.dangerColor)
+                    continue;
                 if (cornerColorsGrid.Contains(c) || sideColorsGrid.Contains(c))
                     return true;
             }
             foreach (Color c in cornerColorsBox)
             {
+                if (c == Color.Gray || c == Game.currentSettings.dangerColor)
+                    continue;
                 if (cornerColorsGrid.Contains(c))
                     return true;
             }
             return false;
         }
+
+        public static bool AllGray(PuzzleBox box, MasterGrid grid)
+        {
+            for (int x = 0; x < boxSize; x++)
+            {
+                for (int y = 0; y < boxSize; y++)
+                {
+                    for (int z = 0; z < boxSize; z++)
+                    {
+                        if(box[x, y, z].color!=Color.Gray && box[x,y,z].color!=Game.currentSettings.dangerColor)
+                            return false;
+                    }
+                }
+            }
+            for (int x = 0; x < gridSize; x++)
+            {
+                for (int y = 0; y < gridSize; y++)
+                {
+                    if(grid.queues[x,y]!=null)
+                    {
+                        for (int i = 0; i < grid.queues[x,y].Count; i++)
+                        {
+                            if (grid.queues[x, y][i].color != Color.Gray && grid.queues[x, y][i].color != Game.currentSettings.dangerColor)
+                                return false;
+                        }
+                    }
+                    if (grid[x, y].color != Color.Gray && grid[x, y].color != Game.currentSettings.dangerColor)
+                        return false;
+                }
+            }
+            return true;
+        }        
 
         // Clears state. Called when returning to ready state.
         public static void Clear(PuzzleBox box, MasterGrid grid)
@@ -685,10 +723,17 @@ namespace PuzzleBox
                         for (int i = 0; i < grid[x, y].replace_distance; i++)
                         {
                             grid.queues[x, y].RemoveAt(0);
-                            PuzzleNode p = new PuzzleNode();
-                            while (p.color == grid.queues[x,y][grid.queues[x,y].Count-1].color)
-                                p = new PuzzleNode();
-                            grid.queues[x, y].Add(p);
+                            if (Game.currentSettings.refillQueues)
+                            {
+                                PuzzleNode p = new PuzzleNode();
+                                while (p.color == grid.queues[x, y][grid.queues[x, y].Count - 1].color)
+                                {
+                                    p = new PuzzleNode();
+                                }
+                                grid.queues[x, y].Add(p);
+                            }
+                            else
+                                grid.queues[x, y].Add(new PuzzleNode(Color.Gray));
                         }
                     } 
                     grid[x, y].ClearMarking();

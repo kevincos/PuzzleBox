@@ -40,14 +40,19 @@ namespace PuzzleBox
                         grid.queues[x, y] = new List<PuzzleNode>();
                 }
             }
-
             for(;;)
             {
                 String s = r.ReadLine();
                 if (s == null)
                     return;
                 string[] data = s.Split(',');
-                
+                if (data[0] == "WIN")
+                {
+
+                }
+                if (data[0] == "LOSE")
+                {
+                }
                 if (data[0] == "BOX")
                 {
                     int x = Convert.ToInt32(data[1]);

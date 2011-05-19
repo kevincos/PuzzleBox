@@ -19,13 +19,14 @@ namespace PuzzleBox
         GameOver_TimeAttack,
         Settings_TimeAttack,
         Settings_Puzzle,
+        Settings_Move,
+        Summary
     }
 
     public enum GameMode
     {
         TimeAttack,
-        Survival,
-        Collect,
+        MoveChallenge,
         Puzzle
     }
 
@@ -40,9 +41,10 @@ namespace PuzzleBox
 
 
         MainMenu mainMenu;
-        Menu timeAttackGameOverMenu;
+        GameOverMenu gameOverMenu;
         LevelSelectMenu selectMenu;
         PauseMenu pauseMenu;
+        SummaryMenu summaryMenu;
 
         MetaState metaState = MetaState.MainMenu;
         public static SpriteBatch spriteBatch;
@@ -59,7 +61,7 @@ namespace PuzzleBox
             graphics.PreparingDeviceSettings += new EventHandler<PreparingDeviceSettingsEventArgs>(graphics_PreparingDeviceSettings);
             //this.graphics.PreferredBackBufferWidth = 800;
             //this.graphics.PreferredBackBufferHeight = 480;
-            this.graphics.IsFullScreen = true;
+            //this.graphics.IsFullScreen = true;
 
             Logger.Init();
             Content.RootDirectory = "Content";
@@ -67,7 +69,8 @@ namespace PuzzleBox
             p1engine = new Engine();
             mainMenu = new MainMenu();
             pauseMenu = new PauseMenu();
-            timeAttackGameOverMenu = new Menu(MenuClass.ResultsMenu);
+            summaryMenu = new SummaryMenu(false);
+            gameOverMenu = new GameOverMenu();
             selectMenu = new LevelSelectMenu();
         }
 
@@ -75,8 +78,6 @@ namespace PuzzleBox
         {
             DisplayMode displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
             e.GraphicsDeviceInformation.PresentationParameters.BackBufferFormat = displayMode.Format;
-            //e.GraphicsDeviceInformation.PresentationParameters.BackBufferWidth = displayMode.Width;
-            //e.GraphicsDeviceInformation.PresentationParameters.BackBufferHeight = displayMode.Height;
             e.GraphicsDeviceInformation.PresentationParameters.BackBufferWidth = 1024;
             e.GraphicsDeviceInformation.PresentationParameters.BackBufferHeight = 768;
         }
@@ -103,11 +104,15 @@ namespace PuzzleBox
             mainMenu.header = Content.Load<Texture2D>("title");
             mainMenu.AddMenuItem(MenuResult.GoToTimeAttack, Content.Load<Texture2D>("timeattack"));
             mainMenu.AddMenuItem(MenuResult.GoToPuzzle, Content.Load<Texture2D>("puzzle"));
-            timeAttackGameOverMenu.background = Content.Load<Texture2D>("background");
-            timeAttackGameOverMenu.header = Content.Load<Texture2D>("gameover");
-            timeAttackGameOverMenu.AddMenuItem(MenuResult.StartTimeAttack, Content.Load<Texture2D>("replay"));
-            timeAttackGameOverMenu.AddMenuItem(MenuResult.GoToTimeAttack, Content.Load<Texture2D>("newgame"));            
-            timeAttackGameOverMenu.AddMenuItem(MenuResult.GoToMainMenu, Content.Load<Texture2D>("returntomenu"));
+            mainMenu.AddMenuItem(MenuResult.GoToMoveChallenge, Content.Load<Texture2D>("moveChallenge"));
+            gameOverMenu.background = Content.Load<Texture2D>("background");
+            gameOverMenu.header = Content.Load<Texture2D>("gameover");
+            gameOverMenu.AddMenuItem(MenuResult.StartTimeAttack, Content.Load<Texture2D>("replay"));
+            gameOverMenu.AddMenuItem(MenuResult.GoToMainMenu, Content.Load<Texture2D>("returntomenu"));
+            selectMenu.star = Content.Load<Texture2D>("star");
+            selectMenu.emptyStar = Content.Load<Texture2D>("emptyStar");                 
+            gameOverMenu.emptyStar = Content.Load<Texture2D>("emptyStar");
+            gameOverMenu.star = Content.Load<Texture2D>("star");
             
             spriteFont = Content.Load<SpriteFont>("SpriteFont1");
             OrbRenderer.orbTexture = Content.Load<Texture2D>("orb");
@@ -160,8 +165,37 @@ namespace PuzzleBox
                     metaState = MetaState.Paused;
                 if (cause == GameStopCause.END)
                 {
-                    timeAttackGameOverMenu.AddScore(p1engine.currentScore, 100, 350);
-                    metaState = MetaState.GameOver_TimeAttack;
+                    gameOverMenu.score = p1engine.currentScore;
+                    gameOverMenu.level = currentSettings.level;
+                    gameOverMenu.state = GameOverMenuState.SCORECHECK;
+                    summaryMenu = new SummaryMenu(true);
+                    if(currentSettings.mode==GameMode.MoveChallenge)
+                        summaryMenu.text = "Looks like you're out of moves, Doctor! \nLet's see how you did...";
+                    if(currentSettings.mode == GameMode.TimeAttack)
+                        summaryMenu.text = "Time's up, Doctor! Let's see \nhow you did...";
+                    
+                    metaState = MetaState.Summary;                    
+                }
+                if (cause == GameStopCause.WIN)
+                {
+                    gameOverMenu.score = Engine.clock.timeElapsed;
+                    gameOverMenu.level = currentSettings.level;
+                    gameOverMenu.state = GameOverMenuState.SCORECHECK;
+                    summaryMenu = new SummaryMenu(true);
+                    summaryMenu.text = "Way to go, Doctor! You did it!";
+                    metaState = MetaState.Summary;
+                }
+                if (cause == GameStopCause.LOSE_STUCK)
+                {
+                    summaryMenu = new SummaryMenu(false);
+                    summaryMenu.text = "Oh no! Looks like you're stuck! Try to be more \ncareful next time!";
+                    metaState = MetaState.Summary;
+                }
+                if (cause == GameStopCause.LOSE_ERROR)
+                {
+                    summaryMenu = new SummaryMenu(false);
+                    summaryMenu.text = "Oh no! You burst a " + currentSettings.dangerColorDisplay + " bubble! Try to be more \ncareful next time!";
+                    metaState = MetaState.Summary;
                 }
             }
             else if (metaState == MetaState.Paused)
@@ -171,8 +205,26 @@ namespace PuzzleBox
                     metaState = MetaState.MainMenu;
                 if (result == MenuResult.ResumeGame)
                     metaState = MetaState.GamePlay;
+                if (result == MenuResult.Replay)
+                {
+                    p1engine = new Engine();
+                    metaState = MetaState.GamePlay;
+                }
             }
-            else if (metaState == MetaState.Settings_TimeAttack || metaState == MetaState.Settings_Puzzle)
+            else if (metaState == MetaState.Summary)
+            {
+                MenuResult result = summaryMenu.Update(gameTime);
+                if (result == MenuResult.GoToMainMenu)
+                    metaState = MetaState.MainMenu;
+                if (result == MenuResult.Replay)
+                {
+                    p1engine = new Engine();
+                    metaState = MetaState.GamePlay;
+                }
+                if (result == MenuResult.GoToResults)
+                    metaState = MetaState.GameOver_TimeAttack;
+            }
+            else if (metaState == MetaState.Settings_TimeAttack || metaState == MetaState.Settings_Puzzle || metaState == MetaState.Settings_Move)
             {
                 MenuResult result = selectMenu.Update(gameTime);
                 if (result == MenuResult.GoToMainMenu)
@@ -182,7 +234,8 @@ namespace PuzzleBox
                 }
                 if (result == MenuResult.StartTimeAttack)
                 {
-                    currentSettings = selectMenu.GetCurrentSetttings();
+                    currentSettings = selectMenu.GetCurrentSettings();
+                    currentSettings.level = selectMenu.currentLevel;
                     p1engine = new Engine();
                     metaState = MetaState.GamePlay;
                 }
@@ -196,7 +249,7 @@ namespace PuzzleBox
                 }
                 else
                 {
-                    MenuResult result = timeAttackGameOverMenu.Update(gameTime);
+                    MenuResult result = gameOverMenu.Update(gameTime);
                     if (result == MenuResult.GoToMainMenu)
                     {
                         metaState = MetaState.MainMenu;
@@ -213,16 +266,24 @@ namespace PuzzleBox
             {
                 MenuResult result = mainMenu.Update(gameTime);
                 if (result == MenuResult.GoToTimeAttack)
-                {                    
+                {
                     metaState = MetaState.Settings_TimeAttack;
                     selectMenu.levelList = SettingsLoader.LoadTimeAttackLevels();
+                    selectMenu.state = LevelSelectMenu.SelectMenuState.LOAD;
                     System.Threading.Thread.Sleep(100);
                 }
                 if (result == MenuResult.GoToPuzzle)
                 {
                     metaState = MetaState.Settings_Puzzle;
                     selectMenu.levelList = SettingsLoader.LoadPuzzleLevels();
+                    selectMenu.state = LevelSelectMenu.SelectMenuState.LOAD;
                     System.Threading.Thread.Sleep(100);
+                }
+                if (result == MenuResult.GoToMoveChallenge)
+                {
+                    metaState = MetaState.Settings_Move;
+                    selectMenu.levelList = SettingsLoader.LoadMoveCountLevels();
+                    selectMenu.state = LevelSelectMenu.SelectMenuState.LOAD;
                 }
                 if (result == MenuResult.StartCollect)
                 {
@@ -252,17 +313,19 @@ namespace PuzzleBox
             GraphicsDevice.Clear(bgColor);
             Game.spriteBatch.Begin();
             
-            if (metaState == MetaState.GamePlay || metaState == MetaState.Paused)            
+            if (metaState == MetaState.GamePlay || metaState == MetaState.Paused || metaState == MetaState.Summary)            
                 p1engine.Draw(gameTime);
 
             if (metaState == MetaState.Paused)
                 pauseMenu.Draw();
-            else if (metaState == MetaState.Settings_TimeAttack || metaState == MetaState.Settings_Puzzle)
+            if (metaState == MetaState.Summary)
+                summaryMenu.Draw();
+            else if (metaState == MetaState.Settings_TimeAttack || metaState == MetaState.Settings_Puzzle || metaState == MetaState.Settings_Move)
             {
-                selectMenu.Draw();                
+                selectMenu.Draw();
             }
             else if (metaState == MetaState.GameOver_TimeAttack)
-                timeAttackGameOverMenu.Draw();
+                gameOverMenu.Draw();
             else if (metaState == MetaState.MainMenu)
                 mainMenu.Draw();
 

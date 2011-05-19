@@ -23,16 +23,45 @@ namespace PuzzleBox
         public string levelfilename = "";
         public GameMode mode = GameMode.TimeAttack;
         public bool allowResets = true;
-        public bool displayScore = true;
-        public bool displayTimer = true;
         public int timerLimit = 0;
-        public int initialTime = 120000;
-        public bool countdownTimer = true;
         public string name = "unnamed";
-        public bool displayMoveCount = false;
-        public int availableMoves = 100;
+
         public Texture2D texture = JellyfishRenderer.orangeJelly;
         public string instructions;
+        public int level;
+
+        // Endgame Conditions
+        public WinType winType;
+        public LoseType loseType;
+        public int initialTime = 120000;
+        public bool countdownTimer = true;
+        public int scoreGoal = 1000;
+        public bool displayMoveCount = false;
+        public int availableMoves = 100; 
+        public bool displayMoves = false;
+        public bool displayScore = true;
+        public bool displayTimer = true;
+        public Color dangerColor = Color.Black;
+        public String dangerColorDisplay = "BLACK";
+        public bool refillQueues = true;
+
+        public int two_star = 2000;
+        public int three_star = 3000;
+    }
+
+    public enum WinType
+    {
+        CLEAR,
+        SCORE,
+        TIMER,
+        MOVES
+    }
+
+    public enum LoseType
+    {
+        BADCOLOR,
+        TIMER,
+        NOMOVES
     }
 
     class MenuOption
@@ -101,6 +130,7 @@ namespace PuzzleBox
         GoToTimeAttack,
         GoToSurvival,
         GoToPuzzle,
+        GoToMoveChallenge,
         StartTimeAttack,
         StartSurvival,
         StartCollect,
@@ -109,6 +139,7 @@ namespace PuzzleBox
         NewGame,
         GoToHelpMenu,
         GoToMainMenu,
+        GoToResults,
         ResumeGame
     }
 

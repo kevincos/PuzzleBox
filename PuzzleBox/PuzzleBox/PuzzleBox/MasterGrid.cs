@@ -55,11 +55,18 @@ namespace PuzzleBox
                         Color prevColor = Color.Black;
                         for (int i = 0; i < 10; i++)
                         {
-                            PuzzleNode p = new PuzzleNode();
-                            while(p.color==prevColor)
-                                p = new PuzzleNode();
-                            queues[x, y].Add(p);
-                            prevColor = p.color;
+                            if (Game.currentSettings.refillQueues)
+                            {
+                                PuzzleNode p = new PuzzleNode();
+                                while (p.color == prevColor)
+                                    p = new PuzzleNode();
+                                queues[x, y].Add(p);
+                                prevColor = p.color;
+                            }
+                            else
+                            {
+                                queues[x, y].Add(new PuzzleNode(Color.Gray));
+                            }
                         }
                     }
                 }

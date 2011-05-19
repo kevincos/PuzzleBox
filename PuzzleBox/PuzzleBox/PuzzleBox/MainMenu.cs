@@ -34,8 +34,15 @@ namespace PuzzleBox
         int cooldown = 0;
         int headerX = 100;
         int headerY = 20;
-        int optionListX = 90;
-        int optionListY = 170;
+        int headerWidth = 824;
+        int headerHeight = 150;
+        int doctorX = 600;
+        int doctorY = 375;
+        int optionListX = 120;
+        int optionListY = 250;
+        int optionGap = 100;
+        int optionWidth = 250;
+        int optionHeight = 75;
 
         public MainMenu()
         {
@@ -50,39 +57,39 @@ namespace PuzzleBox
         public void Draw()
         {            
             Game.spriteBatch.Draw(background, new Rectangle(0, 0, Game.screenSizeX, Game.screenSizeY), Color.White);
-            Game.spriteBatch.Draw(header, new Rectangle(headerX, headerY, 600, 100), Color.White);
+            Game.spriteBatch.Draw(header, new Rectangle(headerX, headerY, headerWidth, headerHeight), Color.White);
             for (int i = 0; i < optionList.Count; i++)
             {
                 if (i == selectedIndex)
                 {
                     PuzzleNode p = new PuzzleNode(Color.Blue);
-                    p.screenX = optionListX - 25;
-                    p.screenY = optionListY + 25 + i * 50;
+                    p.screenX = optionListX-25;
+                    p.screenY = optionListY +optionHeight/2+ i * optionGap;
                     if (state == MainMenuState.ANIMATEDOWN)
-                        p.screenY -= (int)(50f * (1f - (float)animateTime / (float)250));
+                        p.screenY -= (int)(optionGap * (1f - (float)animateTime / (float)250));
                     if (state == MainMenuState.ANIMATEUP)
-                        p.screenY += (int)(50f * (1f - (float)animateTime / (float)250));
+                        p.screenY += (int)(optionGap * (1f - (float)animateTime / (float)250));
 
                     p.distance = 50;
                     p.scale = 1f;
                     OrbRenderer.DrawOrb(p, State.READY, 0f);
                 }
-                Game.spriteBatch.Draw(optionList[i].optionText, new Rectangle(optionListX, optionListY + i * 50, 200, 50), Color.White);
+                Game.spriteBatch.Draw(optionList[i].optionText, new Rectangle(optionListX, optionListY + i * optionGap, optionWidth, optionHeight), Color.White);
             }
             if (state == MainMenuState.DOCTORIN)
             {
-                JellyfishRenderer.DrawJellyfish(1250 - 600 * animateTime / 250, 300, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
-                JellyfishRenderer.DrawJellyfish(1050 - 600 * animateTime / 250, 300, 100, JellyfishRenderer.doctorJellyfish, .75f, SpriteEffects.FlipHorizontally);
+                JellyfishRenderer.DrawJellyfish(doctorX + 800 - 600 * animateTime / 250, doctorY, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
+                JellyfishRenderer.DrawJellyfish(doctorX + 600 - 600 * animateTime / 250, doctorY, 100, JellyfishRenderer.doctorJellyfish, .75f, SpriteEffects.FlipHorizontally);
             }
             else if (state == MainMenuState.DOCTOROUT)
             {
-                JellyfishRenderer.DrawJellyfish(650 + 600 * animateTime / 250, 300, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
-                JellyfishRenderer.DrawJellyfish(450 + 600 * animateTime / 250, 300, 100, JellyfishRenderer.doctorJellyfish, .75f, SpriteEffects.FlipHorizontally);
+                JellyfishRenderer.DrawJellyfish(doctorX + 200 + 600 * animateTime / 250, doctorY, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
+                JellyfishRenderer.DrawJellyfish(doctorX + 600 * animateTime / 250, doctorY, 100, JellyfishRenderer.doctorJellyfish, .75f, SpriteEffects.FlipHorizontally);
             }
             else
             {
-                JellyfishRenderer.DrawJellyfish(650, 300, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
-                JellyfishRenderer.DrawJellyfish(450, 300, 100, JellyfishRenderer.doctorJellyfish, .75f, SpriteEffects.FlipHorizontally);
+                JellyfishRenderer.DrawJellyfish(doctorX+200, doctorY, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
+                JellyfishRenderer.DrawJellyfish(doctorX, doctorY, 100, JellyfishRenderer.doctorJellyfish, .75f, SpriteEffects.FlipHorizontally);
             }
         }
 
@@ -90,7 +97,7 @@ namespace PuzzleBox
         {
             cooldown -= gameTime.ElapsedGameTime.Milliseconds;
             if (cooldown < 0) cooldown = 0;
-            if (state == MainMenuState.DOCTORIN || state == MainMenuState.DOCTOROUT || state == MainMenuState.ANIMATEDOWN || state == MainMenuState.ANIMATEDOWN)
+            if (state == MainMenuState.DOCTORIN || state == MainMenuState.DOCTOROUT || state == MainMenuState.ANIMATEDOWN || state == MainMenuState.ANIMATEUP)
             {
                 animateTime+=gameTime.ElapsedGameTime.Milliseconds;                
             }
@@ -103,6 +110,16 @@ namespace PuzzleBox
                 animateTime = 0;
                 state = MainMenuState.DOCTORIN;
                 return result;
+            }
+            if (state == MainMenuState.ANIMATEDOWN && animateTime > 250)
+            {
+                animateTime = 0;
+                state = MainMenuState.READY;
+            }
+            if (state == MainMenuState.ANIMATEUP && animateTime > 250)
+            {
+                animateTime = 0;
+                state = MainMenuState.READY;
             }
             if (state == MainMenuState.READY && cooldown == 0)
             {
@@ -118,6 +135,8 @@ namespace PuzzleBox
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -.95 || rightStick.Y < -.95)
                 {
+                    state = MainMenuState.ANIMATEDOWN;
+                    animateTime = 0;
                     selectedIndex++;
                     if (selectedIndex >= optionList.Count())
                         selectedIndex = optionList.Count() - 1;
@@ -125,6 +144,9 @@ namespace PuzzleBox
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > .95 || rightStick.Y > .95)
                 {
+                    state = MainMenuState.ANIMATEUP;
+                    animateTime = 0;
+                    
                     selectedIndex--;
                     if (selectedIndex < 0)
                         selectedIndex = 0;

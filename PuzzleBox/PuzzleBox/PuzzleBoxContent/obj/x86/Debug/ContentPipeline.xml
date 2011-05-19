@@ -460,6 +460,33 @@
       <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\SpriteFont1.xnb</Output>
       <Time>2011-04-12T13:56:37.9596942-07:00</Time>
     </Item>
+    <Item>
+      <Source>moveChallenge.png</Source>
+      <Name>moveChallenge</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\moveChallenge.xnb</Output>
+      <Time>2011-05-19T11:22:20.3023443-07:00</Time>
+    </Item>
+    <Item>
+      <Source>star.png</Source>
+      <Name>star</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\star.xnb</Output>
+      <Time>2011-05-19T11:22:20.3033444-07:00</Time>
+    </Item>
+    <Item>
+      <Source>emptystar.png</Source>
+      <Name>emptystar</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Debug\Content\emptystar.xnb</Output>
+      <Time>2011-05-19T11:22:20.3013443-07:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>
