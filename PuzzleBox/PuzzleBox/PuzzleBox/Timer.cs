@@ -48,4 +48,38 @@ namespace PuzzleBox
             }
         }
     }
+    class Countup
+    {
+        int posX;
+        int posY;
+
+        public int timeElapsed;
+
+        public bool enabled;
+
+        public Countup(int initialTime, int posX, int posY)
+        {
+            timeElapsed = initialTime;
+            this.posX = posX;
+            this.posY = posY;
+        }
+
+        public bool Update(GameTime gameTime)
+        {
+            if (enabled)
+            {
+                timeElapsed += gameTime.ElapsedGameTime.Milliseconds;
+            }
+            return true;
+        }
+
+        public void Draw()
+        {
+            if (enabled)
+            {
+                TimeSpan t = new TimeSpan(0, 0, 0, 0, timeElapsed);
+                Game.spriteBatch.DrawString(Game.spriteFont, string.Format("TIME - {0}:{1:D2}", t.Minutes, t.Seconds), new Vector2(posX, posY), Color.White);
+            }
+        }
+    }
 }

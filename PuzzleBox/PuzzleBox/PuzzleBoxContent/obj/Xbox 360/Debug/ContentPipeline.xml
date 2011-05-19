@@ -460,6 +460,33 @@
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\SpriteFont1.xnb</Output>
       <Time>2011-04-11T21:05:48.3390775-07:00</Time>
     </Item>
+    <Item>
+      <Source>moveChallenge.png</Source>
+      <Name>moveChallenge</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\moveChallenge.xnb</Output>
+      <Time>2011-05-18T13:48:48.8355408-07:00</Time>
+    </Item>
+    <Item>
+      <Source>star.png</Source>
+      <Name>star</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\star.xnb</Output>
+      <Time>2011-05-18T15:59:37.084435-07:00</Time>
+    </Item>
+    <Item>
+      <Source>emptystar.png</Source>
+      <Name>emptystar</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\emptystar.xnb</Output>
+      <Time>2011-05-18T15:59:21.3295338-07:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Xbox360</TargetPlatform>

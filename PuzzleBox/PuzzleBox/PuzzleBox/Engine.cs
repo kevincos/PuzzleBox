@@ -46,7 +46,8 @@ namespace PuzzleBox
         PAUSE,
         END,
         WIN,
-        LOSE
+        LOSE_STUCK,
+        LOSE_ERROR
     }
 
     public enum ControlMode
@@ -67,6 +68,8 @@ namespace PuzzleBox
         public List<PuzzleNode> selectedQueue = null;
         int selectedDepth = 0;
         int editorCooldown = 0;
+
+        GameStopCause pendingResult = GameStopCause.NONE;
             
         // Game dimensions
         public static int gridSize = 5;
@@ -77,10 +80,16 @@ namespace PuzzleBox
 
         // Effects
         List<Fragment> fragmentList;
-        List<ScoringSet> scoreList;        
+        List<ScoringSet> scoreList;
+
+        int jellyX = 517;
+        int jellyY = 400;
+        int jellyBodyY = 437; //420
 
         // Game state
-        public static Countdown timer;
+        public static Countdown timer = new Countdown(0,0,0);
+        public static Countup clock = new Countup(0,0,0);
+        public int movesRemaining = 50;
         PuzzleBox puzzleBox;
         MasterGrid masterGrid;
         State gameState = State.RESUMING;
@@ -123,14 +132,23 @@ namespace PuzzleBox
             automator = new Random();
             cubeDistance = 0;
             cubeDistanceGoal = 0;
-            if (Game.currentSettings.displayTimer)
+            if (Game.currentSettings.displayTimer && Game.currentSettings.countdownTimer)
             {
-                timer = new Countdown(Game.currentSettings.initialTime, 650, 450);
+                timer = new Countdown(Game.currentSettings.initialTime, 850, 640);
                 timer.enabled = true;
+                clock.enabled = false;
+            }
+            else if (Game.currentSettings.displayTimer && Game.currentSettings.countdownTimer != true)
+            {
+                clock = new Countup(0, 850, 640);
+                clock.enabled = true;
+                timer.enabled = false;
+
             }
             else
             {
                 timer.enabled = false;
+                clock.enabled = false;
             }
             
             puzzleBox = new PuzzleBox();
@@ -163,7 +181,8 @@ namespace PuzzleBox
                     Logger.totalScore = currentScore;
                     Logger.LogGame();
                     return GameStopCause.END;
-                }                
+                }
+                clock.Update(gameTime);
             }
             // Game state flow
             if (gameState == State.DESTROY || gameState == State.VANISH || gameState == State.NEWSET)
@@ -189,6 +208,8 @@ namespace PuzzleBox
                 if (mode == ControlMode.EDITOR) gameState = State.READY;
                 else
                 {
+                    if(Game.currentSettings.mode==GameMode.MoveChallenge)
+                        movesRemaining--;
                     Matcher.UpdateToggleState(puzzleBox, masterGrid);      
                     gameState = State.VERIFY;
                 }
@@ -197,34 +218,54 @@ namespace PuzzleBox
             {
                 foreach (ScoringSet s in Matcher.Solve(puzzleBox, masterGrid))
                 {
+                    if (Game.currentSettings.loseType == LoseType.BADCOLOR)
+                    {
+                        if (s.color == Game.currentSettings.dangerColor)
+                            pendingResult = GameStopCause.LOSE_ERROR;
+                    }
                     s.CalculateScore();
                     s.LogScore();
                     currentScore += s.score;
                     scoreList.Add(s);
+                }
+                if (Matcher.AllGray(puzzleBox, masterGrid))
+                {
+                    return GameStopCause.WIN;
                 }
                 maxSlideDistance = Matcher.GetMaxReplaceDistance(puzzleBox, masterGrid);
                 if (0 == maxSlideDistance)
                 {
                     if (!Matcher.HasValidMove(puzzleBox, masterGrid))
                     {
-                        Matcher.Reset(puzzleBox, masterGrid);
-                        gameState = State.VANISH;
+                        if (Game.currentSettings.mode == GameMode.Puzzle)
+                        {
+                            return GameStopCause.LOSE_STUCK;
+                        }
+                        else
+                        {
+                            Matcher.Reset(puzzleBox, masterGrid);
+                            gameState = State.VANISH;
+                        }
                     }
                     else
                     {
-                        Matcher.UpdateMoveCountdown(puzzleBox, masterGrid);                
+                        Matcher.UpdateMoveCountdown(puzzleBox, masterGrid);
+                        if (movesRemaining == 0)
+                            return GameStopCause.END;
                         gameState = State.READY;
                         animateTime = 0;
                     }
                 }
                 else
-                {
+                {                    
                     gameState = State.DESTROY;
                     animateTime = 0;
                 }
             }
             if (gameState == State.DESTROY && animateTime == maxAnimateTime)
             {
+                if (pendingResult != GameStopCause.NONE)
+                    return pendingResult;
                 for (int x = 0; x < gridSize; x++)
                 {
                     for (int y = 0; y < gridSize; y++)
@@ -286,7 +327,7 @@ namespace PuzzleBox
                 if (mode == ControlMode.NORMAL)
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.P) || GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Start))
-                    {                        
+                    {
                         gameState = State.PAUSING;
                         savedShift = shift;
                         animateTime = 0;                        
@@ -696,10 +737,10 @@ namespace PuzzleBox
                     {
                         float f = (1f - ((float)animateTime / maxAnimateTime));
                         shift.X = savedShift.X * f;
-                        shift.Y = (savedShift.Y + 290) * f - 290;
+                        shift.Y = (savedShift.Y + 348) * f - 348;
                     }
                     else
-                        shift = new Vector2(0, -290);
+                        shift = new Vector2(0, -348);
                 }
                 if (gameState == State.RESUMING)
                 {
@@ -710,13 +751,19 @@ namespace PuzzleBox
                         //int targetX = (Game.screenCenterX - Mouse.GetState().X);
                         //int targetY = (Game.screenCenterY - Mouse.GetState().Y);
                         // Gamepad Camera                       
-                        targetShift = new Vector2(GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X * Game.screenCenterX,
-                            -GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y * Game.screenCenterY);
+                        if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Length() > .95)
+                        {
+                            targetShift = new Vector2(GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X * Game.screenCenterX,
+                                -GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y * Game.screenCenterY);
+                            savedShift = targetShift;
+                        }
+                        else
+                            targetShift = savedShift;
                         shift.X = (targetShift.X) * f;
-                        shift.Y = (targetShift.Y +290) * f -290;
+                        shift.Y = (targetShift.Y + 348) * f - 348;
                     }
                     else
-                        shift = new Vector2(0, -290);
+                        shift = new Vector2(0, -348);
                 }
             }
 
@@ -1007,30 +1054,38 @@ namespace PuzzleBox
                 OrbRenderer.DrawFragments(f);
             }
 
-            foreach (ScoringSet s in scoreList)
+            if (Game.currentSettings.displayScore)
             {
-                OrbRenderer.DrawScoreBonus(s);
+                foreach (ScoringSet s in scoreList)
+                {
+                    OrbRenderer.DrawScoreBonus(s);
+                }
             }
             #endregion
 
             String message = "Score: " + currentScore;
 
-            Game.spriteBatch.DrawString(Game.spriteFont, message, new Vector2(650,405), Color.LightGreen);
+            if (Game.currentSettings.displayScore)            
+                Game.spriteBatch.DrawString(Game.spriteFont, message, new Vector2(850,665), Color.LightGreen);
 
-            JellyfishRenderer.DrawTransparentJellyfish(Game.screenCenterX + (int)(shift.X / Game.screenSizeX * baseDistance), 300 + (int)(shift.Y / Game.screenSizeX * baseDistance), 10, 1f);
+            JellyfishRenderer.DrawTransparentJellyfish(Game.screenCenterX + (int)(shift.X / Game.screenSizeX * baseDistance), jellyBodyY + (int)(shift.Y / Game.screenSizeX * baseDistance), 10, 1f);
 
             if (gameState == State.PAUSING && animateTime > maxAnimateTime)
             {
                 opacity = (int)((100f * (animateTime-maxAnimateTime)) / maxAnimateTime);
-                JellyfishRenderer.DrawJellyfish(405, 258, opacity,Game.currentSettings.texture,1f);
+                JellyfishRenderer.DrawJellyfish(jellyX, jellyY, opacity,Game.currentSettings.texture,1f);
             }
             if (gameState == State.RESUMING && animateTime < maxAnimateTime)
             {
                 opacity = (int)((100f * (animateTime)) / maxAnimateTime);
-                JellyfishRenderer.DrawJellyfish(405, 258, 100 - opacity, Game.currentSettings.texture,1f);
+                JellyfishRenderer.DrawJellyfish(jellyX, jellyY, 100 - opacity, Game.currentSettings.texture,1f);
             }
 
             timer.Draw();
+            clock.Draw();
+            if(Game.currentSettings.mode==GameMode.MoveChallenge)
+                Game.spriteBatch.DrawString(Game.spriteFont, string.Format("MOVES - {0}", movesRemaining), new Vector2(850, 640), Color.White);
+
 
         }
     }

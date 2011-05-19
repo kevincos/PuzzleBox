@@ -108,6 +108,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CameraUtils.cs" />
+    <Compile Include="SummaryMenu.cs" />
+    <Compile Include="GameOverMenu.cs" />
+    <Compile Include="HighScoreTracker.cs" />
     <Compile Include="JellyfishRenderer.cs" />
     <Compile Include="LevelLoader.cs" />
     <Compile Include="Engine.cs" />

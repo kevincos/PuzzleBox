@@ -55,3 +55,6 @@ C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Puzzl
 C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\PuzzleBox.pdb
 C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\obj\Xbox 360\Debug\PuzzleBox.exe
 C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\obj\Xbox 360\Debug\PuzzleBox.pdb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\moveChallenge.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\star.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\emptystar.xnb
