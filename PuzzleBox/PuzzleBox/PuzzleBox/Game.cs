@@ -35,7 +35,7 @@ namespace PuzzleBox
     public class Game : Microsoft.Xna.Framework.Game
     {
         Engine p1engine;
-
+        
         public static Settings currentSettings;
 
 
