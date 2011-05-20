@@ -32,6 +32,7 @@ namespace PuzzleBox
         public static Texture2D doctorJellyfish;
         public static Texture2D nurseJellyfish;
         public static Texture2D speechBubble;
+        public static Texture2D speechBubble2;
 
         public static void DrawSpeechBubble(int x, int y, int opacity, SpriteEffects effects)
         {
@@ -41,8 +42,19 @@ namespace PuzzleBox
             c.B = (Byte)(c.B * opacity / 100);
             c.A = (Byte)(c.A * opacity / 100);
             Game.spriteBatch.Draw(speechBubble,
-                new Rectangle(x -300, y-50, 600, 100),null,
-                c,0f,Vector2.Zero,effects,0);
+                new Rectangle(x - 300, y - 50, 600, 100), null,
+                c, 0f, Vector2.Zero, effects, 0);
+        }
+        public static void DrawSpeechBubble2(int x, int y, int opacity, SpriteEffects effects)
+        {
+            Color c = Color.White;
+            c.R = (Byte)(c.R * opacity / 100);
+            c.G = (Byte)(c.G * opacity / 100);
+            c.B = (Byte)(c.B * opacity / 100);
+            c.A = (Byte)(c.A * opacity / 100);
+            Game.spriteBatch.Draw(speechBubble2,
+                new Rectangle(x - 300, y - 50, 600, 100), null,
+                c, 0f, Vector2.Zero, effects, 0);
         }
 
         public static void DrawTransparentRing(int x, int y, int opacity, float scale)

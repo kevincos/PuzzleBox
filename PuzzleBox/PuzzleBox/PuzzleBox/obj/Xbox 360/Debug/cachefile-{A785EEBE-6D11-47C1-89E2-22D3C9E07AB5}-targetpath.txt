@@ -51,8 +51,11 @@ Content\speechbubble.xnb
 Content\moveChallenge.xnb
 Content\star.xnb
 Content\emptystar.xnb
-Content\SpriteFont1.xnb
 Content\quit.xnb
 Content\mysterypatient.xnb
+Content\SpriteFont1.xnb
 Content\bloop.xnb
 Content\swoosh.xnb
+Content\click.xnb
+Content\returntolevelselect.xnb
+Content\speechbubble2.xnb

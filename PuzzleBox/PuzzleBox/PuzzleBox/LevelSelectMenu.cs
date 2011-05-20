@@ -26,8 +26,8 @@ namespace PuzzleBox
             LOAD
         }
 
-        public Texture2D emptyStar;
-        public Texture2D star;
+        public static Texture2D emptyStar;
+        public static Texture2D star;
 
         public List<Settings> levelList;
 
@@ -35,7 +35,7 @@ namespace PuzzleBox
 
         public int currentLevel = 0;
 
-        int cooldown = 0;
+        public int cooldown = 0;
 
         string[] textPieces;
         int currentTextPiece;
@@ -44,14 +44,14 @@ namespace PuzzleBox
         int selectedJellyY = 300;
         int nameX = 420;
         int nameY = 120;
-        int infoX = 120;
-        int infoY = 450;
-        int infoLine = 20;
-        int highScoreX = 620;
-        int highScoreY = 450;
+        //int infoX = 120;
+        //int infoY = 450;
+        //int infoLine = 20;
+        int highScoreX = 440;
+        int highScoreY = 430;
         int highScoreLine = 20;
-        int ratingX = 400;
-        int ratingY = 550;
+        int ratingX = 410;
+        int ratingY = 570;
 
         int doctorX = 250;
         int doctorY = 300;
@@ -149,6 +149,7 @@ namespace PuzzleBox
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.Space) || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
                     {
+                        SoundEffects.PlayClick();
                         LevelData levelData = GetLevelData(currentLevel);
                         if (levelData.unlocked == false)
                             state = SelectMenuState.DOCTOROUT;
@@ -165,9 +166,10 @@ namespace PuzzleBox
                 if (state == SelectMenuState.READY)
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.Left) || leftStick.X < -.95 || rightStick.X < -.95)
-                    {
+                    {                        
                         if (currentLevel > 0)
                         {
+                            SoundEffects.soundSwoosh.Play();
                             state = SelectMenuState.SWAPLEFT;
                             currentLevel--;
                             animateTime = 0;
@@ -177,6 +179,7 @@ namespace PuzzleBox
                     {
                         if (currentLevel < levelList.Count - 1)
                         {
+                            SoundEffects.soundSwoosh.Play();                        
                             state = SelectMenuState.SWAPRIGHT;
                             currentLevel++;
                             animateTime = 0;                            
@@ -184,11 +187,12 @@ namespace PuzzleBox
                     }
                     if (Keyboard.GetState().IsKeyDown(Keys.B) || gamePadState.IsButtonDown(Buttons.B))
                     {
+                        SoundEffects.soundSwoosh.Play();
                         return MenuResult.GoToMainMenu;
                     }
                     if (Keyboard.GetState().IsKeyDown(Keys.Space) || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
                     {
-
+                        SoundEffects.soundBloop.Play();
                         textPieces = levelList[currentLevel].instructions.Split('-');
                         if (textPieces.Count() <= 1)
                         {
@@ -271,109 +275,96 @@ namespace PuzzleBox
                     Game.spriteBatch.DrawString(Game.spriteFont, "<", new Vector2(nameX, nameY), Color.LightGreen);
                 if (currentLevel < levelList.Count-1)
                     Game.spriteBatch.DrawString(Game.spriteFont, ">", new Vector2(nameX+200, nameY), Color.LightGreen);
+
+                // Draw stars
+                LevelData levelData = GetLevelData(currentLevel);
+                for (int i = 0; i < 3; i++)
+                {
+                    Game.spriteBatch.Draw(emptyStar,
+                        new Rectangle(ratingX + 75 * i, ratingY + 40, 64, 64), Color.White);
+                }
+                if (levelData.played == true)
+                {
+                    Game.spriteBatch.Draw(star,
+                            new Rectangle(ratingX, ratingY + 40, 64, 64), Color.White);
+                    if (levelData.rank >= 2)
+                        Game.spriteBatch.Draw(star,
+                            new Rectangle(ratingX + 75, ratingY + 40, 64, 64), Color.White);
+                    if (levelData.rank >= 3)
+                        Game.spriteBatch.Draw(star,
+                            new Rectangle(ratingX + 150, ratingY + 40, 64, 64), Color.White);
+                }
                 if (levelList[currentLevel].mode == GameMode.TimeAttack)
                 {
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Goal: Score as many points as possible!", new Vector2(infoX, infoY), Color.LightGreen);
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Orb Density: " + levelList[currentLevel].grayOrbStart, new Vector2(infoX, infoY+infoLine), Color.LightGreen);
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Toggle Orb %: " + levelList[currentLevel].toggleFreq, new Vector2(infoX, infoY + 2 * infoLine), Color.LightGreen);
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Countdown Orb %: " + levelList[currentLevel].counterFreq, new Vector2(infoX, infoY + 3 * infoLine), Color.LightGreen);
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Timer Orb %: " + levelList[currentLevel].timerFreq, new Vector2(infoX, infoY + 4 * infoLine), Color.LightGreen);
+                    //Game.spriteBatch.DrawString(Game.spriteFont, "Goal: Score as many points as possible!", new Vector2(infoX, infoY), Color.LightGreen);
+                    //Game.spriteBatch.DrawString(Game.spriteFont, "Orb Density: " + levelList[currentLevel].grayOrbStart, new Vector2(infoX, infoY+infoLine), Color.LightGreen);
+                    //Game.spriteBatch.DrawString(Game.spriteFont, "Toggle Orb %: " + levelList[currentLevel].toggleFreq, new Vector2(infoX, infoY + 2 * infoLine), Color.LightGreen);
+                    //Game.spriteBatch.DrawString(Game.spriteFont, "Countdown Orb %: " + levelList[currentLevel].counterFreq, new Vector2(infoX, infoY + 3 * infoLine), Color.LightGreen);
+                    //Game.spriteBatch.DrawString(Game.spriteFont, "Timer Orb %: " + levelList[currentLevel].timerFreq, new Vector2(infoX, infoY + 4 * infoLine), Color.LightGreen);
+                    String difficultyString = "BUG";
+                    if (levelList[currentLevel].difficulty == Difficulty.EASY)
+                        difficultyString = "Beginner";
+                    if (levelList[currentLevel].difficulty == Difficulty.MEDIUM)
+                        difficultyString = "Standard";
+                    if (levelList[currentLevel].difficulty == Difficulty.HARD)
+                        difficultyString = "Advanced";
+                    Game.spriteBatch.DrawString(Game.spriteFont, "Difficulty: " + difficultyString, new Vector2(highScoreX - 40, highScoreY), Color.LightGreen); 
+                    
+                    Game.spriteBatch.DrawString(Game.spriteFont, "High Scores", new Vector2(highScoreX, highScoreY+30), Color.LightGreen);
 
-                    Game.spriteBatch.DrawString(Game.spriteFont, "High Scores", new Vector2(highScoreX, highScoreY), Color.LightGreen);
-
-                    LevelData levelData = highScoreData.timeAttackLevels[currentLevel];
+                    levelData = highScoreData.timeAttackLevels[currentLevel];
                     for (int i = 1; i < 6; i++)
                     {
-                        Game.spriteBatch.DrawString(Game.spriteFont, i + ": "+levelData.playerNames[i-1] + " - " + levelData.highScores[i-1], new Vector2(highScoreX, highScoreY + highScoreLine * i + 5), Color.LightGreen);
-                    }
-                    
-                    // Draw stars
-                    for (int i = 0; i < 3; i++)
-                    {
-                        Game.spriteBatch.Draw(emptyStar,
-                            new Rectangle(ratingX + 75 * i, ratingY + 40, 64, 64), Color.White);
-                    }
-                    if (levelData.played == true)
-                    {
-                        Game.spriteBatch.Draw(star,
-                                new Rectangle(ratingX, ratingY + 40, 64, 64), Color.White);
-                        if (levelData.highScores[0] >= Game.currentSettings.two_star)
-                            Game.spriteBatch.Draw(star,
-                                new Rectangle(ratingX + 75, ratingY + 40, 64, 64), Color.White);
-                        if (levelData.highScores[0] >= Game.currentSettings.three_star)
-                            Game.spriteBatch.Draw(star,
-                                new Rectangle(ratingX + 150, ratingY + 40, 64, 64), Color.White);
+                        Game.spriteBatch.DrawString(Game.spriteFont, i + ": "+levelData.playerNames[i-1] + " - " + levelData.highScores[i-1], new Vector2(highScoreX, highScoreY + highScoreLine * i + 35), Color.LightGreen);
                     }
                     
                 }
                 else if (levelList[currentLevel].mode == GameMode.MoveChallenge)
                 {
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Goal: Score as many points as possible!", new Vector2(infoX, infoY), Color.LightGreen);
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Orb Density: " + levelList[currentLevel].grayOrbStart, new Vector2(infoX, infoY + infoLine), Color.LightGreen);
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Toggle Orb %: " + levelList[currentLevel].toggleFreq, new Vector2(infoX, infoY + 2 * infoLine), Color.LightGreen);
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Countdown Orb %: " + levelList[currentLevel].counterFreq, new Vector2(infoX, infoY + 3 * infoLine), Color.LightGreen);
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Timer Orb %: " + levelList[currentLevel].timerFreq, new Vector2(infoX, infoY + 4 * infoLine), Color.LightGreen);
-
-                    Game.spriteBatch.DrawString(Game.spriteFont, "High Scores", new Vector2(highScoreX, highScoreY), Color.LightGreen);
+                    ///Game.spriteBatch.DrawString(Game.spriteFont, "Goal: Score as many points as possible!", new Vector2(infoX, infoY), Color.LightGreen);
+                    //Game.spriteBatch.DrawString(Game.spriteFont, "Orb Density: " + levelList[currentLevel].grayOrbStart, new Vector2(infoX, infoY + infoLine), Color.LightGreen);
+                    //Game.spriteBatch.DrawString(Game.spriteFont, "Toggle Orb %: " + levelList[currentLevel].toggleFreq, new Vector2(infoX, infoY + 2 * infoLine), Color.LightGreen);
+                    //Game.spriteBatch.DrawString(Game.spriteFont, "Countdown Orb %: " + levelList[currentLevel].counterFreq, new Vector2(infoX, infoY + 3 * infoLine), Color.LightGreen);
+                    //Game.spriteBatch.DrawString(Game.spriteFont, "Timer Orb %: " + levelList[currentLevel].timerFreq, new Vector2(infoX, infoY + 4 * infoLine), Color.LightGreen);
+                    String difficultyString = "BUG";
+                    if (levelList[currentLevel].difficulty == Difficulty.EASY)
+                        difficultyString = "Beginner";
+                    if (levelList[currentLevel].difficulty == Difficulty.MEDIUM)
+                        difficultyString = "Standard";
+                    if (levelList[currentLevel].difficulty == Difficulty.HARD)
+                        difficultyString = "Advanced";
+                    Game.spriteBatch.DrawString(Game.spriteFont, "Difficulty: " + difficultyString, new Vector2(highScoreX - 40, highScoreY), Color.LightGreen); 
+                    
+                    Game.spriteBatch.DrawString(Game.spriteFont, "High Scores", new Vector2(highScoreX, highScoreY+30), Color.LightGreen);
                     if (highScoreData == null)
                         highScoreData = HighScoreTracker.LoadHighScores();
-                    LevelData levelData = highScoreData.moveChallengeLevels[currentLevel];
                     for (int i = 1; i < 6; i++)
                     {
-                        Game.spriteBatch.DrawString(Game.spriteFont, i + ": " + levelData.playerNames[i - 1] + " - " + levelData.highScores[i - 1], new Vector2(highScoreX, highScoreY + highScoreLine * i + 5), Color.LightGreen);
-                    }
-
-                    // Draw stars
-                    for (int i = 0; i < 3; i++)
-                    {
-                        Game.spriteBatch.Draw(emptyStar,
-                            new Rectangle(ratingX + 75 * i, ratingY + 40, 64, 64), Color.White);
-                    }
-                    if (levelData.played == true)
-                    {
-                        Game.spriteBatch.Draw(star,
-                                new Rectangle(ratingX, ratingY + 40, 64, 64), Color.White);
-                        if (levelData.highScores[0] >= Game.currentSettings.two_star)
-                            Game.spriteBatch.Draw(star,
-                                new Rectangle(ratingX + 75, ratingY + 40, 64, 64), Color.White);
-                        if (levelData.highScores[0] >= Game.currentSettings.three_star)
-                            Game.spriteBatch.Draw(star,
-                                new Rectangle(ratingX + 150, ratingY + 40, 64, 64), Color.White);
+                        Game.spriteBatch.DrawString(Game.spriteFont, i + ": " + levelData.playerNames[i - 1] + " - " + levelData.highScores[i - 1], new Vector2(highScoreX, highScoreY + highScoreLine * i + 35), Color.LightGreen);
                     }
                 }
                 else
                 {
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Goal: Score as many points as possible!", new Vector2(infoX, infoY), Color.LightGreen);
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Difficulty: Medium", new Vector2(infoX, infoY + infoLine), Color.LightGreen);
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Grade: B", new Vector2(infoX, infoY + 2 * infoLine), Color.LightGreen);
-                    Game.spriteBatch.DrawString(Game.spriteFont, "High Score: 5000", new Vector2(infoX, infoY + 3 * infoLine), Color.LightGreen);
-
-                    Game.spriteBatch.DrawString(Game.spriteFont, "High Scores", new Vector2(highScoreX, highScoreY), Color.LightGreen);
+                    //Game.spriteBatch.DrawString(Game.spriteFont, "Goal: Score as many points as possible!", new Vector2(infoX, infoY), Color.LightGreen);
+                    //Game.spriteBatch.DrawString(Game.spriteFont, "Difficulty: Medium", new Vector2(infoX, infoY + infoLine), Color.LightGreen);
+                    //Game.spriteBatch.DrawString(Game.spriteFont, "Grade: B", new Vector2(infoX, infoY + 2 * infoLine), Color.LightGreen);
+                    //Game.spriteBatch.DrawString(Game.spriteFont, "High Score: 5000", new Vector2(infoX, infoY + 3 * infoLine), Color.LightGreen);
+                    String difficultyString = "BUG";
+                    if (levelList[currentLevel].difficulty == Difficulty.EASY)
+                        difficultyString = "Beginner";
+                    if (levelList[currentLevel].difficulty == Difficulty.MEDIUM)
+                        difficultyString = "Standard";
+                    if (levelList[currentLevel].difficulty == Difficulty.HARD)
+                        difficultyString = "Advanced";
+                    Game.spriteBatch.DrawString(Game.spriteFont, "Difficulty: "+difficultyString, new Vector2(highScoreX-40, highScoreY), Color.LightGreen); 
+                    Game.spriteBatch.DrawString(Game.spriteFont, "High Scores", new Vector2(highScoreX, highScoreY+30), Color.LightGreen);
                     if (highScoreData == null)
-                        highScoreData = HighScoreTracker.LoadHighScores();
-                    LevelData levelData = highScoreData.puzzleLevels[currentLevel];
+                        highScoreData = HighScoreTracker.LoadHighScores();                    
                     for (int i = 1; i < 6; i++)
                     {
                         TimeSpan t = new TimeSpan(0, 0, 0, 0, levelData.highScores[i - 1]);
-                        Game.spriteBatch.DrawString(Game.spriteFont, string.Format("{0}:{1} - {2}:{3:D2}", i,levelData.playerNames[i - 1], t.Minutes, t.Seconds), new Vector2(highScoreX, highScoreY + highScoreLine * i + 5), Color.LightGreen);                        
-                    }
-                    // Draw stars
-                    for (int i = 0; i < 3; i++)
-                    {
-                        Game.spriteBatch.Draw(emptyStar,
-                            new Rectangle(ratingX + 75 * i, ratingY + 40, 64, 64), Color.White);
-                    }
-                    if (levelData.played == true)
-                    {
-                        Game.spriteBatch.Draw(star,
-                                new Rectangle(ratingX, ratingY + 40, 64, 64), Color.White);
-                        if (levelData.highScores[0] <= Game.currentSettings.two_star)
-                            Game.spriteBatch.Draw(star,
-                                new Rectangle(ratingX + 75, ratingY + 40, 64, 64), Color.White);
-                        if (levelData.highScores[0] <= Game.currentSettings.three_star)
-                            Game.spriteBatch.Draw(star,
-                                new Rectangle(ratingX + 150, ratingY + 40, 64, 64), Color.White);
-                    }
+                        Game.spriteBatch.DrawString(Game.spriteFont, string.Format("{0}:{1} - {2}:{3:D2}", i,levelData.playerNames[i - 1], t.Minutes, t.Seconds), new Vector2(highScoreX, highScoreY + highScoreLine * i + 35), Color.LightGreen);                        
+                    }                    
                 }
             }
             if (state == SelectMenuState.TEXT)
@@ -391,7 +382,21 @@ namespace PuzzleBox
                 else
                 {
                     JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Earn two stars on the previous jellyfish \nto unlock this patient!", new Vector2(speechX - 250, speechY - 15), Color.Black);
+                    if (levelList[currentLevel].mode == GameMode.Puzzle)
+                    {
+                        if (levelList[currentLevel].difficulty == Difficulty.MEDIUM)
+                        {
+                            Game.spriteBatch.DrawString(Game.spriteFont, "Earn two stars on any Beginner puzzle \nto unlock this patient!", new Vector2(speechX - 250, speechY - 15), Color.Black);
+                        }
+                        else if (levelList[currentLevel].difficulty == Difficulty.HARD)
+                        {
+                            Game.spriteBatch.DrawString(Game.spriteFont, "Earn two stars on any Standard puzzle \nto unlock this patient!", new Vector2(speechX - 250, speechY - 15), Color.Black);
+                        }
+                    }
+                    else
+                    {
+                        Game.spriteBatch.DrawString(Game.spriteFont, "Earn two stars on the previous jellyfish \nto unlock this patient!", new Vector2(speechX - 250, speechY - 15), Color.Black);
+                    }
                 }
 
             }

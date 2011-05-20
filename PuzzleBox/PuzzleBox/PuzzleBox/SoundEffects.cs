@@ -10,6 +10,7 @@ namespace PuzzleBox
     {
         public static SoundEffect soundSwoosh;
         public static SoundEffect soundBloop;
+        public static SoundEffect soundClick;
         
         public static void Init()
         {
@@ -23,6 +24,11 @@ namespace PuzzleBox
         public static void PlayScore()
         {
             soundBloop.Play();
+        }
+
+        public static void PlayClick()
+        {
+            soundClick.Play();
         }
     }
 }

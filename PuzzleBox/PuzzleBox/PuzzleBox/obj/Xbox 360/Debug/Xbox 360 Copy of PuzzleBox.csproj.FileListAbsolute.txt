@@ -122,3 +122,10 @@ E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Conte
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\mysterypatient.xnb
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\bloop.xnb
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\swoosh.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\quit.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\mysterypatient.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\bloop.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\swoosh.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\click.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\returntolevelselect.xnb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\speechbubble2.xnb

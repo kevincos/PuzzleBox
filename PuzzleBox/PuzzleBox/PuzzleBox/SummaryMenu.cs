@@ -45,6 +45,7 @@ namespace PuzzleBox
             else
             {
                 optionList.Add(new MenuOption(MenuResult.Replay, "Try Again"));
+                optionList.Add(new MenuOption(MenuResult.GoToLevelSelect, "Level Select"));
                 optionList.Add(new MenuOption(MenuResult.GoToMainMenu, "Main Menu"));
             }
         }
@@ -63,17 +64,19 @@ namespace PuzzleBox
             {
                 JellyfishRenderer.DrawJellyfish(nurseX, nurseY, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
                 JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
-                Game.spriteBatch.DrawString(Game.spriteFont, text, new Vector2(speechX - 250, speechY - 15), Color.Black);
+                Game.spriteBatch.DrawString(Game.spriteFont, text, new Vector2(speechX - 250, speechY - 25), Color.Black);
+                int offSet = 0;
                 for (int i = 0; i < optionList.Count(); i++)
                 {
                     if (i == selectedOption)
                     {
-                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count-2) * 150 + 150 * i, speechY + 10), Color.Blue);
+                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count-2) * 150 + offSet, speechY + 18), Color.Blue);
                     }
                     else
                     {
-                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count-2) * 150 + 150 * i, speechY +10), Color.Black);
+                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count-2) * 150 + offSet, speechY +18), Color.Black);
                     }
+                    offSet += optionList[i].optionString.Length * 10 + 40;
                 }
             }
         }
@@ -103,12 +106,14 @@ namespace PuzzleBox
                 Vector2 rightStick = gamePadState.ThumbSticks.Right;
                 if (Keyboard.GetState().IsKeyDown(Keys.Space) || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
                 {
+                    SoundEffects.PlayClick();
                     result = optionList[selectedOption].result;
                     animateTime = 0;
                     state = SummaryMenuState.NURSEOUT;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Right) || leftStick.X > .95 || rightStick.X > .95)
                 {
+                    SoundEffects.PlayClick();
                     selectedOption++;
                     if (selectedOption >= optionList.Count())
                         selectedOption = optionList.Count() - 1;
@@ -116,16 +121,11 @@ namespace PuzzleBox
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Left) || leftStick.X < -.95 || rightStick.X < -.95)
                 {
+                    SoundEffects.PlayClick();
                     selectedOption--;
                     if (selectedOption < 0)
                         selectedOption = 0;
                     cooldown = 250;
-                }
-                if (gamePadState.IsButtonDown(Buttons.B))
-                {
-                    result = MenuResult.ResumeGame;
-                    animateTime = 0;
-                    state = SummaryMenuState.NURSEOUT;
                 }
             }
             return MenuResult.None;

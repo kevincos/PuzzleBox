@@ -37,7 +37,7 @@ namespace PuzzleBox
             highScores = new int[5];
             playerNames = new string[5];
             played = true;
-            rank = 2;
+            rank = 0;
         }
     }
 
@@ -71,7 +71,7 @@ namespace PuzzleBox
                 for(int i = 0; i < 3; i++)
                 {
                     defaultData.moveChallengeLevels[i] = new LevelData();
-                    defaultData.moveChallengeLevels[i].rank = 1;
+                    defaultData.moveChallengeLevels[i].rank = 0;
                     defaultData.moveChallengeLevels[i].played = false;
                     defaultData.moveChallengeLevels[i].unlocked = false;
                     for (int j = 0; j < 5; j++)
@@ -84,7 +84,7 @@ namespace PuzzleBox
                 for(int i = 0; i < 10; i++)
                 {
                     defaultData.puzzleLevels[i] = new LevelData();
-                    defaultData.puzzleLevels[i].rank = 1;
+                    defaultData.puzzleLevels[i].rank = 0;
                     defaultData.puzzleLevels[i].played = false;
                     defaultData.puzzleLevels[i].unlocked = false;
                     for (int j = 0; j < 5; j++)
@@ -92,12 +92,14 @@ namespace PuzzleBox
                         defaultData.puzzleLevels[i].playerNames[j] = "KRC";
                         defaultData.puzzleLevels[i].highScores[j] = (5 + j) * 60000;
                     }
+                    if(i<4)
+                        defaultData.puzzleLevels[i].unlocked = true;
                 }
                 defaultData.puzzleLevels[0].unlocked = true;
                 for(int i = 0; i < 3; i++)
                 {
                     defaultData.timeAttackLevels[i] = new LevelData();
-                    defaultData.timeAttackLevels[i].rank = 1;
+                    defaultData.timeAttackLevels[i].rank = 0;
                     defaultData.timeAttackLevels[i].played = false;
                     defaultData.timeAttackLevels[i].unlocked = false;
                     for (int j = 0; j < 5; j++)

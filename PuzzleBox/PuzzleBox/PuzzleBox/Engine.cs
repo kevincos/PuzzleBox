@@ -216,14 +216,16 @@ namespace PuzzleBox
             }
             if (gameState == State.VERIFY)
             {
-                foreach (ScoringSet s in Matcher.Solve(puzzleBox, masterGrid))
+                List<ScoringSet> scoreSet = Matcher.Solve(puzzleBox, masterGrid);
+                if (scoreSet.Count > 0)
+                    SoundEffects.PlayScore();
+                foreach (ScoringSet s in scoreSet)
                 {
                     if (Game.currentSettings.loseType == LoseType.BADCOLOR)
                     {
                         if (s.color == Game.currentSettings.dangerColor)
                             pendingResult = GameStopCause.LOSE_ERROR;
-                    }
-                    SoundEffects.PlayScore();
+                    }                    
                     s.CalculateScore();
                     s.LogScore();
                     currentScore += s.score;
@@ -297,6 +299,7 @@ namespace PuzzleBox
             {
                 gameState = State.RESUMING;
                 animateTime = 0;
+                SoundEffects.soundSwoosh.Play();
                 return GameStopCause.PAUSE;                
             }
             if (gameState == State.RESUMING && animateTime == 2 * maxAnimateTime)

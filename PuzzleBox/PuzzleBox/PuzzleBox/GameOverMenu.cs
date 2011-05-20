@@ -45,11 +45,11 @@ namespace PuzzleBox
         int headerHeight = 150;
         int doctorX = 600;
         int doctorY = 375;
-        int optionListX = 120;
+        int optionListX = 100;
         int optionListY = 180;
-        int optionGap = 75;
+        int optionGap = 50;
         int optionWidth = 250;
-        int optionHeight = 75;
+        int optionHeight = 50;
         int scoreX = 120;
         int scoreY = 340;
         int highScoreX = 120;
@@ -62,6 +62,8 @@ namespace PuzzleBox
         String initials = "---";
         int currentCharacter = 0;
 
+        String congratulationsMessage = "Testing...";
+
         LevelData levelData;
 
         public GameOverMenu()
@@ -71,7 +73,7 @@ namespace PuzzleBox
 
         public void AddMenuItem(MenuResult result, Texture2D image)
         {
-            optionList.Add(new MenuOption(result, image));
+            optionList.Add(new MenuOption(result, image, "BUG"));
         }
 
         public void Draw()
@@ -121,7 +123,7 @@ namespace PuzzleBox
                         new Rectangle(scoreX + 75 * i, scoreY + 40, 64, 64), Color.White);
                 }
                 Game.spriteBatch.Draw(star,
-                        new Rectangle(scoreX, scoreY + 40, 64, 64), Color.White);
+                        new Rectangle(scoreX, scoreY + 40, 64, 64), Color.White);                
                 if (score <= Game.currentSettings.two_star)
                     Game.spriteBatch.Draw(star,
                         new Rectangle(scoreX + 75, scoreY + 40, 64, 64), Color.White);
@@ -175,9 +177,15 @@ namespace PuzzleBox
                 }
             }
 
+            if (currentCharacter > 2 || rank == -1)
+            {
+                JellyfishRenderer.DrawSpeechBubble2(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
+                Game.spriteBatch.DrawString(Game.spriteFont, congratulationsMessage, new Vector2(speechX - 260, speechY - 15), Color.Black);
+            }
+
             if (rank != -1 && currentCharacter <= 2)
             {
-                JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
+                JellyfishRenderer.DrawSpeechBubble2(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
                 Game.spriteBatch.DrawString(Game.spriteFont, "Way to go! You got a high score! Please enter", new Vector2(speechX-260, speechY-15), Color.Black);
                 Game.spriteBatch.DrawString(Game.spriteFont, "your initials: ", new Vector2(speechX - 260, speechY+5), Color.Black);
                 Game.spriteBatch.DrawString(Game.spriteFont, ""+initials[2], new Vector2(speechX - 70, speechY + 5), Color.Black);
@@ -199,6 +207,39 @@ namespace PuzzleBox
                 if (Game.currentSettings.mode == GameMode.TimeAttack)
                 {
                     levelData = highScoreData.timeAttackLevels[level];
+                    highScoreData.timeAttackLevels[level].played = true;
+                    if (highScoreData.timeAttackLevels[level].rank < 3 && score >= Game.currentSettings.three_star)
+                    {
+                        congratulationsMessage = "Outstanding job! This patient has made a full \nrecovery, giving you the top ranking! Way to go!";
+                        highScoreData.timeAttackLevels[level].rank = 3;
+                    }
+                    else if (highScoreData.timeAttackLevels[level].rank < 2 && score >= Game.currentSettings.two_star)
+                    {
+                        congratulationsMessage = "Great job! You've earned two stars! Try to score\n" + Game.currentSettings.three_star + " points to make it to the next rank!";
+                        highScoreData.timeAttackLevels[level].rank = 2;
+                    }
+                    else if (highScoreData.timeAttackLevels[level].rank == 0)
+                    {
+                        highScoreData.timeAttackLevels[level].rank = 1;
+                        congratulationsMessage = "Good job! You've earned one star! Try to score " + Game.currentSettings.two_star + " \npoints to make it to the next rank!";
+                    }
+                    else if (highScoreData.timeAttackLevels[level].rank == 3)
+                    {
+                        congratulationsMessage = "This patient has already made a full recovery! \nYou should see if you can beat your high score!";
+                    }
+                    else if (highScoreData.timeAttackLevels[level].rank == 2)
+                    {
+                        congratulationsMessage = "Try to score " + Game.currentSettings.three_star + " points to earn three \nstars!";
+                    }
+                    else if (highScoreData.timeAttackLevels[level].rank == 1)
+                    {
+                        congratulationsMessage = "Try to score " + Game.currentSettings.two_star + " points to earn two \nstars!";
+                    }
+                    else
+                    {
+                        congratulationsMessage = "BUG!";
+                    }
+                    
                     for (int i = 4; i >= 0; i--)
                     {
                         if (score >= levelData.highScores[i])
@@ -221,8 +262,40 @@ namespace PuzzleBox
                     }
                 }
                 if (Game.currentSettings.mode == GameMode.MoveChallenge)
-                {
+                {                    
                     levelData = highScoreData.moveChallengeLevels[level];
+                    highScoreData.moveChallengeLevels[level].played = true;
+                    if (highScoreData.moveChallengeLevels[level].rank < 3 && score >= Game.currentSettings.three_star)
+                    {
+                        congratulationsMessage = "Outstanding job! This patient has made a full \nrecovery, giving you the top ranking! Way to go!";
+                        highScoreData.moveChallengeLevels[level].rank = 3;
+                    }
+                    else if (highScoreData.moveChallengeLevels[level].rank < 2 && score >= Game.currentSettings.two_star)
+                    {
+                        congratulationsMessage = "Great job! You've earned two stars! Try to score \n" + Game.currentSettings.three_star + " points to make it to the next rank!";
+                        highScoreData.moveChallengeLevels[level].rank = 2;
+                    }
+                    else if (highScoreData.moveChallengeLevels[level].rank == 0)
+                    {
+                        highScoreData.moveChallengeLevels[level].rank = 1;
+                        congratulationsMessage = "Good job! You've earned one star! Try to score " + Game.currentSettings.two_star + " \npoints to make it to the next rank!";
+                    }
+                    else if (highScoreData.moveChallengeLevels[level].rank == 3)
+                    {
+                        congratulationsMessage = "This patient has already made a full recovery! \nYou should see if you can beat your high score!";
+                    }
+                    else if (highScoreData.moveChallengeLevels[level].rank == 2)
+                    {
+                        congratulationsMessage = "Try to score " + Game.currentSettings.three_star + " points to earn three \nstars!";
+                    }
+                    else if (highScoreData.moveChallengeLevels[level].rank == 1)
+                    {
+                        congratulationsMessage = "Try to score " + Game.currentSettings.two_star + " points to earn two \nstars!";
+                    }
+                    else
+                    {
+                        congratulationsMessage = "BUG!";
+                    }
                     for (int i = 4; i >= 0; i--)
                     {
                         if (score >= levelData.highScores[i])
@@ -247,6 +320,40 @@ namespace PuzzleBox
                 else if (Game.currentSettings.mode == GameMode.Puzzle)
                 {
                     levelData = highScoreData.puzzleLevels[level];
+                    highScoreData.puzzleLevels[level].played = true;
+                    TimeSpan twoStarTime = new TimeSpan(0, 0, 0, 0, Game.currentSettings.two_star);
+                    TimeSpan threeStarTime = new TimeSpan(0, 0, 0, 0, Game.currentSettings.three_star);
+                    if (highScoreData.puzzleLevels[level].rank < 3 && score <= Game.currentSettings.three_star)
+                    {
+                        congratulationsMessage = "Outstanding job! This patient has made a full \nrecovery, giving you the top ranking! Way to go!";
+                        highScoreData.puzzleLevels[level].rank = 3;
+                    }
+                    else if (highScoreData.puzzleLevels[level].rank < 2 && score <= Game.currentSettings.two_star)
+                    {
+                        congratulationsMessage = string.Format("Great job! You've earned two stars! Try to finish \nin under {0}:{1:D2} to make it to the next rank!",threeStarTime.Minutes,threeStarTime.Seconds);
+                        highScoreData.puzzleLevels[level].rank = 2;
+                    }
+                    else if (highScoreData.puzzleLevels[level].rank == 0)
+                    {
+                        highScoreData.puzzleLevels[level].rank = 1;
+                        congratulationsMessage = string.Format("Good job! You've earned one star! Try to finish \nin under {0}:{1:D2} to make it to the next rank!",twoStarTime.Minutes,twoStarTime.Seconds);
+                    }
+                    else if (highScoreData.puzzleLevels[level].rank == 3)
+                    {
+                        congratulationsMessage = "This patient has already made a full recovery! \nSee if you can beat your high score!";
+                    }
+                    else if (highScoreData.puzzleLevels[level].rank == 2)
+                    {
+                        congratulationsMessage = string.Format("Try to finish in under {0}:{1:D2} to earn three \nstars!", threeStarTime.Minutes, threeStarTime.Seconds);
+                    }
+                    else if (highScoreData.puzzleLevels[level].rank == 1)
+                    {
+                        congratulationsMessage = string.Format("Try to finish in under {0}:{1:D2} to earn two \nstars!",twoStarTime.Minutes,twoStarTime.Seconds);
+                    }
+                    else
+                    {
+                        congratulationsMessage = "BUG!";
+                    }
                     for (int i = 4; i >= 0; i--)
                     {
                         if (score <= levelData.highScores[i])
@@ -262,10 +369,27 @@ namespace PuzzleBox
                             levelData.highScores[i] = score;
                         }
                     }
+                    
                     if (score <= Game.currentSettings.two_star && level < highScoreData.puzzleLevels.Count() - 1)
                     {
-                        if (highScoreData.puzzleLevels[level + 1] != null)
-                            highScoreData.puzzleLevels[level + 1].unlocked = true;
+                        List<Settings> puzzleSettings = SettingsLoader.LoadPuzzleLevels();
+                        if (Game.currentSettings.difficulty == Difficulty.EASY)
+                        {
+                            for (int i = 0; i < highScoreData.puzzleLevels.Count(); i++)
+                            {
+                                if (highScoreData.puzzleLevels[i] != null && (puzzleSettings[i].difficulty == Difficulty.MEDIUM || puzzleSettings[i].difficulty == Difficulty.EASY))
+                                    highScoreData.puzzleLevels[i].unlocked = true;
+                            }
+                        }
+                        if (Game.currentSettings.difficulty == Difficulty.MEDIUM)
+                        {
+                            for (int i = 0; i < highScoreData.puzzleLevels.Count(); i++)
+                            {
+                                if (highScoreData.puzzleLevels[i] != null && puzzleSettings[i].difficulty == Difficulty.HARD)
+                                    highScoreData.puzzleLevels[i].unlocked = true;
+                            }
+                        }
+
                     }
                 }
                 HighScoreTracker.SaveHighScores(highScoreData);    
@@ -304,30 +428,34 @@ namespace PuzzleBox
                 Vector2 rightStick = gamePadState.ThumbSticks.Right;
                 if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -.95 || rightStick.Y < -.95)
                 {
+                    SoundEffects.PlayClick();
                     Char[] cArray = initials.ToCharArray();
                     Char c = cArray[currentCharacter];
                     c--;
                     if (c < 'A') c = 'Z';
                     cArray[currentCharacter] = c;
                     initials = new String(cArray);
-                    cooldown = 50;
+                    cooldown = 100;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > .95 || rightStick.Y > .95)
                 {
+                    SoundEffects.PlayClick();
                     Char[] cArray = initials.ToCharArray();
                     Char c = cArray[currentCharacter];
                     c++;
                     if (c > 'Z') c = 'A';
                     cArray[currentCharacter] = c; 
                     initials = new String(cArray);
-                    cooldown = 50;
+                    cooldown = 100;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Right) || gamePadState.IsButtonDown(Buttons.A))
                 {
+
                     currentCharacter++;
                     cooldown = 250;
-                    if(currentCharacter>2)
+                    if (currentCharacter > 2)
                     {
+                        SoundEffects.PlayScore();
                         cooldown = 500;
                         levelData.playerNames[rank] = initials;
                         HighScoreData data = HighScoreTracker.LoadHighScores();
@@ -347,9 +475,14 @@ namespace PuzzleBox
                         HighScoreTracker.SaveHighScores(data);
                         state = GameOverMenuState.READY;
                     }
+                    else
+                    {
+                        SoundEffects.PlayClick();
+                    }
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Left) || gamePadState.IsButtonDown(Buttons.B))
                 {
+                    SoundEffects.PlayClick();
                     if (currentCharacter > 0)
                     {
                         currentCharacter--;
@@ -368,6 +501,7 @@ namespace PuzzleBox
                     result = optionList[selectedIndex].result;
                     animateTime = 0;
                     state = GameOverMenuState.DOCTOROUT;
+                    SoundEffects.PlayScore();
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -.95 || rightStick.Y < -.95)
                 {
@@ -377,6 +511,7 @@ namespace PuzzleBox
                     if (selectedIndex >= optionList.Count())
                         selectedIndex = optionList.Count() - 1;
                     cooldown = 250;
+                    SoundEffects.PlayMove();
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > .95 || rightStick.Y > .95)
                 {
@@ -387,6 +522,7 @@ namespace PuzzleBox
                     if (selectedIndex < 0)
                         selectedIndex = 0;
                     cooldown = 250;
+                    SoundEffects.PlayMove();
                 }
             }
             return MenuResult.None;            

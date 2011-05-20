@@ -16,14 +16,15 @@ namespace PuzzleBox
                 Settings s = new Settings();
                 s.allowResets = false;
                 s.displayScore = false;
-                s.displayTimer = true;
+                s.displayTimer = true;                
                 s.countdownTimer = false;
+                s.difficulty = Difficulty.EASY;
                 s.randomOrbs = false;
                 s.mode = GameMode.Puzzle;
                 s.refillQueues = false;
                 s.instructions = "";
-                s.two_star = 4000;
-                s.three_star = 2000;
+                s.two_star = 120000;
+                s.three_star = 30000;
                 levels.Add(s);
             }
             levels[0].levelfilename = "allgraytemplate.txt";
@@ -42,17 +43,32 @@ namespace PuzzleBox
             levels[3].levelfilename = "puzzle3.txt";
             levels[3].name = "Level3"; 
             levels[4].levelfilename = "puzzle4.txt";
-            levels[4].name = "Level4"; 
+            levels[4].name = "Level4";
+            levels[4].difficulty = Difficulty.MEDIUM; 
+            
             levels[5].levelfilename = "puzzle5.txt";
             levels[5].name = "Level5";
+            levels[5].difficulty = Difficulty.MEDIUM;
+            
             levels[6].levelfilename = "puzzle6.txt";
-            levels[6].name = "Level6"; 
+            levels[6].name = "Level6";
+            levels[6].winType = WinType.CLEAR;
+            levels[6].loseType = LoseType.BADCOLOR;
+            levels[6].dangerColor = Color.Yellow;
+            levels[6].dangerColorDisplay = "YELLOW";
+            levels[6].difficulty = Difficulty.MEDIUM;
+            
             levels[7].levelfilename = "puzzle7.txt";
-            levels[7].name = "Level7"; 
+            levels[7].name = "Level7";
+            levels[7].difficulty = Difficulty.HARD;
+            
             levels[8].levelfilename = "puzzle8.txt";
-            levels[8].name = "8"; 
+            levels[8].name = "8";
+            levels[8].difficulty = Difficulty.HARD;
+
             levels[9].levelfilename = "puzzle9.txt";
-            levels[9].name = "Level9"; 
+            levels[9].name = "Level9";
+            levels[9].difficulty = Difficulty.HARD;
             return levels;
         }
 
@@ -63,6 +79,7 @@ namespace PuzzleBox
             {
                 Settings s = new Settings();
                 s.allowResets = true;
+                s.difficulty = Difficulty.EASY;
                 s.displayScore = true;
                 s.displayTimer = true;
                 s.countdownTimer = true;
@@ -87,11 +104,13 @@ namespace PuzzleBox
             levels[0].two_star = 300;
             levels[0].three_star = 1000;
             levels[1].name = "Standard";
+            levels[1].difficulty = Difficulty.MEDIUM;
             levels[2].name = "Advanced";
             levels[2].grayOrbStart = 0;
             levels[2].texture = JellyfishRenderer.mustacheJelly;
             levels[2].two_star = 6000;
             levels[2].three_star = 10000;
+            levels[2].difficulty = Difficulty.HARD;
             return levels;
         }
 
@@ -106,6 +125,7 @@ namespace PuzzleBox
                 s.displayTimer = false;
                 s.displayMoveCount = true;
                 s.availableMoves = 100;
+                s.difficulty = Difficulty.EASY;
                 s.randomOrbs = true;                
                 s.grayOrbStart = 18;
                 s.toggleFreq = 0;
@@ -124,11 +144,13 @@ namespace PuzzleBox
             levels[0].two_star = 300;
             levels[0].three_star = 1000;
             levels[1].name = "Standard";
+            levels[1].difficulty = Difficulty.MEDIUM;
             levels[2].name = "Advanced";
             levels[2].grayOrbStart = 0;
             levels[2].texture = JellyfishRenderer.mustacheJelly;
             levels[2].two_star = 6000;
-            levels[2].three_star = 10000;  
+            levels[2].three_star = 10000;
+            levels[2].difficulty = Difficulty.HARD;
             return levels;
         }
     }

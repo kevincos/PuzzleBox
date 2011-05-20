@@ -104,16 +104,17 @@ namespace PuzzleBox
             MenuOption.menu_high = Content.Load<Texture2D>("high");
             mainMenu.background = Content.Load<Texture2D>("mainmenu");
             mainMenu.header = Content.Load<Texture2D>("title");
-            mainMenu.AddMenuItem(MenuResult.GoToTimeAttack, Content.Load<Texture2D>("timeattack"));
-            mainMenu.AddMenuItem(MenuResult.GoToPuzzle, Content.Load<Texture2D>("puzzle"));
-            mainMenu.AddMenuItem(MenuResult.GoToMoveChallenge, Content.Load<Texture2D>("moveChallenge"));
-            mainMenu.AddMenuItem(MenuResult.Quit, Content.Load<Texture2D>("quit"));
+            mainMenu.AddMenuItem(MenuResult.GoToTimeAttack, Content.Load<Texture2D>("timeattack"),"Score as many points as you can within the \ntime limit.");
+            mainMenu.AddMenuItem(MenuResult.GoToPuzzle, Content.Load<Texture2D>("puzzle"), "Solve a series of unique challenges.");
+            mainMenu.AddMenuItem(MenuResult.GoToMoveChallenge, Content.Load<Texture2D>("moveChallenge"), "Score as many points as you can with a \nlimited number of moves.");
+            mainMenu.AddMenuItem(MenuResult.Quit, Content.Load<Texture2D>("quit"), "Quit Jellyfish, MD??");
             gameOverMenu.background = Content.Load<Texture2D>("background");
             gameOverMenu.header = Content.Load<Texture2D>("gameover");
             gameOverMenu.AddMenuItem(MenuResult.StartTimeAttack, Content.Load<Texture2D>("replay"));
             gameOverMenu.AddMenuItem(MenuResult.GoToMainMenu, Content.Load<Texture2D>("returntomenu"));
-            selectMenu.star = Content.Load<Texture2D>("star");
-            selectMenu.emptyStar = Content.Load<Texture2D>("emptyStar");                 
+            gameOverMenu.AddMenuItem(MenuResult.GoToLevelSelect, Content.Load<Texture2D>("returntolevelselect"));
+            LevelSelectMenu.star = Content.Load<Texture2D>("star");
+            LevelSelectMenu.emptyStar = Content.Load<Texture2D>("emptyStar");                 
             gameOverMenu.emptyStar = Content.Load<Texture2D>("emptyStar");
             gameOverMenu.star = Content.Load<Texture2D>("star");
             
@@ -143,8 +144,10 @@ namespace PuzzleBox
             JellyfishRenderer.doctorJellyfish = Content.Load<Texture2D>("drjelly");
             JellyfishRenderer.nurseJellyfish = Content.Load<Texture2D>("nursejelly");
             JellyfishRenderer.speechBubble = Content.Load<Texture2D>("speechbubble");
+            JellyfishRenderer.speechBubble2 = Content.Load<Texture2D>("speechbubble2");
             SoundEffects.soundSwoosh = Content.Load<SoundEffect>("swoosh");
             SoundEffects.soundBloop = Content.Load<SoundEffect>("bloop");
+            SoundEffects.soundClick = Content.Load<SoundEffect>("click");
         }
 
         protected override void UnloadContent()
@@ -211,6 +214,15 @@ namespace PuzzleBox
                     metaState = MetaState.MainMenu;
                 if (result == MenuResult.ResumeGame)
                     metaState = MetaState.GamePlay;
+                if (result == MenuResult.GoToLevelSelect)
+                {
+                    if (currentSettings.mode == GameMode.TimeAttack)
+                        metaState = MetaState.Settings_TimeAttack;
+                    if (currentSettings.mode == GameMode.Puzzle)
+                        metaState = MetaState.Settings_Puzzle;
+                    if (currentSettings.mode == GameMode.MoveChallenge)
+                        metaState = MetaState.Settings_Move;
+                }
                 if (result == MenuResult.Replay)
                 {
                     p1engine = new Engine();
@@ -229,6 +241,15 @@ namespace PuzzleBox
                 }
                 if (result == MenuResult.GoToResults)
                     metaState = MetaState.GameOver_TimeAttack;
+                if (result == MenuResult.GoToLevelSelect)
+                {
+                    if (currentSettings.mode == GameMode.TimeAttack)
+                        metaState = MetaState.Settings_TimeAttack;
+                    if (currentSettings.mode == GameMode.Puzzle)
+                        metaState = MetaState.Settings_Puzzle;
+                    if (currentSettings.mode == GameMode.MoveChallenge)
+                        metaState = MetaState.Settings_Move;
+                }
             }
             else if (metaState == MetaState.Settings_TimeAttack || metaState == MetaState.Settings_Puzzle || metaState == MetaState.Settings_Move)
             {
@@ -261,6 +282,32 @@ namespace PuzzleBox
                         metaState = MetaState.MainMenu;
                         System.Threading.Thread.Sleep(100);
                     }
+                    if (result == MenuResult.GoToLevelSelect)
+                    {
+                        selectMenu = new LevelSelectMenu();
+                        selectMenu.state = LevelSelectMenu.SelectMenuState.LOAD;
+                        if (currentSettings.mode == GameMode.MoveChallenge)
+                        {
+                            metaState = MetaState.Settings_Move;
+                            selectMenu.cooldown = 250;
+                            selectMenu.levelList = SettingsLoader.LoadMoveCountLevels();
+                            currentSettings.mode = GameMode.MoveChallenge;
+                        }
+                        if (currentSettings.mode == GameMode.TimeAttack)
+                        {
+                            metaState = MetaState.Settings_TimeAttack;
+                            selectMenu.cooldown = 250;
+                            selectMenu.levelList = SettingsLoader.LoadTimeAttackLevels();
+                            currentSettings.mode = GameMode.TimeAttack;
+                        }
+                        if (currentSettings.mode == GameMode.Puzzle)
+                        {
+                            metaState = MetaState.Settings_Puzzle;
+                            selectMenu.cooldown = 250;
+                            selectMenu.levelList = SettingsLoader.LoadPuzzleLevels();
+                            currentSettings.mode = GameMode.Puzzle;
+                        }
+                    }
                     if (result == MenuResult.StartTimeAttack)
                     {
                         p1engine = new Engine();
@@ -274,22 +321,28 @@ namespace PuzzleBox
                 if (result == MenuResult.GoToTimeAttack)
                 {
                     metaState = MetaState.Settings_TimeAttack;
+                    selectMenu = new LevelSelectMenu();
                     selectMenu.levelList = SettingsLoader.LoadTimeAttackLevels();
                     selectMenu.state = LevelSelectMenu.SelectMenuState.LOAD;
+                    currentSettings.mode = GameMode.TimeAttack;
                     System.Threading.Thread.Sleep(100);
                 }
                 if (result == MenuResult.GoToPuzzle)
                 {
                     metaState = MetaState.Settings_Puzzle;
+                    selectMenu = new LevelSelectMenu();
                     selectMenu.levelList = SettingsLoader.LoadPuzzleLevels();
                     selectMenu.state = LevelSelectMenu.SelectMenuState.LOAD;
+                    currentSettings.mode = GameMode.Puzzle;
                     System.Threading.Thread.Sleep(100);
                 }
                 if (result == MenuResult.GoToMoveChallenge)
                 {
                     metaState = MetaState.Settings_Move;
+                    selectMenu = new LevelSelectMenu();
                     selectMenu.levelList = SettingsLoader.LoadMoveCountLevels();
                     selectMenu.state = LevelSelectMenu.SelectMenuState.LOAD;
+                    currentSettings.mode = GameMode.TimeAttack;
                 }
                 if (result == MenuResult.StartCollect)
                 {

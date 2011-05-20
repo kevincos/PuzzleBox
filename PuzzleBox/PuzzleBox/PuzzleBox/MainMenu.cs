@@ -43,15 +43,17 @@ namespace PuzzleBox
         int optionGap = 100;
         int optionWidth = 250;
         int optionHeight = 75;
+        int speechX = 612;
+        int speechY = 600;
 
         public MainMenu()
         {
             optionList = new List<MenuOption>();
         }
 
-        public void AddMenuItem(MenuResult result, Texture2D image)
+        public void AddMenuItem(MenuResult result, Texture2D image, String helpText)
         {
-            optionList.Add(new MenuOption(result, image));
+            optionList.Add(new MenuOption(result, image, helpText));
         }
 
         public void Draw()
@@ -90,6 +92,12 @@ namespace PuzzleBox
             {
                 JellyfishRenderer.DrawJellyfish(doctorX+200, doctorY, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
                 JellyfishRenderer.DrawJellyfish(doctorX, doctorY, 100, JellyfishRenderer.doctorJellyfish, .75f, SpriteEffects.FlipHorizontally);
+            }
+            if (state == MainMenuState.READY)
+            {
+                JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
+                Game.spriteBatch.DrawString(Game.spriteFont, optionList[selectedIndex].optionString, new Vector2(speechX - 250, speechY - 15), Color.Black);
+                
             }
         }
 

@@ -47,6 +47,15 @@ namespace PuzzleBox
 
         public int two_star = 2000;
         public int three_star = 3000;
+
+        public Difficulty difficulty = Difficulty.EASY;
+    }
+
+    public enum Difficulty
+    {
+        EASY,
+        MEDIUM,
+        HARD
     }
 
     public enum WinType
@@ -77,10 +86,11 @@ namespace PuzzleBox
         public static Texture2D menu_medium;
         public static Texture2D menu_high;
 
-        public MenuOption(MenuResult result, Texture2D optionText)
+        public MenuOption(MenuResult result, Texture2D optionText, String helpText)
         {
             this.result = result;
             this.optionText = optionText;
+            this.optionString = helpText;
             this.type = MenuType.Normal;
         }
 
@@ -131,6 +141,7 @@ namespace PuzzleBox
         GoToSurvival,
         GoToPuzzle,
         GoToMoveChallenge,
+        GoToLevelSelect,
         StartTimeAttack,
         StartSurvival,
         StartCollect,
@@ -184,7 +195,7 @@ namespace PuzzleBox
 
         public void AddMenuItem(MenuResult result, Texture2D image)
         {
-            optionList.Add(new MenuOption(result, image));
+            optionList.Add(new MenuOption(result, image, "BUG"));
         }
 
         public void AddMenuItem(MenuType type, Texture2D image)
