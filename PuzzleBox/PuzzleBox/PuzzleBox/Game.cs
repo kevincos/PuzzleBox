@@ -148,6 +148,9 @@ namespace PuzzleBox
             SoundEffects.soundSwoosh = Content.Load<SoundEffect>("swoosh");
             SoundEffects.soundBloop = Content.Load<SoundEffect>("bloop");
             SoundEffects.soundClick = Content.Load<SoundEffect>("click");
+            SoundEffects.soundBeep = Content.Load<SoundEffect>("beep");
+            MusicControl.track1 = Content.Load<Song>("track1");
+            MusicControl.track2 = Content.Load<Song>("track2");
         }
 
         protected override void UnloadContent()

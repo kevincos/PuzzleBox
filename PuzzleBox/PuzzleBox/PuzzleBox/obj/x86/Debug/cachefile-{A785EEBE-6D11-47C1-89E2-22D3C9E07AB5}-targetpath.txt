@@ -53,9 +53,14 @@ Content\star.xnb
 Content\emptystar.xnb
 Content\quit.xnb
 Content\mysterypatient.xnb
+Content\returntolevelselect.xnb
+Content\speechbubble2.xnb
 Content\SpriteFont1.xnb
 Content\bloop.xnb
 Content\swoosh.xnb
 Content\click.xnb
-Content\returntolevelselect.xnb
-Content\speechbubble2.xnb
+Content\track1.xnb
+Content\track1.wma
+Content\track2.xnb
+Content\track2.wma
+Content\beep.xnb

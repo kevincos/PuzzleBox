@@ -150,7 +150,11 @@ namespace PuzzleBox
                 timer.enabled = false;
                 clock.enabled = false;
             }
-            
+
+            targetShift = new Vector2(1000, 1000);
+            savedShift = new Vector2(1000, 1000);
+            shift = new Vector2(1000, 1000);
+
             puzzleBox = new PuzzleBox();
             masterGrid = new MasterGrid();
             
@@ -161,6 +165,7 @@ namespace PuzzleBox
                 Matcher.Reset(puzzleBox, masterGrid);
                 Matcher.Clear(puzzleBox, masterGrid);
                 gameState = State.RESUMING;
+                MusicControl.PlayGameMusic();
             }
             else
             {
@@ -1108,8 +1113,13 @@ namespace PuzzleBox
 
             timer.Draw();
             clock.Draw();
-            if(Game.currentSettings.mode==GameMode.MoveChallenge)
-                Game.spriteBatch.DrawString(Game.spriteFont, string.Format("MOVES - {0}", movesRemaining), new Vector2(850, 640), Color.White);
+            if (Game.currentSettings.mode == GameMode.MoveChallenge)
+            {
+                if(movesRemaining > 10)
+                    Game.spriteBatch.DrawString(Game.spriteFont, string.Format("MOVES: {0}", movesRemaining), new Vector2(850, 640), Color.White);
+                else
+                    Game.spriteBatch.DrawString(Game.spriteFont, string.Format("MOVES: {0}", movesRemaining), new Vector2(850, 640-5), Color.Red,0f,Vector2.Zero,1.3f,SpriteEffects.None,0);
+            }
 
 
         }

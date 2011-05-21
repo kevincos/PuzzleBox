@@ -20,6 +20,7 @@ namespace PuzzleBox
         public int timeRemaining;
 
         public bool enabled;
+        int mostRecentValue;
 
         public Countdown(int initialTime, int posX, int posY)
         {
@@ -44,7 +45,17 @@ namespace PuzzleBox
             if (enabled)
             {
                 TimeSpan t = new TimeSpan(0, 0, 0, 0, timeRemaining);
-                Game.spriteBatch.DrawString(Game.spriteFont, string.Format("TIME - {0}:{1:D2}", t.Minutes, t.Seconds), new Vector2(posX, posY), Color.White);
+                if (t.Minutes == 0 && t.Seconds < 10)
+                {
+                    if (mostRecentValue != t.Seconds)
+                    {
+                        SoundEffects.PlayAlert();
+                    }
+                    mostRecentValue = t.Seconds;
+                    Game.spriteBatch.DrawString(Game.spriteFont, string.Format("TIME-{0}:{1:D2}", t.Minutes, t.Seconds), new Vector2(posX , posY - 5), Color.Red, 0, Vector2.Zero, 1.3f, SpriteEffects.None, 0);
+                }
+                else
+                    Game.spriteBatch.DrawString(Game.spriteFont, string.Format("TIME - {0}:{1:D2}", t.Minutes, t.Seconds), new Vector2(posX, posY), Color.White);
             }
         }
     }

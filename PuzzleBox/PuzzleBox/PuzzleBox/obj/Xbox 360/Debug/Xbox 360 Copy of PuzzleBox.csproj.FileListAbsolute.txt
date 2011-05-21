@@ -129,3 +129,11 @@ C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Conte
 C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\click.xnb
 C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\returntolevelselect.xnb
 C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\speechbubble2.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\returntolevelselect.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\speechbubble2.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\click.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\track1.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\track1.wma
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\track2.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\track2.wma
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\beep.xnb

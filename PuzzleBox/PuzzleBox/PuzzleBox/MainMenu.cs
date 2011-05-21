@@ -111,6 +111,7 @@ namespace PuzzleBox
             }
             if (state == MainMenuState.DOCTORIN && animateTime > 250)
             {
+                MusicControl.PlayMenuMusic();
                 state = MainMenuState.READY;
             }
             if (state == MainMenuState.DOCTOROUT && animateTime > 250)

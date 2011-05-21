@@ -78,6 +78,7 @@
     <Compile Include="MasterGrid.cs" />
     <Compile Include="Matcher.cs" />
     <Compile Include="Menu.cs" />
+    <Compile Include="MusicControl.cs" />
     <Compile Include="PauseMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

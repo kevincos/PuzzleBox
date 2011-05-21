@@ -111,6 +111,7 @@ namespace PuzzleBox
             if (state == SelectMenuState.LOAD)
             {
                 state = SelectMenuState.READY;
+                MusicControl.PlayMenuMusic();
                 highScoreData = HighScoreTracker.LoadHighScores();
             }
             if (state == SelectMenuState.DOCTORIN)

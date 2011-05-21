@@ -400,7 +400,8 @@ namespace PuzzleBox
                 animateTime+=gameTime.ElapsedGameTime.Milliseconds;                
             }
             if (state == GameOverMenuState.DOCTORIN && animateTime > 250)
-            {                
+            {
+                MusicControl.PlayMenuMusic();
                 state = GameOverMenuState.READY;
                 if(rank!=-1)
                     state = GameOverMenuState.INITIALS;
