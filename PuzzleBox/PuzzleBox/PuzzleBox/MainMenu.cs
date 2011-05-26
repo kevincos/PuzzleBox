@@ -38,12 +38,12 @@ namespace PuzzleBox
         int headerHeight = 150;
         int doctorX = 600;
         int doctorY = 375;
-        int optionListX = 120;
-        int optionListY = 250;
-        int optionGap = 100;
+        int optionListX = 100;
+        int optionListY = 220;
+        int optionGap = 60;
         int optionWidth = 250;
-        int optionHeight = 75;
-        int speechX = 612;
+        int optionHeight = 60;
+        int speechX = 712;
         int speechY = 600;
 
         public MainMenu()
@@ -95,7 +95,7 @@ namespace PuzzleBox
             }
             if (state == MainMenuState.READY)
             {
-                JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
+                JellyfishRenderer.DrawSpeechBubble2(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
                 Game.spriteBatch.DrawString(Game.spriteFont, optionList[selectedIndex].optionString, new Vector2(speechX - 250, speechY - 15), Color.Black);
                 
             }
@@ -138,7 +138,7 @@ namespace PuzzleBox
 
                 if (Keyboard.GetState().IsKeyDown(Keys.Space) || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
                 {
-                    SoundEffects.soundBloop.Play();
+                    SoundEffects.PlayScore();
                     result = optionList[selectedIndex].result;
                     animateTime = 0;
                     state = MainMenuState.DOCTOROUT;
@@ -147,7 +147,7 @@ namespace PuzzleBox
                 {
                     if (selectedIndex < optionList.Count() - 1)
                     {
-                        SoundEffects.soundSwoosh.Play();
+                        SoundEffects.PlayMove();
                         state = MainMenuState.ANIMATEDOWN;
                         animateTime = 0;
                         selectedIndex++;
@@ -158,7 +158,7 @@ namespace PuzzleBox
                 {
                     if (selectedIndex > 0)
                     {
-                        SoundEffects.soundSwoosh.Play();
+                        SoundEffects.PlayMove();
                         state = MainMenuState.ANIMATEUP;
                         animateTime = 0;
 

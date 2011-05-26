@@ -718,7 +718,8 @@ namespace PuzzleBox
             {
                 for (int y = 0; y < gridSize; y++)
                 {
-                    if (x == 0 || x == gridSize-1 || y == 0 || y == gridSize-1)
+                    //if (x == 0 || x == gridSize-1 || y == 0 || y == gridSize-1)
+                    if(grid.queues[x,y]!=null)
                     {
                         for (int i = 0; i < grid[x, y].replace_distance; i++)
                         {
@@ -734,6 +735,10 @@ namespace PuzzleBox
                             }
                             else
                                 grid.queues[x, y].Add(new PuzzleNode(Color.Gray));
+                        }
+                        for (int i = 0; i < grid.queues[x, y].Count; i++)
+                        {
+                            grid.queues[x, y][i].ClearMarking();
                         }
                     } 
                     grid[x, y].ClearMarking();

@@ -47,7 +47,10 @@ namespace PuzzleBox
         END,
         WIN,
         LOSE_STUCK,
-        LOSE_ERROR
+        LOSE_ERROR,
+        TUTORIAL_TEXT,
+        TUTORIAL_PASS,
+        TUTORIAL_FAIL
     }
 
     public enum ControlMode
@@ -87,12 +90,16 @@ namespace PuzzleBox
         int jellyBodyY = 437; //420
 
         // Game state
+        int cooldown = 0;
         public static Countdown timer = new Countdown(0,0,0);
         public static Countup clock = new Countup(0,0,0);
         public int movesRemaining = 50;
         PuzzleBox puzzleBox;
         MasterGrid masterGrid;
-        State gameState = State.RESUMING;
+        PuzzleBox prevPuzzleBox;
+        MasterGrid prevMasterGrid;
+        int prevCubeDistance;
+        public State gameState = State.RESUMING;
         int animateTime = 0;
         int maxAnimateTime = 250;
         int maxSlideDistance = 0;
@@ -126,7 +133,20 @@ namespace PuzzleBox
         List<PuzzleNode> zBuffer;
         #endregion
 
-        public Engine()
+        public void Back()
+        {
+            puzzleBox = prevPuzzleBox.Copy();
+            masterGrid = prevMasterGrid.Copy();
+            cubeDistance = prevCubeDistance;
+            //gameState = State.NEWSET;
+            pendingResult = GameStopCause.NONE;
+            gameState = State.VANISH;
+            animateTime = 0;
+            prevPuzzleBox = null;
+            prevMasterGrid = null;
+        }
+
+        public Engine(int tutorialStage)
         {
             Logger.ClearLogger();
             automator = new Random();
@@ -167,6 +187,11 @@ namespace PuzzleBox
                 gameState = State.RESUMING;
                 MusicControl.PlayGameMusic();
             }
+            else if (tutorialStage!=-1)
+            {
+                TutorialStage.LoadLesson(tutorialStage, puzzleBox, masterGrid);
+                gameState = State.RESUMING;
+            }
             else
             {
                 LevelLoader.LoadLevel(Game.currentSettings.levelfilename, puzzleBox, masterGrid);
@@ -178,6 +203,8 @@ namespace PuzzleBox
 
         public GameStopCause Update(GameTime gameTime)
         {
+            cooldown -= gameTime.ElapsedGameTime.Milliseconds;
+            if (cooldown < 0) cooldown = 0;
             if (mode != ControlMode.EDITOR)
             {
                 Matcher.UpdateTimeCountdown(puzzleBox, masterGrid, gameTime.ElapsedGameTime.Milliseconds);
@@ -238,6 +265,11 @@ namespace PuzzleBox
                 }
                 if (Matcher.AllGray(puzzleBox, masterGrid))
                 {
+                    if (Game.currentSettings.mode == GameMode.Tutorial)
+                    {
+                        TutorialStage.phase = TutorialPhase.Pass;
+                        return GameStopCause.TUTORIAL_PASS;
+                    }
                     return GameStopCause.WIN;
                 }
                 maxSlideDistance = Matcher.GetMaxReplaceDistance(puzzleBox, masterGrid);
@@ -251,6 +283,10 @@ namespace PuzzleBox
                         if (Game.currentSettings.mode == GameMode.Puzzle)
                         {
                             return GameStopCause.LOSE_STUCK;
+                        }
+                        else if (Game.currentSettings.mode == GameMode.Tutorial)
+                        {
+                            return GameStopCause.TUTORIAL_FAIL;
                         }
                         else
                         {
@@ -304,13 +340,19 @@ namespace PuzzleBox
             {
                 gameState = State.RESUMING;
                 animateTime = 0;
-                SoundEffects.soundSwoosh.Play();
+                SoundEffects.PlayMove();                
                 return GameStopCause.PAUSE;                
             }
             if (gameState == State.RESUMING && animateTime == 2 * maxAnimateTime)
             {
+                //Matcher.Reset(puzzleBox,masterGrid);
+                Matcher.Clear(puzzleBox, masterGrid);
                 gameState = State.READY;
                 animateTime = 0;
+                if (Game.currentSettings.mode == GameMode.Tutorial)
+                {
+                    return GameStopCause.TUTORIAL_TEXT;
+                }
             }
             if (gameState == State.VANISH && animateTime == maxAnimateTime)
             {
@@ -322,6 +364,10 @@ namespace PuzzleBox
                 Matcher.Clear(puzzleBox, masterGrid);
                 gameState = State.READY;
                 animateTime = 0;
+                if (Game.currentSettings.mode == GameMode.Tutorial)
+                {
+                    return GameStopCause.TUTORIAL_TEXT;
+                }
             }
             if (gameState == State.REGENERATE && animateTime == maxAnimateTime * maxSlideDistance)
             {
@@ -348,52 +394,122 @@ namespace PuzzleBox
                     Vector2 stick = GamePad.GetState(PlayerIndex.One).ThumbSticks.Left;
                     GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
 
-                    if (Keyboard.GetState().IsKeyDown(Keys.Left) || stick.X < -.95f)
+                    if (Keyboard.GetState().IsKeyDown(Keys.B) || gamePadState.IsButtonDown(Buttons.B))
                     {
-                        SoundEffects.PlayMove();
-                        gameState = State.ROTATEPOSY;
-                    }
-                    if (Keyboard.GetState().IsKeyDown(Keys.Right) || stick.X > .95f)
-                    {
-                        SoundEffects.PlayMove();
-                        gameState = State.ROTATENEGY;
-                    }
-                    if (Keyboard.GetState().IsKeyDown(Keys.Up) || stick.Y > .95f)
-                    {
-                        SoundEffects.PlayMove();
-                        gameState = State.ROTATEPOSX;
-                    }
-                    if (Keyboard.GetState().IsKeyDown(Keys.Down) || stick.Y < -.95f)
-                    {
-                        SoundEffects.PlayMove();
-                        gameState = State.ROTATENEGX;
-                    }
-                    if (Keyboard.GetState().IsKeyDown(Keys.S) || gamePadState.IsButtonDown(Buttons.Y))
-                    {
-                        SoundEffects.PlayMove();
-                        gameState = State.ROTATEPOSZ;
-                    }
-                    if (Keyboard.GetState().IsKeyDown(Keys.A) || gamePadState.IsButtonDown(Buttons.X))
-                    {
-                        SoundEffects.PlayMove();
-                        gameState = State.ROTATENEGZ;
-                    }
-                    if (Keyboard.GetState().IsKeyDown(Keys.Q) || gamePadState.IsButtonDown(Buttons.RightShoulder) || gamePadState.IsButtonDown(Buttons.LeftShoulder))
-                    {
-                        if (cubeDistance < spacing * 2)
+                        if (Game.currentSettings.mode == GameMode.Puzzle)
                         {
-                            SoundEffects.PlayMove();
-                            cubeDistanceGoal = cubeDistance + spacing;
-                            gameState = State.PUSH;
+                            if (prevPuzzleBox == null)
+                                SoundEffects.PlayClick();
+                            else
+                                Back();
                         }
                     }
-                    if (Keyboard.GetState().IsKeyDown(Keys.W) || gamePadState.IsButtonDown(Buttons.RightTrigger) || gamePadState.IsButtonDown(Buttons.LeftTrigger))
+                    if ((Keyboard.GetState().IsKeyDown(Keys.E) || gamePadState.IsButtonDown(Buttons.X)))
                     {
-                        if (cubeDistance > 0)
+                        if (cooldown == 0)
+                        {
+                            Game.gameSettings.soundEffectsEnabled = !Game.gameSettings.soundEffectsEnabled;
+                            cooldown = 250;
+                        }
+                    }
+                    if (cooldown==0 && (Keyboard.GetState().IsKeyDown(Keys.M) || gamePadState.IsButtonDown(Buttons.Y)))
+                    {
+                        if (Game.gameSettings.musicEnabled)
+                        {
+                            Game.gameSettings.musicEnabled = false;
+                            MusicControl.Stop();
+                        }
+                        else
+                        {
+                            Game.gameSettings.musicEnabled = true;
+                            MusicControl.PlayGameMusic();
+                        }
+                        cooldown = 250;
+                    }
+                    if(cooldown==0 && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || gamePadState.IsButtonDown(Buttons.Back)))
+                    {
+                        Game.gameSettings.displayControls = !Game.gameSettings.displayControls;
+                        cooldown = 250;
+                    }
+                    if ((TutorialStage.phase == TutorialPhase.None || TutorialStage.restrictions == ControlRestrictions.None || TutorialStage.restrictions == ControlRestrictions.StickOnly))
+                    {
+                        if (Keyboard.GetState().IsKeyDown(Keys.Left) || stick.X < -.95f)
                         {
                             SoundEffects.PlayMove();
-                            cubeDistanceGoal = cubeDistance - spacing;
-                            gameState = State.PULL;
+                            prevMasterGrid = masterGrid.Copy();
+                            prevPuzzleBox = puzzleBox.Copy();
+                            prevCubeDistance = cubeDistance;
+                            gameState = State.ROTATEPOSY;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Right) || stick.X > .95f)
+                        {
+                            SoundEffects.PlayMove();
+                            prevMasterGrid = masterGrid.Copy();
+                            prevPuzzleBox = puzzleBox.Copy();
+                            prevCubeDistance = cubeDistance;
+                            gameState = State.ROTATENEGY;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Up) || stick.Y > .95f)
+                        {
+                            SoundEffects.PlayMove();
+                            prevMasterGrid = masterGrid.Copy();
+                            prevPuzzleBox = puzzleBox.Copy();
+                            prevCubeDistance = cubeDistance;
+                            gameState = State.ROTATEPOSX;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Down) || stick.Y < -.95f)
+                        {
+                            SoundEffects.PlayMove();
+                            prevMasterGrid = masterGrid.Copy();
+                            prevPuzzleBox = puzzleBox.Copy();
+                            prevCubeDistance = cubeDistance;
+                            gameState = State.ROTATENEGX;
+                        }
+                    }
+                    if (TutorialStage.phase==TutorialPhase.None || TutorialStage.restrictions == ControlRestrictions.None || TutorialStage.restrictions == ControlRestrictions.ShouldersOnly)
+                    {
+                        if (Keyboard.GetState().IsKeyDown(Keys.S) || gamePadState.IsButtonDown(Buttons.RightShoulder))
+                        {
+                            SoundEffects.PlayMove();
+                            prevMasterGrid = masterGrid.Copy();
+                            prevPuzzleBox = puzzleBox.Copy();
+                            prevCubeDistance = cubeDistance;
+                            gameState = State.ROTATEPOSZ;
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.A) || gamePadState.IsButtonDown(Buttons.LeftShoulder))
+                        {
+                            SoundEffects.PlayMove();
+                            prevMasterGrid = masterGrid.Copy();
+                            prevPuzzleBox = puzzleBox.Copy();
+                            prevCubeDistance = cubeDistance;
+                            gameState = State.ROTATENEGZ;
+                        }
+                    }
+                    if (TutorialStage.phase == TutorialPhase.None || TutorialStage.restrictions == ControlRestrictions.None || TutorialStage.restrictions == ControlRestrictions.TriggersOnly)
+                    {
+                        if (Keyboard.GetState().IsKeyDown(Keys.Q) || gamePadState.IsButtonDown(Buttons.LeftTrigger) || gamePadState.IsButtonDown(Buttons.LeftTrigger))
+                        {
+                            if (cubeDistance < spacing * 2)
+                            {
+                                SoundEffects.PlayMove();
+                                prevMasterGrid = masterGrid.Copy();
+                                prevPuzzleBox = puzzleBox.Copy();
+                                prevCubeDistance = cubeDistance;
+                                cubeDistanceGoal = cubeDistance + spacing;
+                                gameState = State.PUSH;
+                            }
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.W) || gamePadState.IsButtonDown(Buttons.RightTrigger) || gamePadState.IsButtonDown(Buttons.RightTrigger))
+                        {
+                            if (cubeDistance > 0)
+                            {
+                                SoundEffects.PlayMove();
+                                prevMasterGrid = masterGrid.Copy();
+                                prevPuzzleBox = puzzleBox.Copy();
+                                prevCubeDistance = cubeDistance;
+                                cubeDistanceGoal = cubeDistance - spacing;
+                                gameState = State.PULL;
+                            }
                         }
                     }
                 }
@@ -1121,7 +1237,7 @@ namespace PuzzleBox
                     Game.spriteBatch.DrawString(Game.spriteFont, string.Format("MOVES: {0}", movesRemaining), new Vector2(850, 640-5), Color.Red,0f,Vector2.Zero,1.3f,SpriteEffects.None,0);
             }
 
-
+            // Draw controls info
         }
     }
 }

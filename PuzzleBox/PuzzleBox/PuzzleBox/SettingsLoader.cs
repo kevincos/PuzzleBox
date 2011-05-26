@@ -8,6 +8,24 @@ namespace PuzzleBox
 {
     class SettingsLoader
     {
+        public static Settings Tutorial()
+        {
+            Settings s = new Settings();
+            s.allowResets = false;
+            s.displayScore = true;
+            s.displayTimer = false;
+            s.texture = JellyfishRenderer.orangeJelly;
+            s.countdownTimer = false;
+            s.difficulty = Difficulty.EASY;
+            s.randomOrbs = false;
+            s.mode = GameMode.Tutorial;
+            s.refillQueues = false;
+            s.instructions = "";
+            s.two_star = 120000;
+            s.three_star = 30000;
+            return s;
+        }
+
         public static List<Settings> LoadPuzzleLevels()
         {
             List<Settings> levels = new List<Settings>();
@@ -29,6 +47,7 @@ namespace PuzzleBox
             }
             levels[0].levelfilename = "allgraytemplate.txt";
             levels[0].name = "Template Level";
+            levels[0].texture = JellyfishRenderer.baseballJelly2;
             levels[1].levelfilename = "puzzle1.txt";
             levels[1].name = "Level1";
             levels[1].instructions = "N:Doctor! This patient has severe allergies to \nRED toxins!-D:Got it! We'll have to be extra careful \nnot to burst any of the RED globs.-N:Be careful!";
@@ -36,20 +55,24 @@ namespace PuzzleBox
             levels[1].loseType = LoseType.BADCOLOR;
             levels[1].dangerColor = Color.Red;
             levels[1].dangerColorDisplay = "RED";
+            levels[1].texture = JellyfishRenderer.profJelly;
             levels[2].levelfilename = "puzzle2.txt";
             levels[2].name = "Level2";
             levels[2].winType = WinType.CLEAR;
             levels[2].loseType = LoseType.NOMOVES;
+            levels[2].texture = JellyfishRenderer.officerJelly;
             levels[3].levelfilename = "puzzle3.txt";
-            levels[3].name = "Level3"; 
+            levels[3].name = "Level3";
+            levels[3].texture = JellyfishRenderer.firemanJelly;
             levels[4].levelfilename = "puzzle4.txt";
             levels[4].name = "Level4";
-            levels[4].difficulty = Difficulty.MEDIUM; 
-            
+            levels[4].difficulty = Difficulty.MEDIUM;
+            levels[4].texture = JellyfishRenderer.libraryJelly;
             levels[5].levelfilename = "puzzle5.txt";
             levels[5].name = "Level5";
             levels[5].difficulty = Difficulty.MEDIUM;
-            
+            levels[5].texture = JellyfishRenderer.mogulJelly;
+            levels[6].texture = JellyfishRenderer.clownJelly;
             levels[6].levelfilename = "puzzle6.txt";
             levels[6].name = "Level6";
             levels[6].winType = WinType.CLEAR;

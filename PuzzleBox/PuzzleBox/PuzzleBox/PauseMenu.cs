@@ -36,10 +36,18 @@ namespace PuzzleBox
         public PauseMenu()
         {
             optionList = new List<MenuOption>();
-            optionList.Add(new MenuOption(MenuResult.ResumeGame, "Resume"));
-            optionList.Add(new MenuOption(MenuResult.Replay, "Restart"));
-            optionList.Add(new MenuOption(MenuResult.GoToLevelSelect, "Level Select"));
-            optionList.Add(new MenuOption(MenuResult.GoToMainMenu, "Main Menu"));
+            if (TutorialStage.phase == TutorialPhase.None)
+            {
+                optionList.Add(new MenuOption(MenuResult.ResumeGame, "Resume"));
+                optionList.Add(new MenuOption(MenuResult.Replay, "Restart"));
+                optionList.Add(new MenuOption(MenuResult.GoToLevelSelect, "Level Select"));
+                optionList.Add(new MenuOption(MenuResult.GoToMainMenu, "Main Menu"));
+            }
+            else
+            {
+                optionList.Add(new MenuOption(MenuResult.ResumeGame, "Resume"));
+                optionList.Add(new MenuOption(MenuResult.GoToMainMenu, "Main Menu"));
+            }
         }
 
         public void Draw()
@@ -57,16 +65,16 @@ namespace PuzzleBox
                 JellyfishRenderer.DrawJellyfish(nurseX, nurseY, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
                 JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
                 Game.spriteBatch.DrawString(Game.spriteFont, "Doctor?", new Vector2(speechX-250, speechY-15), Color.Black);
-                int offSet = 0;
+                int offSet = 20;                
                 for (int i = 0; i < optionList.Count(); i++)
                 {
                     if (i == selectedOption)
                     {
-                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - 240 + offSet, speechY + 10), Color.Blue);
+                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count - 2) * 125 + offSet, speechY + 10), Color.Blue);
                     }
                     else
                     {
-                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - 240 + offSet, speechY+10), Color.Black);
+                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count - 2) * 125 + offSet, speechY + 10), Color.Black);
                     }
                     offSet += optionList[i].optionString.Length*10+40;
                 }                
@@ -101,7 +109,7 @@ namespace PuzzleBox
                     result = optionList[selectedOption].result;
                     animateTime = 0;
                     state = PauseMenuState.NURSEOUT;
-                    SoundEffects.soundSwoosh.Play();
+                    SoundEffects.PlayMove();
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Right) || leftStick.X > .95 || rightStick.X > .95)
                 {
@@ -124,7 +132,7 @@ namespace PuzzleBox
                     result = MenuResult.ResumeGame;
                     animateTime = 0;
                     state = PauseMenuState.NURSEOUT;
-                    SoundEffects.soundSwoosh.Play();
+                    SoundEffects.PlayMove();
                 }
             }
             return MenuResult.None;            

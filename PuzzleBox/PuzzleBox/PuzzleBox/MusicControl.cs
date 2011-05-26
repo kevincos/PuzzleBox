@@ -16,22 +16,34 @@ namespace PuzzleBox
 
         public static void PlayMenuMusic()
         {
-            if (currentTrack != track1)
+            if (Game.gameSettings.musicEnabled)
             {
-                MediaPlayer.IsRepeating = true;
-                MediaPlayer.Play(track1);
-                currentTrack = track1;
+                if (currentTrack != track1)
+                {
+                    MediaPlayer.IsRepeating = true;
+                    MediaPlayer.Play(track1);
+                    currentTrack = track1;
+                }
             }
         }
 
         public static void PlayGameMusic()
         {
-            if (currentTrack != track2)
+            if (Game.gameSettings.musicEnabled)
             {
-                MediaPlayer.IsRepeating = true;
-                MediaPlayer.Play(track2);
-                currentTrack = track2;
+                if (currentTrack != track2)
+                {
+                    MediaPlayer.IsRepeating = true;
+                    MediaPlayer.Play(track2);
+                    currentTrack = track2;
+                }
             }
+        }
+
+        public static void Stop()
+        {
+            MediaPlayer.Stop();
+            currentTrack = null;
         }
 
         public static void Pause()
@@ -41,7 +53,10 @@ namespace PuzzleBox
 
         public static void Resume()
         {
-            MediaPlayer.Resume();
+            if (Game.gameSettings.musicEnabled)
+            {
+                MediaPlayer.Resume();
+            }
         }
 
     }

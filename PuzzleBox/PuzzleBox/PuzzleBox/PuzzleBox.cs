@@ -36,6 +36,51 @@ namespace PuzzleBox
             }
         }
 
+        public void Mark()
+        {
+            for (int x = 0; x < size; x++)
+            {
+                for (int y = 0; y < size; y++)
+                {
+                    for (int z = 0; z < size; z++)
+                    {
+                        arr[x, y, z].marked = true;
+                    }
+                }
+            }            
+        }
+
+        public PuzzleBox Copy()
+        {
+            PuzzleBox newBox = new PuzzleBox();
+            for (int x = 0; x < size; x++)
+            {
+                for (int y = 0; y < size; y++)
+                {
+                    for (int z = 0; z < size; z++)
+                    {
+                        newBox[x, y, z] = arr[x, y, z].Copy();
+                    }
+                }
+            }
+            newBox.activeZ = activeZ;
+            return newBox;
+        }
+
+        public void Blank()
+        {
+            for (int x = 0; x < size; x++)
+            {
+                for (int y = 0; y < size; y++)
+                {
+                    for(int z = 0; z < size; z++)
+                    {
+                        arr[x, y, z] = new PuzzleNode(Color.Gray);
+                    }
+                }
+            }
+        }
+
         private void Cross()
         {
             for (int z = 0; z < size; z++)

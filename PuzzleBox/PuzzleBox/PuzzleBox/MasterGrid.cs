@@ -73,6 +73,63 @@ namespace PuzzleBox
             }
         }
 
+        public MasterGrid Copy()
+        {
+            MasterGrid newGrid = new MasterGrid();
+            for (int x = 0; x < gridSize; x++)
+            {
+                for (int y = 0; y < gridSize; y++)
+                {
+                    newGrid[x, y] = arr[x, y].Copy();
+                    if (queues[x, y] != null)
+                    {
+                        newGrid.queues[x, y] = new List<PuzzleNode>();
+                        for (int z = 0; z < queues[x, y].Count; z++)
+                            newGrid.queues[x, y].Add(queues[x, y][z].Copy());
+                    }
+                }
+            }
+            return newGrid;
+        }
+
+        public void Mark()
+        {
+            for (int x = 0; x < gridSize; x++)
+            {
+                for (int y = 0; y < gridSize; y++)
+                {
+                    arr[x, y].marked = true;
+                    if (queues[x, y] != null)
+                    {
+                        for (int z = 0; z < queues[x, y].Count; z++)
+                            queues[x, y][z].marked = true;
+                    }
+                }
+            }
+        }
+
+
+        public void Blank()
+        {
+            for (int x = 0; x < gridSize; x++)
+            {
+                for (int y = 0; y < gridSize; y++)
+                {
+                    arr[x, y] = new PuzzleNode(Color.Gray);
+                    if (queues[x, y] != null)
+                    {
+                        queues[x, y] = new List<PuzzleNode>();
+                        queues[x, y].Add(new PuzzleNode(Color.Gray));
+                        queues[x, y].Add(new PuzzleNode(Color.Gray));
+                        queues[x, y].Add(new PuzzleNode(Color.Gray));
+                        queues[x, y].Add(new PuzzleNode(Color.Gray));
+                        queues[x, y].Add(new PuzzleNode(Color.Gray));
+                        queues[x, y].Add(new PuzzleNode(Color.Gray));
+                    }
+                }
+            }
+        }
+
         public void ClearSelection()
         {
             for (int x = 0; x < gridSize; x++)

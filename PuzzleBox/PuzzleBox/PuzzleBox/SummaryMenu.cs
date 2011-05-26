@@ -22,11 +22,11 @@ namespace PuzzleBox
     class SummaryMenu
     {
         int animateTime = 0;
-        SummaryMenuState state = SummaryMenuState.NURSEIN;
+        public SummaryMenuState state = SummaryMenuState.NURSEIN;
         MenuResult result = MenuResult.None;
         int selectedOption = 0;
         List<MenuOption> optionList;
-        int cooldown = 0;
+        int cooldown = 100;
 
         int nurseX = 150;
         int nurseY = 400;
@@ -40,10 +40,26 @@ namespace PuzzleBox
         {
             this.win = win;
             optionList = new List<MenuOption>();
-            if (win)
+            bool endOfSection = TutorialStage.IsEndOfSection();
+            if (TutorialStage.phase!=TutorialPhase.None && endOfSection==false)
+            {
+                optionList.Add(new MenuOption(MenuResult.GoToResults, "Continue"));
+            }
+            else if (TutorialStage.phase != TutorialPhase.None && endOfSection == true)
+            {
+                optionList.Add(new MenuOption(MenuResult.GoToResults, "Continue"));
+                optionList.Add(new MenuOption(MenuResult.Replay, "Practice"));                            
+            }
+            else if (TutorialStage.phase==TutorialPhase.Fail)
+            {
+                optionList.Add(new MenuOption(MenuResult.Replay, "Try Again"));
+                optionList.Add(new MenuOption(MenuResult.GoToMainMenu, "Main Menu"));
+            }
+            else if (win)
                 optionList.Add(new MenuOption(MenuResult.GoToResults, "Continue"));
             else
             {
+                optionList.Add(new MenuOption(MenuResult.Undo, "Undo"));
                 optionList.Add(new MenuOption(MenuResult.Replay, "Try Again"));
                 optionList.Add(new MenuOption(MenuResult.GoToLevelSelect, "Level Select"));
                 optionList.Add(new MenuOption(MenuResult.GoToMainMenu, "Main Menu"));
@@ -63,20 +79,23 @@ namespace PuzzleBox
             if (state == SummaryMenuState.READY)
             {
                 JellyfishRenderer.DrawJellyfish(nurseX, nurseY, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
-                JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
-                Game.spriteBatch.DrawString(Game.spriteFont, text, new Vector2(speechX - 250, speechY - 25), Color.Black);
-                int offSet = 0;
-                for (int i = 0; i < optionList.Count(); i++)
+                if (Game.metaState != MetaState.GamePlay)
                 {
-                    if (i == selectedOption)
+                    JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
+                    Game.spriteBatch.DrawString(Game.spriteFont, text, new Vector2(speechX - 260, speechY - 22), Color.Black);
+                    int offSet = 50;
+                    for (int i = 0; i < optionList.Count(); i++)
                     {
-                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count-2) * 150 + offSet, speechY + 18), Color.Blue);
+                        if (i == selectedOption)
+                        {
+                            Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count - 2) * 130 + offSet, speechY + 28), Color.Blue);
+                        }
+                        else
+                        {
+                            Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count - 2) * 130 + offSet, speechY + 28), Color.Black);
+                        }
+                        offSet += optionList[i].optionString.Length * 10 + 40;
                     }
-                    else
-                    {
-                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count-2) * 150 + offSet, speechY +18), Color.Black);
-                    }
-                    offSet += optionList[i].optionString.Length * 10 + 40;
                 }
             }
         }
@@ -108,8 +127,46 @@ namespace PuzzleBox
                 {
                     SoundEffects.PlayClick();
                     result = optionList[selectedOption].result;
-                    animateTime = 0;
-                    state = SummaryMenuState.NURSEOUT;
+                    String nextText = null;
+                    if (TutorialStage.phase==TutorialPhase.Intro)
+                    {
+                        nextText = TutorialStage.IntroText();                        
+                    }
+                    else if (TutorialStage.phase == TutorialPhase.Pass)
+                    {
+                        nextText = TutorialStage.SuccessText();
+                        if (TutorialStage.IsEndOfSection())
+                        {                            
+                            optionList = new List<MenuOption>();
+                            optionList.Add(new MenuOption(MenuResult.GoToResults, "Continue"));
+                            optionList.Add(new MenuOption(MenuResult.Replay, "Practice"));                            
+                        }
+                    }
+                    else if (TutorialStage.phase == TutorialPhase.Fail)
+                    {
+                        nextText = TutorialStage.FailureText();
+                        if (TutorialStage.IsEndOfSection())
+                        {
+                            optionList = new List<MenuOption>();
+                            optionList.Add(new MenuOption(MenuResult.Replay, "Try Again"));
+                            optionList.Add(new MenuOption(MenuResult.GoToMainMenu, "Main Menu"));                            
+                        }
+                    }
+                    if (nextText != null)
+                    {
+                        text = nextText;
+                        cooldown = 250;
+                    }
+                    else
+                    {
+                        if (TutorialStage.phase == TutorialPhase.Pass || TutorialStage.phase == TutorialPhase.Fail)
+                        {
+                            return result;
+                        }
+                        animateTime = 0;
+                        state = SummaryMenuState.NURSEOUT;
+                        
+                    }
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Right) || leftStick.X > .95 || rightStick.X > .95)
                 {

@@ -12,6 +12,9 @@ namespace PuzzleBox
     
     public class HighScoreData
     {
+        public bool displayHelp;
+        public bool musicEnabled;
+        public bool soundEffectsEnabled;
         public LevelData[] timeAttackLevels;
         public LevelData[] moveChallengeLevels;
         public LevelData[] puzzleLevels;

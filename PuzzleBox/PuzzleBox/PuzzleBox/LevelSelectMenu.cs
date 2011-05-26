@@ -170,7 +170,7 @@ namespace PuzzleBox
                     {                        
                         if (currentLevel > 0)
                         {
-                            SoundEffects.soundSwoosh.Play();
+                            SoundEffects.PlayMove();
                             state = SelectMenuState.SWAPLEFT;
                             currentLevel--;
                             animateTime = 0;
@@ -180,7 +180,7 @@ namespace PuzzleBox
                     {
                         if (currentLevel < levelList.Count - 1)
                         {
-                            SoundEffects.soundSwoosh.Play();                        
+                            SoundEffects.PlayMove();
                             state = SelectMenuState.SWAPRIGHT;
                             currentLevel++;
                             animateTime = 0;                            
@@ -188,12 +188,12 @@ namespace PuzzleBox
                     }
                     if (Keyboard.GetState().IsKeyDown(Keys.B) || gamePadState.IsButtonDown(Buttons.B))
                     {
-                        SoundEffects.soundSwoosh.Play();
+                        SoundEffects.PlayMove();
                         return MenuResult.GoToMainMenu;
                     }
                     if (Keyboard.GetState().IsKeyDown(Keys.Space) || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
                     {
-                        SoundEffects.soundBloop.Play();
+                        SoundEffects.PlayScore();
                         textPieces = levelList[currentLevel].instructions.Split('-');
                         if (textPieces.Count() <= 1)
                         {

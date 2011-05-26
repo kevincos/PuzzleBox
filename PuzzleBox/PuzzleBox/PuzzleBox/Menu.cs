@@ -83,6 +83,7 @@ namespace PuzzleBox
 
         public static Texture2D menu_off;
         public static Texture2D menu_low;
+        public static Texture2D menu_on;
         public static Texture2D menu_medium;
         public static Texture2D menu_high;
 
@@ -115,14 +116,18 @@ namespace PuzzleBox
         ColorSelect,
         ToggleFreq,
         CounterFreq,
-        TimerFreq
+        TimerFreq,
+        MusicToggle,
+        SoundToggle,
+        HelpToggle
     }
 
     public enum MenuClass
     {
         MainMenu,
         PauseMenu,
-        ResultsMenu
+        ResultsMenu,
+        SettingsMenu
     }
 
     public enum MenuState
@@ -136,12 +141,17 @@ namespace PuzzleBox
     public enum MenuResult
     {
         None,
+        Undo,
         MenuAction,
+        GoToSettings,
+        GoToTutorial,
+        GoToJellyfishCity,
         GoToTimeAttack,
         GoToSurvival,
         GoToPuzzle,
         GoToMoveChallenge,
         GoToLevelSelect,
+        StartTutorial,
         StartTimeAttack,
         StartSurvival,
         StartCollect,
@@ -164,8 +174,17 @@ namespace PuzzleBox
         MenuClass type;
         int headerX = 100;
         int headerY = 20;
-        int optionListX = 90;
-        int optionListY= 170;
+        int headerWidth = 824;
+        int headerHeight = 150;
+        int doctorX = 600;
+        int doctorY = 375;
+        int optionListX = 100;
+        int optionListY = 220;
+        int optionGap = 60;
+        int optionWidth = 250;
+        int optionHeight = 60;
+        int speechX = 712;
+        int speechY = 600; 
         List<MenuOption> optionList;
         int selectedIndex = 0;
         int animationTime = 0;
@@ -207,6 +226,7 @@ namespace PuzzleBox
         {
             if (selectedIndex < optionList.Count - 1)
             {
+                SoundEffects.PlayMove();
                 state = MenuState.AnimateDown;
                 animationTime = 0;
                 selectedIndex++;
@@ -216,66 +236,67 @@ namespace PuzzleBox
         {
             if (selectedIndex > 0)
             {
+                SoundEffects.PlayMove();
                 state = MenuState.AnimateUp;
                 animationTime = 0;
                 selectedIndex--;
             }            
         }
         public void Draw()
-        {            
+        {
             Game.spriteBatch.Draw(background, new Rectangle(0, 0, Game.screenSizeX, Game.screenSizeY), Color.White);
-            Game.spriteBatch.Draw(header, new Rectangle(headerX, headerY, 600, 100), Color.White);
-            for(int i =0; i < optionList.Count; i++)
+            Game.spriteBatch.Draw(header, new Rectangle(headerX, headerY, headerWidth, headerHeight), Color.White);
+            JellyfishRenderer.DrawJellyfish(doctorX + 200, doctorY, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
+            JellyfishRenderer.DrawJellyfish(doctorX, doctorY, 100, JellyfishRenderer.doctorJellyfish, .75f, SpriteEffects.FlipHorizontally);
+
+            for (int i = 0; i < optionList.Count; i++)
             {
                 if (i == selectedIndex)
                 {                    
                     PuzzleNode p = new PuzzleNode(Color.Blue);
-                    p.screenX = optionListX-25;
-                    p.screenY = optionListY+25 + i*50;
+                    p.screenX = optionListX - 25;
+                    p.screenY = optionListY + optionHeight / 2 + i * optionGap;
                     if (state == MenuState.AnimateDown)
-                        p.screenY -= (int)(50f * (1f - (float)animationTime / (float)maxAnimationTime));
+                        p.screenY -= (int)(optionGap * (1f - (float)animationTime / (float)maxAnimationTime));
                     if (state == MenuState.AnimateUp)
-                        p.screenY += (int)(50f * (1f - (float)animationTime / (float)maxAnimationTime));
+                        p.screenY += (int)(optionGap * (1f - (float)animationTime / (float)maxAnimationTime));
 
                     p.distance = 50;
                     p.scale = 1f;
                     OrbRenderer.DrawOrb(p, State.READY, 0f);
                 }
-                Game.spriteBatch.Draw(optionList[i].optionText, new Rectangle(optionListX, optionListY + i * 50, 200, 50), Color.White);
-                if (optionList[i].type == MenuType.ColorSelect)
+                Game.spriteBatch.Draw(optionList[i].optionText, new Rectangle(optionListX, optionListY + i * optionGap, optionWidth, optionHeight), Color.White);
+                if (optionList[i].type == MenuType.SoundToggle)
                 {
-                    for (int j = 0; j < numColors; j++)
+                    if (Game.gameSettings.soundEffectsEnabled)
                     {
-                        PuzzleNode p;
-                        if(j==0)
-                            p = new PuzzleNode(Color.Blue);
-                        else if (j == 1)
-                            p = new PuzzleNode(Color.Yellow);
-                        else if (j == 2)
-                            p = new PuzzleNode(Color.Red);
-                        else if (j == 3)
-                            p = new PuzzleNode(Color.Green);
-                        else if (j == 4)
-                            p = new PuzzleNode(Color.Magenta);
-                        else if (j == 5)
-                            p = new PuzzleNode(Color.DarkOrange);
-                        else if (j == 6)
-                            p = new PuzzleNode(Color.GreenYellow);
-                        else if (j == 7)
-                            p = new PuzzleNode(Color.DarkViolet);
-                        else if (j == 8)
-                            p = new PuzzleNode(Color.DarkTurquoise);
-                        else if (j == 9)
-                            p = new PuzzleNode(Color.White);
-                        else
-                            p = new PuzzleNode(Color.Black);
-
-                        p.screenX = optionListX + 250 + j * 45;
-                        p.screenY = optionListY + 25 + i * 50;
-
-                        p.distance = 50;
-                        p.scale = 1f;
-                        OrbRenderer.DrawOrb(p, State.READY, 0f);
+                        Game.spriteBatch.Draw(MenuOption.menu_on, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                    }
+                    else
+                    {
+                        Game.spriteBatch.Draw(MenuOption.menu_off, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                    }
+                }
+                if (optionList[i].type == MenuType.HelpToggle)
+                {
+                    if (Game.gameSettings.displayControls)
+                    {
+                        Game.spriteBatch.Draw(MenuOption.menu_on, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                    }
+                    else
+                    {
+                        Game.spriteBatch.Draw(MenuOption.menu_off, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                    }
+                }
+                if (optionList[i].type == MenuType.MusicToggle)
+                {
+                    if (Game.gameSettings.musicEnabled)
+                    {
+                        Game.spriteBatch.Draw(MenuOption.menu_on, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                    }
+                    else
+                    {
+                        Game.spriteBatch.Draw(MenuOption.menu_off, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
                     }
                 }
                 if (optionList[i].type == MenuType.ToggleFreq)
@@ -316,10 +337,7 @@ namespace PuzzleBox
             {
                 String message = "Score: " + score;
                 Game.spriteBatch.DrawString(Game.spriteFont, message, new Vector2(scoreX, scoreY), Color.LightGreen);
-            }
-            JellyfishRenderer.DrawJellyfish(600, 300, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.None); 
-            JellyfishRenderer.DrawJellyfish(400, 300, 100, JellyfishRenderer.doctorJellyfish, .75f, SpriteEffects.FlipHorizontally);
-            
+            }            
         }
 
         public void UpdateSettings(Settings s)
@@ -384,7 +402,8 @@ namespace PuzzleBox
                     if (optionList[selectedIndex].type == MenuType.CounterFreq)
                     {
                         counterFreq--;
-                        if (counterFreq < 0) counterFreq = 3;
+                        if (counterFreq < 0) 
+                            counterFreq = 3;
                     }
                     if (optionList[selectedIndex].type == MenuType.ToggleFreq)
                     {
@@ -400,6 +419,30 @@ namespace PuzzleBox
                     {
                         numColors++;
                         if (numColors > 6) numColors = 1;
+                    }
+                    if (optionList[selectedIndex].type == MenuType.HelpToggle)
+                    {
+                        SoundEffects.PlayClick();
+                        Game.gameSettings.displayControls = !Game.gameSettings.displayControls;
+                    }
+                    if (optionList[selectedIndex].type == MenuType.MusicToggle)
+                    {
+                        SoundEffects.PlayClick();
+                        if (Game.gameSettings.musicEnabled)
+                        {
+                            Game.gameSettings.musicEnabled = false;
+                            MusicControl.Stop();
+                        }
+                        else
+                        {
+                            Game.gameSettings.musicEnabled = true;
+                            MusicControl.PlayMenuMusic();
+                        }                        
+                    }
+                    if (optionList[selectedIndex].type == MenuType.SoundToggle)
+                    {
+                        Game.gameSettings.soundEffectsEnabled = !Game.gameSettings.soundEffectsEnabled;
+                        SoundEffects.PlayClick();
                     }
                     if (optionList[selectedIndex].type == MenuType.TimerFreq)
                     {

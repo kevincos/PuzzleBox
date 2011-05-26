@@ -20,22 +20,26 @@ namespace PuzzleBox
 
         public static void PlayMove()
         {
-            soundSwoosh.Play();
+            if(Game.gameSettings.soundEffectsEnabled)
+                soundSwoosh.Play();
         }
 
         public static void PlayScore()
         {
-            soundBloop.Play();
+            if (Game.gameSettings.soundEffectsEnabled)
+                soundBloop.Play();
         }
 
         public static void PlayClick()
         {
-            soundClick.Play();
+            if (Game.gameSettings.soundEffectsEnabled)
+                soundClick.Play();
         }
 
         public static void PlayAlert()
         {
-            soundBeep.Play();
+            if (Game.gameSettings.soundEffectsEnabled)
+                soundBeep.Play();
         }
     }
 }

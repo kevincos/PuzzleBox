@@ -16,6 +16,16 @@ namespace PuzzleBox
             PuzzleNode.r = new Random();
         }
 
+        public PuzzleNode Copy()
+        {
+            PuzzleNode newNode = new PuzzleNode(color);
+            newNode.toggleColor = toggleColor;
+            newNode.toggleOrb = toggleOrb;
+            ClearMarking();
+            newNode.marked = true;
+            return newNode;
+        }
+
         public static bool Match(PuzzleNode p1, PuzzleNode p2)
         {     
             if ((p1.color.R==128 && p1.color.G ==128 && p1.color.B==128) || p1.color == Color.Black) return false;

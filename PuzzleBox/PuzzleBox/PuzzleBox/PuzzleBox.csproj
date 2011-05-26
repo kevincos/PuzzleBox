@@ -108,6 +108,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CameraUtils.cs" />
+    <Compile Include="GameSettings.cs" />
+    <Compile Include="JellyfishCity.cs" />
     <Compile Include="MusicControl.cs" />
     <Compile Include="SoundEffects.cs" />
     <Compile Include="SummaryMenu.cs" />
@@ -135,6 +137,8 @@
     <Compile Include="Scorer.cs" />
     <Compile Include="SettingsLoader.cs" />
     <Compile Include="Timer.cs" />
+    <Compile Include="TutorialLauncher.cs" />
+    <Compile Include="TutorialStage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
