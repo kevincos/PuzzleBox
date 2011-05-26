@@ -363,6 +363,10 @@ namespace PuzzleBox
                 {
                     SelectUp();                    
                 }
+                else if (Keyboard.GetState().IsKeyDown(Keys.B) || gamePadState.IsButtonDown(Buttons.B))
+                {
+                    return MenuResult.GoToMainMenu;
+                }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
                     if (optionList[selectedIndex].type == MenuType.ColorSelect)
@@ -402,7 +406,7 @@ namespace PuzzleBox
                     if (optionList[selectedIndex].type == MenuType.CounterFreq)
                     {
                         counterFreq--;
-                        if (counterFreq < 0) 
+                        if (counterFreq < 0)
                             counterFreq = 3;
                     }
                     if (optionList[selectedIndex].type == MenuType.ToggleFreq)
@@ -437,7 +441,7 @@ namespace PuzzleBox
                         {
                             Game.gameSettings.musicEnabled = true;
                             MusicControl.PlayMenuMusic();
-                        }                        
+                        }
                     }
                     if (optionList[selectedIndex].type == MenuType.SoundToggle)
                     {

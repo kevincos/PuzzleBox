@@ -133,6 +133,11 @@ namespace PuzzleBox
         List<PuzzleNode> zBuffer;
         #endregion
 
+        public bool IsBackAvailable()
+        {
+            return prevPuzzleBox != null;
+        }
+
         public void Back()
         {
             puzzleBox = prevPuzzleBox.Copy();
@@ -154,13 +159,13 @@ namespace PuzzleBox
             cubeDistanceGoal = 0;
             if (Game.currentSettings.displayTimer && Game.currentSettings.countdownTimer)
             {
-                timer = new Countdown(Game.currentSettings.initialTime, 850, 640);
+                timer = new Countdown(Game.currentSettings.initialTime, 850, 700);
                 timer.enabled = true;
                 clock.enabled = false;
             }
             else if (Game.currentSettings.displayTimer && Game.currentSettings.countdownTimer != true)
             {
-                clock = new Countup(0, 850, 640);
+                clock = new Countup(0, 850, 700);
                 clock.enabled = true;
                 timer.enabled = false;
 
@@ -404,7 +409,7 @@ namespace PuzzleBox
                                 Back();
                         }
                     }
-                    if ((Keyboard.GetState().IsKeyDown(Keys.E) || gamePadState.IsButtonDown(Buttons.X)))
+                    if ((Keyboard.GetState().IsKeyDown(Keys.E) || gamePadState.IsButtonDown(Buttons.Y)))
                     {
                         if (cooldown == 0)
                         {
@@ -412,7 +417,7 @@ namespace PuzzleBox
                             cooldown = 250;
                         }
                     }
-                    if (cooldown==0 && (Keyboard.GetState().IsKeyDown(Keys.M) || gamePadState.IsButtonDown(Buttons.Y)))
+                    if (cooldown==0 && (Keyboard.GetState().IsKeyDown(Keys.M) || gamePadState.IsButtonDown(Buttons.X)))
                     {
                         if (Game.gameSettings.musicEnabled)
                         {
@@ -1238,6 +1243,7 @@ namespace PuzzleBox
             }
 
             // Draw controls info
+            HelpOverlay.Draw(IsBackAvailable());
         }
     }
 }

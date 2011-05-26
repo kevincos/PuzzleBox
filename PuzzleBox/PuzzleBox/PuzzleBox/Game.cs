@@ -142,7 +142,17 @@ namespace PuzzleBox
             LevelSelectMenu.emptyStar = Content.Load<Texture2D>("emptyStar");                 
             gameOverMenu.emptyStar = Content.Load<Texture2D>("emptyStar");
             gameOverMenu.star = Content.Load<Texture2D>("star");
-            
+            HelpOverlay.help_hide = Content.Load<Texture2D>("help_hide");
+            HelpOverlay.help_show = Content.Load<Texture2D>("help_show");
+            HelpOverlay.help_sound = Content.Load<Texture2D>("help_sound");
+            HelpOverlay.help_music = Content.Load<Texture2D>("help_music");
+            HelpOverlay.help_undo = Content.Load<Texture2D>("help_undo");
+            HelpOverlay.help_leftstick = Content.Load<Texture2D>("help_leftstick");
+            HelpOverlay.help_lefttrigger = Content.Load<Texture2D>("help_lefttrigger");
+            HelpOverlay.help_righttrigger = Content.Load<Texture2D>("help_righttrigger");
+            HelpOverlay.help_leftbutton = Content.Load<Texture2D>("help_leftbutton");
+            HelpOverlay.help_rightbutton = Content.Load<Texture2D>("help_rightbutton");
+            HelpOverlay.help_x = Content.Load<Texture2D>("help_x");
             spriteFont = Content.Load<SpriteFont>("SpriteFont1");
             OrbRenderer.orbTexture = Content.Load<Texture2D>("orb");
             OrbRenderer.orbCrackedLeftTexture = Content.Load<Texture2D>("orb-cracked-left");

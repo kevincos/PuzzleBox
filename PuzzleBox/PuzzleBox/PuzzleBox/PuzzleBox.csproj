@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="CameraUtils.cs" />
     <Compile Include="GameSettings.cs" />
+    <Compile Include="HelpOverlay.cs" />
     <Compile Include="JellyfishCity.cs" />
     <Compile Include="MusicControl.cs" />
     <Compile Include="SoundEffects.cs" />
