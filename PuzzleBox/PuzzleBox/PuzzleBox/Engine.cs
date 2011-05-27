@@ -65,7 +65,7 @@ namespace PuzzleBox
 
         #region Member Variables
 
-        public static ControlMode mode = ControlMode.NORMAL;
+        public static ControlMode mode = ControlMode.EDITOR;
         Random automator;
         public PuzzleNode selectedNode = null;
         public List<PuzzleNode> selectedQueue = null;
@@ -140,15 +140,18 @@ namespace PuzzleBox
 
         public void Back()
         {
-            puzzleBox = prevPuzzleBox.Copy();
-            masterGrid = prevMasterGrid.Copy();
-            cubeDistance = prevCubeDistance;
-            //gameState = State.NEWSET;
-            pendingResult = GameStopCause.NONE;
-            gameState = State.VANISH;
-            animateTime = 0;
-            prevPuzzleBox = null;
-            prevMasterGrid = null;
+            if (mode != ControlMode.EDITOR)
+            {
+                puzzleBox = prevPuzzleBox.Copy();
+                masterGrid = prevMasterGrid.Copy();
+                cubeDistance = prevCubeDistance;
+                //gameState = State.NEWSET;
+                pendingResult = GameStopCause.NONE;
+                gameState = State.VANISH;
+                animateTime = 0;
+                prevPuzzleBox = null;
+                prevMasterGrid = null;
+            }
         }
 
         public Engine(int tutorialStage)
@@ -795,8 +798,13 @@ namespace PuzzleBox
                         
                         if (Keyboard.GetState().IsKeyDown(Keys.C))
                         {
-                            selectedNode.moveCountdownOrb = true;
-                            selectedNode.countdown = 10;
+                            if (selectedNode.moveCountdownOrb == false)
+                            {
+                                selectedNode.moveCountdownOrb = true;
+                                selectedNode.countdown = 10;
+                            }
+                            else
+                                selectedNode.moveCountdownOrb = false;
                         }
                         if(Keyboard.GetState().IsKeyDown(Keys.LeftShift)) {
                             if(Keyboard.GetState().IsKeyDown(Keys.F))
@@ -813,8 +821,13 @@ namespace PuzzleBox
 
                         if (Keyboard.GetState().IsKeyDown(Keys.T))
                         {
-                            selectedNode.timeCountdownOrb = true;
-                            selectedNode.countdown = 10000;                        
+                            if (selectedNode.timeCountdownOrb == false)
+                            {
+                                selectedNode.timeCountdownOrb = true;
+                                selectedNode.countdown = 10000;
+                            }
+                            else
+                                selectedNode.timeCountdownOrb = false;
                         }
                         if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
                         {

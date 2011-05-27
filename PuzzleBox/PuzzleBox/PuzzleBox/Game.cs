@@ -277,12 +277,14 @@ namespace PuzzleBox
                 {
                     summaryMenu = new SummaryMenu(false);
                     summaryMenu.text = "Oh no! Looks like you're stuck! Try to be more \ncareful next time!";
+                    gameOverMenu.state = GameOverMenuState.READY;
                     metaState = MetaState.Summary;
                 }
                 if (cause == GameStopCause.LOSE_ERROR)
                 {
                     summaryMenu = new SummaryMenu(false);
                     summaryMenu.text = "Oh no! You burst a " + currentSettings.dangerColorDisplay + " bubble! Try to be more \ncareful next time!";
+                    gameOverMenu.state = GameOverMenuState.READY;
                     metaState = MetaState.Summary;
                 }
             }
@@ -313,6 +315,10 @@ namespace PuzzleBox
             }
             else if (metaState == MetaState.Summary)
             {
+                if (Game.currentSettings.mode==GameMode.Puzzle && gameOverMenu.state != GameOverMenuState.SCORECHECK)
+                {
+                    Engine.clock.Update(gameTime);
+                }
                 MenuResult result = summaryMenu.Update(gameTime);
                 if (result == MenuResult.GoToMainMenu)
                 {
@@ -486,6 +492,7 @@ namespace PuzzleBox
                     metaState = MetaState.Settings_TimeAttack;
                     selectMenu = new LevelSelectMenu();
                     selectMenu.levelList = SettingsLoader.LoadTimeAttackLevels();
+                    selectMenu.currentLevel = gameSettings.timeAttackViewLevel;
                     selectMenu.state = LevelSelectMenu.SelectMenuState.LOAD;
                     currentSettings.mode = GameMode.TimeAttack;
                     System.Threading.Thread.Sleep(100);
@@ -496,6 +503,7 @@ namespace PuzzleBox
                     selectMenu = new LevelSelectMenu();
                     selectMenu.levelList = SettingsLoader.LoadPuzzleLevels();
                     selectMenu.state = LevelSelectMenu.SelectMenuState.LOAD;
+                    selectMenu.currentLevel = gameSettings.puzzleViewLevel;
                     currentSettings.mode = GameMode.Puzzle;
                     System.Threading.Thread.Sleep(100);
                 }
@@ -518,6 +526,7 @@ namespace PuzzleBox
                     selectMenu = new LevelSelectMenu();
                     selectMenu.levelList = SettingsLoader.LoadMoveCountLevels();
                     selectMenu.state = LevelSelectMenu.SelectMenuState.LOAD;
+                    selectMenu.currentLevel = gameSettings.moveChallengeViewLevel;
                     currentSettings.mode = GameMode.TimeAttack;
                 }
                 if (result == MenuResult.StartCollect)

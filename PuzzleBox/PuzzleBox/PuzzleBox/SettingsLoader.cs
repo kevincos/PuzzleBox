@@ -29,7 +29,7 @@ namespace PuzzleBox
         public static List<Settings> LoadPuzzleLevels()
         {
             List<Settings> levels = new List<Settings>();
-            for(int i =0; i < 10; i++)
+            for(int i =0; i < 20; i++)
             {                
                 Settings s = new Settings();
                 s.allowResets = false;
@@ -86,12 +86,57 @@ namespace PuzzleBox
             levels[7].difficulty = Difficulty.HARD;
             
             levels[8].levelfilename = "puzzle8.txt";
-            levels[8].name = "8";
+            levels[8].name = "level8";
             levels[8].difficulty = Difficulty.HARD;
 
             levels[9].levelfilename = "puzzle9.txt";
             levels[9].name = "Level9";
             levels[9].difficulty = Difficulty.HARD;
+
+            levels[10].levelfilename = "puzzle10.txt";
+            levels[10].name = "Level10";
+            levels[10].difficulty = Difficulty.EASY;
+
+            levels[11].levelfilename = "puzzle11.txt";
+            levels[11].name = "Level11";
+            levels[11].difficulty = Difficulty.EASY;
+
+            levels[12].levelfilename = "puzzle12.txt";
+            levels[12].name = "Level12";
+            levels[12].difficulty = Difficulty.EASY;
+
+            levels[13].levelfilename = "puzzle13.txt";
+            levels[13].name = "Level13";
+            levels[13].difficulty = Difficulty.EASY;
+
+            levels[14].levelfilename = "puzzle14.txt";
+            levels[14].name = "Level14";
+            levels[14].difficulty = Difficulty.EASY;
+
+            levels[15].levelfilename = "puzzle15.txt";
+            levels[15].name = "Level15";
+            levels[15].difficulty = Difficulty.EASY;
+            levels[15].loseType = LoseType.BADCOLOR;
+            levels[15].dangerColor = Color.Green;
+            levels[15].dangerColorDisplay = "GREEN";
+
+            levels[16].levelfilename = "puzzle16.txt";
+            levels[16].name = "Level16";
+            levels[16].difficulty = Difficulty.EASY;
+
+            levels[17].levelfilename = "puzzle17.txt";
+            levels[17].name = "Level17";
+            levels[17].difficulty = Difficulty.EASY;
+
+            levels[18].levelfilename = "puzzle18.txt";
+            levels[18].name = "Level18";
+            levels[18].difficulty = Difficulty.EASY;
+
+            levels[19].levelfilename = "puzzle19.txt";
+            levels[19].name = "Level19";
+            levels[19].difficulty = Difficulty.EASY;
+
+
             return levels;
         }
 

@@ -679,6 +679,8 @@ namespace PuzzleBox
                     {
                         if(box[x, y, z].color!=Color.Gray && box[x,y,z].color!=Game.currentSettings.dangerColor)
                             return false;
+                        if (box[x, y, z].toggleColor != Color.Gray && box[x, y, z].toggleColor != Game.currentSettings.dangerColor)
+                            return false;
                     }
                 }
             }

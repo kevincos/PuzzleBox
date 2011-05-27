@@ -61,6 +61,10 @@ namespace PuzzleBox
         int speechX = 500;
         int speechY = 600;
 
+        int numSwaps = 0;
+        int swapTime = 500;
+        bool left = false;
+
         HighScoreData highScoreData = null;
 
         public SelectMenuState state = SelectMenuState.READY;
@@ -91,10 +95,18 @@ namespace PuzzleBox
             if (state == SelectMenuState.SWAPLEFT || state == SelectMenuState.SWAPRIGHT)
             {
                 animateTime += gameTime.ElapsedGameTime.Milliseconds;
-                if (animateTime > 500)
+
+                if (animateTime > swapTime)
                 {
+                    // Update currentLevel
+                    if (levelList[currentLevel].mode == GameMode.TimeAttack)
+                        Game.gameSettings.timeAttackViewLevel = currentLevel;
+                    if (levelList[currentLevel].mode == GameMode.Puzzle)
+                        Game.gameSettings.puzzleViewLevel = currentLevel;
+                    if (levelList[currentLevel].mode == GameMode.MoveChallenge)
+                        Game.gameSettings.moveChallengeViewLevel = currentLevel;
                     state = SelectMenuState.READY;
-                    animateTime = 500;
+                    animateTime = swapTime;
                 }
             }
 
@@ -171,6 +183,15 @@ namespace PuzzleBox
                         if (currentLevel > 0)
                         {
                             SoundEffects.PlayMove();
+                            if (!left)
+                                numSwaps = 0;
+                            numSwaps++;
+                            if (numSwaps > 1)
+                                swapTime = 400;
+                            if (numSwaps > 2)
+                                swapTime = 200;
+
+                            left = true;
                             state = SelectMenuState.SWAPLEFT;
                             currentLevel--;
                             animateTime = 0;
@@ -181,6 +202,15 @@ namespace PuzzleBox
                         if (currentLevel < levelList.Count - 1)
                         {
                             SoundEffects.PlayMove();
+                            if (left)
+                                numSwaps = 0;
+                            numSwaps++;
+                            if (numSwaps > 1)
+                                swapTime = 400;
+                            if (numSwaps > 2)
+                                swapTime = 200;
+
+                            left = false;
                             state = SelectMenuState.SWAPRIGHT;
                             currentLevel++;
                             animateTime = 0;                            
@@ -209,6 +239,11 @@ namespace PuzzleBox
                         }
                         animateTime = 0;
                     }
+                    if (state == SelectMenuState.READY)
+                    {
+                        numSwaps = 0;
+                        swapTime = 500;
+                    }
                 }
             }
             return MenuResult.None;
@@ -224,12 +259,12 @@ namespace PuzzleBox
                 if (state == SelectMenuState.SWAPRIGHT)
                 {
                     t += 100;
-                    t -= animateTime * 100 / 500;
+                    t -= animateTime * 100 / swapTime;
                 }
                 if (state == SelectMenuState.SWAPLEFT)
                 {
                     t -= 100;
-                    t += animateTime * 100 / 500;
+                    t += animateTime * 100 / swapTime;
                 }
                 int x = t*3;
                 int y = -t*t/100;
@@ -269,7 +304,7 @@ namespace PuzzleBox
                 JellyfishRenderer.DrawJellyfish(doctorX - (int)(docShift * animateTime / 500f), doctorY, 100, JellyfishRenderer.doctorJellyfish, 1f);
                 JellyfishRenderer.DrawJellyfish(nurseX + (int)(docShift * animateTime / 500f), nurseY, 100, JellyfishRenderer.nurseJellyfish, 1f);
             }
-            if (state == SelectMenuState.READY)
+            if (state == SelectMenuState.READY || state == SelectMenuState.SWAPLEFT || state == SelectMenuState.SWAPRIGHT)
             {
                 Game.spriteBatch.DrawString(Game.spriteFont, levelList[currentLevel].name, new Vector2(nameX+50, nameY), Color.LightGreen);
                 if(currentLevel > 0)
@@ -297,11 +332,6 @@ namespace PuzzleBox
                 }
                 if (levelList[currentLevel].mode == GameMode.TimeAttack)
                 {
-                    //Game.spriteBatch.DrawString(Game.spriteFont, "Goal: Score as many points as possible!", new Vector2(infoX, infoY), Color.LightGreen);
-                    //Game.spriteBatch.DrawString(Game.spriteFont, "Orb Density: " + levelList[currentLevel].grayOrbStart, new Vector2(infoX, infoY+infoLine), Color.LightGreen);
-                    //Game.spriteBatch.DrawString(Game.spriteFont, "Toggle Orb %: " + levelList[currentLevel].toggleFreq, new Vector2(infoX, infoY + 2 * infoLine), Color.LightGreen);
-                    //Game.spriteBatch.DrawString(Game.spriteFont, "Countdown Orb %: " + levelList[currentLevel].counterFreq, new Vector2(infoX, infoY + 3 * infoLine), Color.LightGreen);
-                    //Game.spriteBatch.DrawString(Game.spriteFont, "Timer Orb %: " + levelList[currentLevel].timerFreq, new Vector2(infoX, infoY + 4 * infoLine), Color.LightGreen);
                     String difficultyString = "BUG";
                     if (levelList[currentLevel].difficulty == Difficulty.EASY)
                         difficultyString = "Beginner";
@@ -322,11 +352,6 @@ namespace PuzzleBox
                 }
                 else if (levelList[currentLevel].mode == GameMode.MoveChallenge)
                 {
-                    ///Game.spriteBatch.DrawString(Game.spriteFont, "Goal: Score as many points as possible!", new Vector2(infoX, infoY), Color.LightGreen);
-                    //Game.spriteBatch.DrawString(Game.spriteFont, "Orb Density: " + levelList[currentLevel].grayOrbStart, new Vector2(infoX, infoY + infoLine), Color.LightGreen);
-                    //Game.spriteBatch.DrawString(Game.spriteFont, "Toggle Orb %: " + levelList[currentLevel].toggleFreq, new Vector2(infoX, infoY + 2 * infoLine), Color.LightGreen);
-                    //Game.spriteBatch.DrawString(Game.spriteFont, "Countdown Orb %: " + levelList[currentLevel].counterFreq, new Vector2(infoX, infoY + 3 * infoLine), Color.LightGreen);
-                    //Game.spriteBatch.DrawString(Game.spriteFont, "Timer Orb %: " + levelList[currentLevel].timerFreq, new Vector2(infoX, infoY + 4 * infoLine), Color.LightGreen);
                     String difficultyString = "BUG";
                     if (levelList[currentLevel].difficulty == Difficulty.EASY)
                         difficultyString = "Beginner";
@@ -346,10 +371,6 @@ namespace PuzzleBox
                 }
                 else
                 {
-                    //Game.spriteBatch.DrawString(Game.spriteFont, "Goal: Score as many points as possible!", new Vector2(infoX, infoY), Color.LightGreen);
-                    //Game.spriteBatch.DrawString(Game.spriteFont, "Difficulty: Medium", new Vector2(infoX, infoY + infoLine), Color.LightGreen);
-                    //Game.spriteBatch.DrawString(Game.spriteFont, "Grade: B", new Vector2(infoX, infoY + 2 * infoLine), Color.LightGreen);
-                    //Game.spriteBatch.DrawString(Game.spriteFont, "High Score: 5000", new Vector2(infoX, infoY + 3 * infoLine), Color.LightGreen);
                     String difficultyString = "BUG";
                     if (levelList[currentLevel].difficulty == Difficulty.EASY)
                         difficultyString = "Beginner";

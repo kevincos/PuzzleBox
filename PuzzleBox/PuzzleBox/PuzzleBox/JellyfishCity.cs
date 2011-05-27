@@ -36,15 +36,18 @@ namespace PuzzleBox
         {
             posX += velX * gameTime.ElapsedGameTime.Milliseconds;
             posY += velY * gameTime.ElapsedGameTime.Milliseconds;
-            velX += (((float)(JellyfishCity.r.NextDouble()))*.001f-.0005f)*gameTime.ElapsedGameTime.Milliseconds;
+            if (texture == JellyfishRenderer.doctorJellyfish)
+                velX += 2*(((float)(JellyfishCity.r.NextDouble())) * .001f - .0005f) * gameTime.ElapsedGameTime.Milliseconds;
+            else
+                velX += (((float)(JellyfishCity.r.NextDouble()))*.001f-.0005f)*gameTime.ElapsedGameTime.Milliseconds;
             velY += (((float)(JellyfishCity.r.NextDouble()))*.001f-.0005f)* gameTime.ElapsedGameTime.Milliseconds;
             if (posX > 850)
                 velX -= .01f;
             if (posX <150)
                 velX += .01f;
             
-            if (posY < -80)
-                posY = 850;
+            if (posY < -100)
+                posY = 870;
             if (velY > 0)
                 velY = 0;
             if (posX < -60f)
@@ -57,6 +60,10 @@ namespace PuzzleBox
                 velX = -.2f;
             if (velX > .2f)
                 velX = .2f;
+            if (velX < -.05f)
+                left = true;
+            if (velX > .05f)
+                left = false;
         }
 
         public Texture2D texture;
@@ -64,6 +71,7 @@ namespace PuzzleBox
         public float posY;
         public float velX;
         public float velY = -.1f;
+        public bool left = false;
     }
 
     class JellyfishCity
@@ -124,8 +132,11 @@ namespace PuzzleBox
                         jelliesSaved++;
                         jellyList.Add(new Jellyfish(puzzleSettingsList[i].texture));
                     }
-                }                
-                
+                }
+                if (totalJellies == jelliesSaved)
+                {
+                    jellyList.Add(new Jellyfish(JellyfishRenderer.doctorJellyfish));
+                }
                 state = JellyfishCityState.NURSEIN;
             }
             if (state == JellyfishCityState.NURSEIN || state == JellyfishCityState.NURSEOUT)
@@ -194,7 +205,15 @@ namespace PuzzleBox
             {
                 foreach (Jellyfish j in jellyList)
                 {
-                    JellyfishRenderer.DrawJellyfish((int)(j.posX), (int)(j.posY), 100, j.texture, .35f);
+                    if (j.texture == JellyfishRenderer.doctorJellyfish)
+                    {
+                        if(j.left)
+                            JellyfishRenderer.DrawJellyfish((int)(j.posX), (int)(j.posY), 100, j.texture, .5f,SpriteEffects.FlipHorizontally);
+                        else
+                            JellyfishRenderer.DrawJellyfish((int)(j.posX), (int)(j.posY), 100, j.texture, .5f, SpriteEffects.None);
+                    }
+                    else
+                        JellyfishRenderer.DrawJellyfish((int)(j.posX), (int)(j.posY), 100, j.texture, .35f);
                 }
             }
             if (state == JellyfishCityState.NURSEIN)

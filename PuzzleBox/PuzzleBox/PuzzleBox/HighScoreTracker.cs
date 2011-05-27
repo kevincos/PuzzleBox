@@ -23,7 +23,7 @@ namespace PuzzleBox
         {
             timeAttackLevels = new LevelData[10];
             moveChallengeLevels = new LevelData[10];
-            puzzleLevels = new LevelData[10];
+            puzzleLevels = new LevelData[20];
         }
     }
 
@@ -84,7 +84,7 @@ namespace PuzzleBox
                     }
                 }
                 defaultData.moveChallengeLevels[0].unlocked = true;
-                for(int i = 0; i < 10; i++)
+                for(int i = 0; i < 20; i++)
                 {
                     defaultData.puzzleLevels[i] = new LevelData();
                     defaultData.puzzleLevels[i].rank = 0;
@@ -95,7 +95,7 @@ namespace PuzzleBox
                         defaultData.puzzleLevels[i].playerNames[j] = "KRC";
                         defaultData.puzzleLevels[i].highScores[j] = (5 + j) * 60000;
                     }
-                    if(i<4)
+                    if(i<8)
                         defaultData.puzzleLevels[i].unlocked = true;
                 }
                 defaultData.puzzleLevels[0].unlocked = true;
