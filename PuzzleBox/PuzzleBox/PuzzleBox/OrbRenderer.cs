@@ -30,7 +30,8 @@ namespace PuzzleBox
         public static void DrawScoreBonus(ScoringSet set)
         {
             set.CalculateScore();
-            Game.spriteBatch.DrawString(Game.spriteFont, "+"+set.score, new Vector2(set.drawX, set.drawY), set.color,0,Vector2.Zero,2f,SpriteEffects.None,0);
+            Game.spriteBatch.DrawString(Game.menuFont, "+" + set.score, new Vector2(set.drawX, set.drawY), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+            Game.spriteBatch.DrawString(Game.menuFont, "+" + set.score, new Vector2(set.drawX, set.drawY), set.color, 0, Vector2.Zero, .96f, SpriteEffects.None, 0);
         }
 
         public static void DrawFragments(Fragment frag)

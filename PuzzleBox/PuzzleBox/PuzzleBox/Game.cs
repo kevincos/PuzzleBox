@@ -133,7 +133,7 @@ namespace PuzzleBox
             gameOverMenu.AddMenuItem(MenuResult.StartTimeAttack, "Replay");
             gameOverMenu.AddMenuItem(MenuResult.GoToMainMenu, "Main Menu");
             gameOverMenu.AddMenuItem(MenuResult.GoToLevelSelect, "Level Select");
-            settingsMenu.AddMenuItem(MenuResult.GoToMainMenu, "Return to Main Menu");
+            settingsMenu.AddMenuItem(MenuResult.GoToMainMenu, "Return to Menu");
             settingsMenu.AddMenuItem(MenuType.SoundToggle, "Sound Effects"); 
             settingsMenu.AddMenuItem(MenuType.MusicToggle, "Music");
             settingsMenu.AddMenuItem(MenuType.HelpToggle, "Help Overlay");
@@ -283,6 +283,8 @@ namespace PuzzleBox
                     TutorialStage.phase = TutorialPhase.Intro;
                     summaryMenu = new SummaryMenu(true);
                     summaryMenu.text = TutorialStage.IntroText();
+                    if (summaryMenu.text == null)
+                        metaState = MetaState.GamePlay;
                     summaryMenu.state = SummaryMenuState.READY;
 
                     metaState = MetaState.Summary;
@@ -328,7 +330,7 @@ namespace PuzzleBox
                 }
                 if (result == MenuResult.ResumeGame)
                 {
-                    summaryMenu.state = SummaryMenuState.NURSEIN;
+                    summaryMenu.state = SummaryMenuState.NURSEIN;                    
                     metaState = MetaState.GamePlay;
                 }
                 if (result == MenuResult.GoToLevelSelect)
@@ -362,9 +364,14 @@ namespace PuzzleBox
                 {
                     if (TutorialStage.phase == TutorialPhase.Fail || TutorialStage.phase == TutorialPhase.Pass)
                     {
-                        p1engine = new Engine(TutorialStage.lessonIndex);
-                        p1engine.gameState = State.VANISH;
+                        //p1engine = new Engine(TutorialStage.lessonIndex);
+                        p1engine.LoadTutorial(TutorialStage.lessonIndex);
+                        //p1engine.gameState = State.VANISH;
                         TutorialStage.phase = TutorialPhase.Intro;
+                        TutorialStage.failureIndex = 0;
+                        TutorialStage.introIndex = 0;
+                        TutorialStage.successIndex = 0;
+                        p1engine.firstResume = true;
                         metaState = MetaState.GamePlay;
                     }
                     else
@@ -397,8 +404,10 @@ namespace PuzzleBox
                             }
                             else
                             {
-                                p1engine = new Engine(TutorialStage.lessonIndex);
-                                p1engine.gameState = State.VANISH;
+                                //p1engine = new Engine(TutorialStage.lessonIndex);
+                                p1engine.LoadTutorial(TutorialStage.lessonIndex);
+                                p1engine.firstResume = true;
+                                //p1engine.gameState = State.VANISH;
                                 TutorialStage.phase = TutorialPhase.Intro;
                                 metaState = MetaState.GamePlay;
                             }
@@ -511,8 +520,10 @@ namespace PuzzleBox
                 MenuResult result = tutorialLauncher.Update(gameTime);
                 if (result == MenuResult.StartTutorial)
                 {
+                    summaryMenu.state = SummaryMenuState.READY;
                     currentSettings = SettingsLoader.Tutorial();
                     p1engine = new Engine(0);
+                    p1engine.firstResume = true;
                     metaState = MetaState.GamePlay;
 
                 }

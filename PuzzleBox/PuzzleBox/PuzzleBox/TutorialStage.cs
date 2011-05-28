@@ -169,8 +169,7 @@ namespace PuzzleBox
             "Use the Left Control Stick to rotate the\n" +
             "bubbles in Mister Jellyfish's body.:" +
             "Try to match up the colored bubbles in\n" +
-            "his body with the bubbles in his\n" +
-            "tentacles!";
+            "his body with the bubbles in his tentacles!";
             successText = "" +
             "Great job! When you aligned the bubbles in\n" +
             "his body with the bubbles in his tentacles,\n" +

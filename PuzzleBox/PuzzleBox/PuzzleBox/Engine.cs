@@ -123,7 +123,7 @@ namespace PuzzleBox
         Vector2 shift;
         Vector2 targetShift;
         Vector2 savedShift;
-        bool firstResume = true;
+        public bool firstResume = false;
 
         // Screen display
         public static int spacing = 60;
@@ -160,6 +160,19 @@ namespace PuzzleBox
                 prevPuzzleBox = null;
                 prevMasterGrid = null;
             }
+        }
+
+        public void LoadTutorial(int tutorialStage)
+        {
+            newPuzzleBox = new PuzzleBox();
+            newMasterGrid = new MasterGrid();
+            newPuzzleBox.activeZ = 0;// puzzleBox.activeZ;
+            newCubeDistance = 0;
+            TutorialStage.LoadLesson(tutorialStage, newPuzzleBox, newMasterGrid);
+            gameState = State.VANISH;
+            puzzleBox.Mark();
+            masterGrid.Mark();
+            animateTime = 0;
         }
 
         public Engine(int tutorialStage)
@@ -380,9 +393,14 @@ namespace PuzzleBox
             }
             if (gameState == State.VANISH && animateTime == maxAnimateTime)
             {
-                puzzleBox = newPuzzleBox.Copy();
-                masterGrid = newMasterGrid.Copy();
-                cubeDistance = newCubeDistance;
+                if (newPuzzleBox != null)
+                {
+                    puzzleBox = newPuzzleBox.Copy();
+                    masterGrid = newMasterGrid.Copy();
+                    cubeDistance = newCubeDistance;
+                    newPuzzleBox = null;
+                    newMasterGrid = null;
+                }
                 gameState = State.NEWSET;
                 animateTime = 0;
             }
@@ -391,9 +409,10 @@ namespace PuzzleBox
                 Matcher.Clear(puzzleBox, masterGrid);
                 gameState = State.READY;
                 animateTime = 0;
-                if (Game.currentSettings.mode == GameMode.Tutorial)
-                {                    
-                    return GameStopCause.TUTORIAL_TEXT;
+                if (Game.currentSettings.mode == GameMode.Tutorial && firstResume==true)
+                {
+                    firstResume = false;
+                    return GameStopCause.TUTORIAL_TEXT;                    
                 }
             }
             if (gameState == State.REGENERATE && animateTime == maxAnimateTime * maxSlideDistance)

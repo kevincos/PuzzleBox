@@ -196,11 +196,11 @@
     </LevelData>
     <LevelData>
       <highScores>
+        <int>29488</int>
         <int>300000</int>
         <int>360000</int>
         <int>420000</int>
         <int>480000</int>
-        <int>540000</int>
       </highScores>
       <playerNames>
         <string>KRC</string>
@@ -209,17 +209,17 @@
         <string>KRC</string>
         <string>KRC</string>
       </playerNames>
-      <played>false</played>
+      <played>true</played>
       <unlocked>true</unlocked>
-      <rank>0</rank>
+      <rank>3</rank>
     </LevelData>
     <LevelData>
       <highScores>
+        <int>53424</int>
         <int>300000</int>
         <int>360000</int>
         <int>420000</int>
         <int>480000</int>
-        <int>540000</int>
       </highScores>
       <playerNames>
         <string>KRC</string>
@@ -228,9 +228,9 @@
         <string>KRC</string>
         <string>KRC</string>
       </playerNames>
-      <played>false</played>
+      <played>true</played>
       <unlocked>true</unlocked>
-      <rank>0</rank>
+      <rank>2</rank>
     </LevelData>
     <LevelData>
       <highScores>

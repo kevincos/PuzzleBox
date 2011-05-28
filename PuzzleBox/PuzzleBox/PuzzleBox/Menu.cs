@@ -275,12 +275,12 @@ namespace PuzzleBox
                     if (Game.gameSettings.soundEffectsEnabled)
                     {
                         //Game.spriteBatch.Draw(MenuOption.menu_on, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
-                        Game.spriteBatch.DrawString(Game.menuFont, "On", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "On", new Vector2(optionListX + 300, optionListY + i * optionGap), Color.White);
                     }
                     else
                     {
                         //Game.spriteBatch.Draw(MenuOption.menu_off, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
-                        Game.spriteBatch.DrawString(Game.menuFont, "Off", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "Off", new Vector2(optionListX + 300, optionListY + i * optionGap), Color.White);
                     }
                 }
                 if (optionList[i].type == MenuType.HelpToggle)
@@ -288,12 +288,12 @@ namespace PuzzleBox
                     if (Game.gameSettings.displayControls)
                     {
                         //Game.spriteBatch.Draw(MenuOption.menu_on, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
-                        Game.spriteBatch.DrawString(Game.menuFont, "On", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "On", new Vector2(optionListX + 300, optionListY + i * optionGap), Color.White);
                     }
                     else
                     {
                         //Game.spriteBatch.Draw(MenuOption.menu_off, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
-                        Game.spriteBatch.DrawString(Game.menuFont, "Off", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "Off", new Vector2(optionListX + 300, optionListY + i * optionGap), Color.White);
                     }
                 }
                 if (optionList[i].type == MenuType.FullScreenToggle)
@@ -301,12 +301,12 @@ namespace PuzzleBox
                     if (Game.gameSettings.fullScreen)
                     {
                         //Game.spriteBatch.Draw(MenuOption.menu_on, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
-                        Game.spriteBatch.DrawString(Game.menuFont, "On", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "On", new Vector2(optionListX + 300, optionListY + i * optionGap), Color.White);
                     }
                     else
                     {
                         //Game.spriteBatch.Draw(MenuOption.menu_off, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
-                        Game.spriteBatch.DrawString(Game.menuFont, "Off", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "Off", new Vector2(optionListX + 300, optionListY + i * optionGap), Color.White);
                     }
                 }
                 if (optionList[i].type == MenuType.MusicToggle)
@@ -314,12 +314,12 @@ namespace PuzzleBox
                     if (Game.gameSettings.musicEnabled)
                     {
                         //Game.spriteBatch.Draw(MenuOption.menu_on, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
-                        Game.spriteBatch.DrawString(Game.menuFont, "On", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "On", new Vector2(optionListX + 300, optionListY + i * optionGap), Color.White);
                     }
                     else
                     {
                         //Game.spriteBatch.Draw(MenuOption.menu_off, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
-                        Game.spriteBatch.DrawString(Game.menuFont, "Off", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "Off", new Vector2(optionListX + 300, optionListY + i * optionGap), Color.White);
                     }
                 }
                 if (optionList[i].type == MenuType.ToggleFreq)
