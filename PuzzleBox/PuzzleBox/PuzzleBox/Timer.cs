@@ -52,10 +52,10 @@ namespace PuzzleBox
                         SoundEffects.PlayAlert();
                     }
                     mostRecentValue = t.Seconds;
-                    Game.spriteBatch.DrawString(Game.spriteFont, string.Format("TIME-{0}:{1:D2}", t.Minutes, t.Seconds), new Vector2(posX , posY - 5), Color.Red, 0, Vector2.Zero, 1.3f, SpriteEffects.None, 0);
+                    Game.spriteBatch.DrawString(Game.spriteFont, string.Format("TIME  {0}:{1:D2}", t.Minutes, t.Seconds), new Vector2(posX , posY - 5), Color.Red, 0, Vector2.Zero, 1.3f, SpriteEffects.None, 0);
                 }
                 else
-                    Game.spriteBatch.DrawString(Game.spriteFont, string.Format("TIME - {0}:{1:D2}", t.Minutes, t.Seconds), new Vector2(posX, posY), Color.White);
+                    Game.spriteBatch.DrawString(Game.spriteFont, string.Format("TIME  {0}:{1:D2}", t.Minutes, t.Seconds), new Vector2(posX, posY), Color.White);
             }
         }
     }
@@ -89,7 +89,7 @@ namespace PuzzleBox
             if (enabled)
             {
                 TimeSpan t = new TimeSpan(0, 0, 0, 0, timeElapsed);
-                Game.spriteBatch.DrawString(Game.spriteFont, string.Format("TIME - {0}:{1:D2}", t.Minutes, t.Seconds), new Vector2(posX, posY), Color.White);
+                Game.spriteBatch.DrawString(Game.spriteFont, string.Format("TIME-  {0}:{1:D2}", t.Minutes, t.Seconds), new Vector2(posX, posY), Color.White);
             }
         }
     }

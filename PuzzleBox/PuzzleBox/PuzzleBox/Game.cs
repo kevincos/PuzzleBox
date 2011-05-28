@@ -122,8 +122,8 @@ namespace PuzzleBox
             settingsMenu.background = Content.Load<Texture2D>("mainmenu");
             settingsMenu.header = Content.Load<Texture2D>("title");            
             mainMenu.AddMenuItem(MenuResult.GoToTimeAttack, "Emergency Room","Score as many points as you can within the \ntime limit.");
-            mainMenu.AddMenuItem(MenuResult.GoToPuzzle, "Challenge", "Solve a series of unique challenges.");
             mainMenu.AddMenuItem(MenuResult.GoToMoveChallenge, "Operation", "Score as many points as you can with a \nlimited number of moves.");
+            mainMenu.AddMenuItem(MenuResult.GoToPuzzle, "Challenge", "Solve a series of unique challenges.");
             mainMenu.AddMenuItem(MenuResult.GoToTutorial, "Tutorial", "Learn to play Jellyfish, MD");
             mainMenu.AddMenuItem(MenuResult.GoToJellyfishCity, "Jellyfish Parade", "Check in on your former patients!");
             mainMenu.AddMenuItem(MenuResult.GoToSettings, "Settings", "Change settings for Jellyfish, MD");

@@ -7,16 +7,16 @@
   <timeAttackLevels>
     <LevelData>
       <highScores>
+        <int>1630</int>
         <int>1530</int>
         <int>1430</int>
         <int>500</int>
         <int>430</int>
-        <int>400</int>
       </highScores>
       <playerNames>
         <string>KRC</string>
-        <string>JRC</string>
         <string>KRC</string>
+        <string>JRC</string>
         <string>KRC</string>
         <string>KRC</string>
       </playerNames>
@@ -45,11 +45,11 @@
     </LevelData>
     <LevelData>
       <highScores>
+        <int>10400</int>
+        <int>8360</int>
         <int>7770</int>
+        <int>6210</int>
         <int>500</int>
-        <int>400</int>
-        <int>300</int>
-        <int>200</int>
       </highScores>
       <playerNames>
         <string>KRC</string>
@@ -60,7 +60,7 @@
       </playerNames>
       <played>true</played>
       <unlocked>true</unlocked>
-      <rank>2</rank>
+      <rank>3</rank>
     </LevelData>
     <LevelData xsi:nil="true" />
     <LevelData xsi:nil="true" />
