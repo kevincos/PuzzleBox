@@ -159,6 +159,7 @@ namespace PuzzleBox
             if (IsWildCard(p))
             {
                 p.replace_orb = new PuzzleNode(p.color);
+                p.replace_distance = 0;
                 p.replace_orb.bonus = 2;
             }
             else if (p.replace_bottom)

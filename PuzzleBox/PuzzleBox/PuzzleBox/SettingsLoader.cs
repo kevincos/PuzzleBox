@@ -52,8 +52,7 @@ namespace PuzzleBox
 
             // Easy Levels
 
-            //levels[0].levelfilename = "puzzle2.txt";
-            levels[0].levelfilename = "bugrepro.txt";
+            levels[0].levelfilename = "puzzle2.txt";
             levels[0].name = "Level2";
             levels[0].difficulty = Difficulty.EASY;
             levels[0].winType = WinType.CLEAR;

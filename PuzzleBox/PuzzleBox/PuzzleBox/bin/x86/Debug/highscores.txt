@@ -48,8 +48,8 @@
         <int>10400</int>
         <int>8360</int>
         <int>7770</int>
+        <int>7370</int>
         <int>6210</int>
-        <int>500</int>
       </highScores>
       <playerNames>
         <string>KRC</string>
