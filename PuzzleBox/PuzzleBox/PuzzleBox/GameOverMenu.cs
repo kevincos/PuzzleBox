@@ -43,17 +43,17 @@ namespace PuzzleBox
         int headerY = 20;
         int headerWidth = 824;
         int headerHeight = 150;
-        int doctorX = 600;
+        int doctorX = 625;
         int doctorY = 375;
-        int optionListX = 100;
-        int optionListY = 180;
+        int optionListX = 120;
+        int optionListY = 200;
         int optionGap = 50;
         int optionWidth = 250;
         int optionHeight = 50;
         int scoreX = 120;
-        int scoreY = 340;
+        int scoreY = 390;
         int highScoreX = 120;
-        int highScoreY = 450;
+        int highScoreY = 500;
         int highScoreLine = 30;
         int speechX = 700;
         int speechY = 625;
@@ -71,9 +71,9 @@ namespace PuzzleBox
             optionList = new List<MenuOption>();
         }
 
-        public void AddMenuItem(MenuResult result, Texture2D image)
+        public void AddMenuItem(MenuResult result, String text)
         {
-            optionList.Add(new MenuOption(result, image, "BUG"));
+            optionList.Add(new MenuOption(result, text, "BUG"));
         }
 
         public void Draw()
@@ -82,7 +82,7 @@ namespace PuzzleBox
             Game.spriteBatch.Draw(header, new Rectangle(headerX, headerY, headerWidth, headerHeight), Color.White);
             for (int i = 0; i < optionList.Count; i++)
             {
-                if (i == selectedIndex)
+                if (i == selectedIndex && state != GameOverMenuState.INITIALS)
                 {
                     PuzzleNode p = new PuzzleNode(Color.Blue);
                     p.screenX = optionListX-25;
@@ -95,8 +95,10 @@ namespace PuzzleBox
                     p.distance = 50;
                     p.scale = 1f;
                     OrbRenderer.DrawOrb(p, State.READY, 0f);
+                    Game.spriteBatch.DrawString(Game.menuFont, optionList[i].optionText, new Vector2(optionListX, optionListY + i * optionGap), Color.LightGreen);
                 }
-                Game.spriteBatch.Draw(optionList[i].optionText, new Rectangle(optionListX, optionListY + i * optionGap, optionWidth, optionHeight), Color.White);
+                else
+                    Game.spriteBatch.DrawString(Game.menuFont, optionList[i].optionText, new Vector2(optionListX, optionListY + i * optionGap), Color.White);
             }
             if (state == GameOverMenuState.DOCTORIN)
             {
@@ -116,42 +118,42 @@ namespace PuzzleBox
             if (Game.currentSettings.mode == GameMode.Puzzle)
             {
                 TimeSpan t = new TimeSpan(0, 0, 0, 0, score);
-                Game.spriteBatch.DrawString(Game.spriteFont, string.Format("TIME: {0}:{1:D2}", t.Minutes, t.Seconds), new Vector2(scoreX, scoreY), Color.LightGreen, 0, Vector2.Zero, 1.75f, SpriteEffects.None, 0);
+                Game.spriteBatch.DrawString(Game.spriteFont, string.Format("TIME: {0}:{1:D2}", t.Minutes, t.Seconds), new Vector2(scoreX, scoreY), Color.LightGreen, 0, Vector2.Zero, 1.6f, SpriteEffects.None, 0);
                 for (int i = 0; i < 3; i++)
                 {
                     Game.spriteBatch.Draw(emptyStar,
-                        new Rectangle(scoreX + 75 * i, scoreY + 40, 64, 64), Color.White);
+                        new Rectangle(scoreX + 75 * i, scoreY + 50, 64, 64), Color.White);
                 }
                 Game.spriteBatch.Draw(star,
-                        new Rectangle(scoreX, scoreY + 40, 64, 64), Color.White);                
+                        new Rectangle(scoreX, scoreY + 50, 64, 64), Color.White);                
                 if (score <= Game.currentSettings.two_star)
                     Game.spriteBatch.Draw(star,
-                        new Rectangle(scoreX + 75, scoreY + 40, 64, 64), Color.White);
+                        new Rectangle(scoreX + 75, scoreY + 50, 64, 64), Color.White);
                 if (score <= Game.currentSettings.three_star)
                     Game.spriteBatch.Draw(star,
-                        new Rectangle(scoreX + 150, scoreY + 40, 64, 64), Color.White);                    
+                        new Rectangle(scoreX + 150, scoreY + 50, 64, 64), Color.White);                    
             }
             else
             {
-                Game.spriteBatch.DrawString(Game.spriteFont, "SCORE:" + score, new Vector2(scoreX, scoreY), Color.LightGreen, 0, Vector2.Zero, 1.75f, SpriteEffects.None, 0);
+                Game.spriteBatch.DrawString(Game.spriteFont, "SCORE:" + score, new Vector2(scoreX, scoreY), Color.LightGreen, 0, Vector2.Zero, 1.6f, SpriteEffects.None, 0);
                 for (int i = 0; i < 3; i++)
                 {                    
                     Game.spriteBatch.Draw(emptyStar,
-                        new Rectangle(scoreX + 75*i, scoreY + 40, 64, 64), Color.White);                    
+                        new Rectangle(scoreX + 75*i, scoreY + 50, 64, 64), Color.White);                    
                 }
                 Game.spriteBatch.Draw(star,
-                        new Rectangle(scoreX, scoreY + 40, 64, 64), Color.White);                    
+                        new Rectangle(scoreX, scoreY + 50, 64, 64), Color.White);                    
                 if(score >= Game.currentSettings.two_star)
                     Game.spriteBatch.Draw(star,
-                        new Rectangle(scoreX + 75, scoreY + 40, 64, 64), Color.White);
+                        new Rectangle(scoreX + 75, scoreY + 50, 64, 64), Color.White);
                 if (score >= Game.currentSettings.three_star)
                     Game.spriteBatch.Draw(star,
-                        new Rectangle(scoreX + 150, scoreY + 40, 64, 64), Color.White);                    
+                        new Rectangle(scoreX + 150, scoreY + 50, 64, 64), Color.White);                    
             }
 
             if (levelData != null)
             {
-                Game.spriteBatch.DrawString(Game.spriteFont, "High Scores", new Vector2(highScoreX, highScoreY), Color.LightGreen, 0, Vector2.Zero, 1.75f, SpriteEffects.None, 0);
+                Game.spriteBatch.DrawString(Game.spriteFont, "High Scores", new Vector2(highScoreX, highScoreY), Color.LightGreen, 0, Vector2.Zero, 1.6f, SpriteEffects.None, 0);
                 for (int i = 1; i < 6; i++)
                 {
                     if (i - 1 == rank)
@@ -159,20 +161,20 @@ namespace PuzzleBox
                         if (Game.currentSettings.mode == GameMode.Puzzle)
                         {
                             TimeSpan t = new TimeSpan(0, 0, 0, 0, levelData.highScores[i - 1]);
-                            Game.spriteBatch.DrawString(Game.spriteFont, string.Format("{0}: {1}:{2:D2}", levelData.playerNames[i - 1], t.Minutes, t.Seconds), new Vector2(highScoreX, highScoreY + highScoreLine * (i + 1) + 4), Color.White, 0, Vector2.Zero, 1.8f, SpriteEffects.None, 0);
+                            Game.spriteBatch.DrawString(Game.spriteFont, string.Format("{0}: {1}:{2:D2}", levelData.playerNames[i - 1], t.Minutes, t.Seconds), new Vector2(highScoreX, highScoreY + highScoreLine * (i + 1) + 4), Color.White, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 0);
                         }
                         else
-                            Game.spriteBatch.DrawString(Game.spriteFont, i + ": " + levelData.playerNames[i - 1] + " - " + levelData.highScores[i - 1], new Vector2(highScoreX, highScoreY + highScoreLine * (i + 1) + 4), Color.White, 0, Vector2.Zero, 1.8f, SpriteEffects.None, 0);
+                            Game.spriteBatch.DrawString(Game.spriteFont, i + ": " + levelData.playerNames[i - 1] + " - " + levelData.highScores[i - 1], new Vector2(highScoreX, highScoreY + highScoreLine * (i + 1) + 4), Color.White, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 0);
                     }
                     else
                     {
                         if (Game.currentSettings.mode == GameMode.Puzzle)
                         {
                             TimeSpan t = new TimeSpan(0, 0, 0, 0, levelData.highScores[i - 1]);
-                            Game.spriteBatch.DrawString(Game.spriteFont, string.Format("{0}: {1}:{2:D2}", levelData.playerNames[i - 1], t.Minutes, t.Seconds), new Vector2(highScoreX, highScoreY + highScoreLine * (i + 1) + 5), Color.LightGreen, 0, Vector2.Zero, 1.75f, SpriteEffects.None, 0);
+                            Game.spriteBatch.DrawString(Game.spriteFont, string.Format("{0}: {1}:{2:D2}", levelData.playerNames[i - 1], t.Minutes, t.Seconds), new Vector2(highScoreX, highScoreY + highScoreLine * (i + 1) + 5), Color.LightGreen, 0, Vector2.Zero, 1.4f, SpriteEffects.None, 0);
                         }
                         else
-                            Game.spriteBatch.DrawString(Game.spriteFont, i + ": " + levelData.playerNames[i - 1] + " - " + levelData.highScores[i - 1], new Vector2(highScoreX, highScoreY + highScoreLine * (i + 1) + 5), Color.LightGreen, 0, Vector2.Zero, 1.75f, SpriteEffects.None, 0);
+                            Game.spriteBatch.DrawString(Game.spriteFont, i + ": " + levelData.playerNames[i - 1] + " - " + levelData.highScores[i - 1], new Vector2(highScoreX, highScoreY + highScoreLine * (i + 1) + 5), Color.LightGreen, 0, Vector2.Zero, 1.4f, SpriteEffects.None, 0);
                     }
                 }
             }
@@ -180,18 +182,18 @@ namespace PuzzleBox
             if (currentCharacter > 2 || rank == -1)
             {
                 JellyfishRenderer.DrawSpeechBubble2(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
-                Game.spriteBatch.DrawString(Game.spriteFont, congratulationsMessage, new Vector2(speechX - 260, speechY - 15), Color.Black);
+                Game.spriteBatch.DrawString(Game.spriteFont, congratulationsMessage, new Vector2(speechX - 260, speechY), Color.Black);
             }
 
             if (rank != -1 && currentCharacter <= 2)
             {
                 JellyfishRenderer.DrawSpeechBubble2(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
-                Game.spriteBatch.DrawString(Game.spriteFont, "Way to go! You got a high score! Please enter", new Vector2(speechX-260, speechY-15), Color.Black);
-                Game.spriteBatch.DrawString(Game.spriteFont, "your initials: ", new Vector2(speechX - 260, speechY+5), Color.Black);
-                Game.spriteBatch.DrawString(Game.spriteFont, ""+initials[2], new Vector2(speechX - 70, speechY + 5), Color.Black);
-                Game.spriteBatch.DrawString(Game.spriteFont, ""+initials[1], new Vector2(speechX - 85, speechY + 5), Color.Black);
-                Game.spriteBatch.DrawString(Game.spriteFont, ""+initials[0], new Vector2(speechX - 100, speechY + 5), Color.Black);
-                Game.spriteBatch.DrawString(Game.spriteFont, "^", new Vector2(speechX - 100+15*currentCharacter, speechY + 25), Color.Black);
+                Game.spriteBatch.DrawString(Game.spriteFont, "Way to go! You got a high score! Please enter", new Vector2(speechX-260, speechY), Color.Black);
+                Game.spriteBatch.DrawString(Game.spriteFont, "your initials: ", new Vector2(speechX - 260, speechY+25), Color.Black);
+                Game.spriteBatch.DrawString(Game.spriteFont, "" + initials[2], new Vector2(speechX - 70, speechY + 25), Color.Black,0,Vector2.Zero,1f,SpriteEffects.None,0);
+                Game.spriteBatch.DrawString(Game.spriteFont, "" + initials[1], new Vector2(speechX - 95, speechY + 25), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                Game.spriteBatch.DrawString(Game.spriteFont, "" + initials[0], new Vector2(speechX - 120, speechY + 25), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                Game.spriteBatch.DrawString(Game.spriteFont, "^", new Vector2(speechX - 120 + 25 * currentCharacter, speechY + 45), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
             }
         }
 
@@ -375,7 +377,7 @@ namespace PuzzleBox
                         List<Settings> puzzleSettings = SettingsLoader.LoadPuzzleLevels();
                         if (Game.currentSettings.difficulty == Difficulty.EASY)
                         {
-                            for (int i = 0; i < highScoreData.puzzleLevels.Count(); i++)
+                            for (int i = 0; i < puzzleSettings.Count(); i++)
                             {
                                 if (highScoreData.puzzleLevels[i] != null && (puzzleSettings[i].difficulty == Difficulty.MEDIUM || puzzleSettings[i].difficulty == Difficulty.EASY))
                                     highScoreData.puzzleLevels[i].unlocked = true;
@@ -383,7 +385,7 @@ namespace PuzzleBox
                         }
                         if (Game.currentSettings.difficulty == Difficulty.MEDIUM)
                         {
-                            for (int i = 0; i < highScoreData.puzzleLevels.Count(); i++)
+                            for (int i = 0; i < puzzleSettings.Count(); i++)
                             {
                                 if (highScoreData.puzzleLevels[i] != null && puzzleSettings[i].difficulty == Difficulty.HARD)
                                     highScoreData.puzzleLevels[i].unlocked = true;
@@ -506,24 +508,26 @@ namespace PuzzleBox
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -.95 || rightStick.Y < -.95)
                 {
-                    state = GameOverMenuState.ANIMATEDOWN;
-                    animateTime = 0;
-                    selectedIndex++;
-                    if (selectedIndex >= optionList.Count())
-                        selectedIndex = optionList.Count() - 1;
-                    cooldown = 250;
-                    SoundEffects.PlayMove();
+                    if (selectedIndex < optionList.Count() - 1)
+                    {
+                        state = GameOverMenuState.ANIMATEDOWN;
+                        animateTime = 0;
+                        selectedIndex++;
+                        cooldown = 250;
+                        SoundEffects.PlayMove();
+                    }
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > .95 || rightStick.Y > .95)
                 {
-                    state = GameOverMenuState.ANIMATEUP;
-                    animateTime = 0;
-                    
-                    selectedIndex--;
-                    if (selectedIndex < 0)
-                        selectedIndex = 0;
-                    cooldown = 250;
-                    SoundEffects.PlayMove();
+                    if (selectedIndex > 0)
+                    {
+                        state = GameOverMenuState.ANIMATEUP;
+                        animateTime = 0;
+
+                        selectedIndex--;
+                        cooldown = 250;
+                        SoundEffects.PlayMove();
+                    }
                 }
             }
             return MenuResult.None;            

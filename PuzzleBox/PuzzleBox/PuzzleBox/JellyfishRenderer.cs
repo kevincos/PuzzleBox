@@ -32,6 +32,15 @@ namespace PuzzleBox
         public static Texture2D officerJelly;
         public static Texture2D baseballJelly2;
         public static Texture2D mogulJelly;
+        public static Texture2D fortuneJelly;
+        public static Texture2D artistJelly;
+        public static Texture2D bikerJelly;
+        public static Texture2D birthdayJelly;
+        public static Texture2D capnJelly;
+        public static Texture2D chefJelly;
+        public static Texture2D karateJelly;
+        public static Texture2D explorerJelly;
+        public static Texture2D kingJelly;
 
         public static Texture2D transparentBody;
         public static Texture2D transparentRing;
@@ -49,7 +58,7 @@ namespace PuzzleBox
             c.B = (Byte)(c.B * opacity / 100);
             c.A = (Byte)(c.A * opacity / 100);
             Game.spriteBatch.Draw(speechBubble,
-                new Rectangle(x - 300, y - 50, 600, 112), null,
+                new Rectangle(x - 300, y - 50, 600, 150), null,
                 c, 0f, Vector2.Zero, effects, 0);
         }
         public static void DrawSpeechBubble2(int x, int y, int opacity, SpriteEffects effects)
@@ -60,7 +69,7 @@ namespace PuzzleBox
             c.B = (Byte)(c.B * opacity / 100);
             c.A = (Byte)(c.A * opacity / 100);
             Game.spriteBatch.Draw(speechBubble2,
-                new Rectangle(x - 300, y - 50, 600, 112), null,
+                new Rectangle(x - 300, y - 50, 600, 150), null,
                 c, 0f, Vector2.Zero, effects, 0);
         }
 

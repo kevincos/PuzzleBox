@@ -15,6 +15,7 @@ namespace PuzzleBox
         public bool displayHelp;
         public bool musicEnabled;
         public bool soundEffectsEnabled;
+        public bool fullScreen;
         public LevelData[] timeAttackLevels;
         public LevelData[] moveChallengeLevels;
         public LevelData[] puzzleLevels;
@@ -95,7 +96,7 @@ namespace PuzzleBox
                         defaultData.puzzleLevels[i].playerNames[j] = "KRC";
                         defaultData.puzzleLevels[i].highScores[j] = (5 + j) * 60000;
                     }
-                    if(i<8)
+                    if(i<6)
                         defaultData.puzzleLevels[i].unlocked = true;
                 }
                 defaultData.puzzleLevels[0].unlocked = true;

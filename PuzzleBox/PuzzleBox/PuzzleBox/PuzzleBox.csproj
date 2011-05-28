@@ -112,6 +112,7 @@
     <Compile Include="HelpOverlay.cs" />
     <Compile Include="JellyfishCity.cs" />
     <Compile Include="MusicControl.cs" />
+    <Compile Include="Preview.cs" />
     <Compile Include="SoundEffects.cs" />
     <Compile Include="SummaryMenu.cs" />
     <Compile Include="GameOverMenu.cs" />

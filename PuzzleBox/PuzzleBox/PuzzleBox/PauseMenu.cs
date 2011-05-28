@@ -64,17 +64,17 @@ namespace PuzzleBox
             {
                 JellyfishRenderer.DrawJellyfish(nurseX, nurseY, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
                 JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
-                Game.spriteBatch.DrawString(Game.spriteFont, "Doctor?", new Vector2(speechX-250, speechY-15), Color.Black);
+                Game.spriteBatch.DrawString(Game.spriteFont, "Doctor?", new Vector2(speechX-250, speechY), Color.Black);
                 int offSet = 20;                
                 for (int i = 0; i < optionList.Count(); i++)
                 {
                     if (i == selectedOption)
                     {
-                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count - 2) * 125 + offSet, speechY + 10), Color.Blue);
+                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count - 2) * 125 + offSet, speechY + 40), Color.Blue);
                     }
                     else
                     {
-                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count - 2) * 125 + offSet, speechY + 10), Color.Black);
+                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count - 2) * 125 + offSet, speechY + 40), Color.Black);
                     }
                     offSet += optionList[i].optionString.Length*10+40;
                 }                

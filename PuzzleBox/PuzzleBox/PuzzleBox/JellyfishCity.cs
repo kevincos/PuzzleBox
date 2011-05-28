@@ -231,14 +231,14 @@ namespace PuzzleBox
                 if (state == JellyfishCityState.HELLO)
                 {
                     if(jelliesSaved==totalJellies)
-                        Game.spriteBatch.DrawString(Game.spriteFont, "Wow! Way to go! You've saved all the Jellyfish!\nEven Dr. Jellyfish is ready to join the parade!", new Vector2(speechX - 270, speechY - 15), Color.Black);
+                        Game.spriteBatch.DrawString(Game.spriteFont, "Wow! Way to go! You've saved all the Jellyfish!\nEven Dr. Jellyfish is ready to join the parade!", new Vector2(speechX - 265, speechY), Color.Black);
                     else if(jelliesSaved==totalJellies-1)
-                        Game.spriteBatch.DrawString(Game.spriteFont, "You've rescued " + jelliesSaved + " Jellyfish! Just one more to go!\nTry to score 3 stars!", new Vector2(speechX - 270, speechY - 15), Color.Black);
+                        Game.spriteBatch.DrawString(Game.spriteFont, "You've rescued " + jelliesSaved + " Jellyfish! Just one more to go!\nTry to score 3 stars!", new Vector2(speechX - 265, speechY), Color.Black);
                     else
-                        Game.spriteBatch.DrawString(Game.spriteFont, "You've rescued " + jelliesSaved + " jellyfish! " + (totalJellies - jelliesSaved) + " more patients still\nneed your help. Score 3 stars on each Jellyfish!", new Vector2(speechX - 270, speechY - 15), Color.Black);                    
+                        Game.spriteBatch.DrawString(Game.spriteFont, "You've rescued " + jelliesSaved + " jellyfish! " + (totalJellies - jelliesSaved) + " more patients still\nneed your help. Score 3 stars on each Jellyfish!", new Vector2(speechX - 265, speechY), Color.Black);     
                 }
                 if(state == JellyfishCityState.GOODBYE)
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Come back soon!", new Vector2(speechX - 270, speechY - 5), Color.Black);                
+                    Game.spriteBatch.DrawString(Game.spriteFont, "Come back soon!", new Vector2(speechX - 270, speechY), Color.Black);
             }            
         }
     }

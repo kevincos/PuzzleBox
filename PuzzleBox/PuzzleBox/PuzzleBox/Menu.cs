@@ -27,6 +27,7 @@ namespace PuzzleBox
         public string name = "unnamed";
 
         public Texture2D texture = JellyfishRenderer.orangeJelly;
+        public Texture2D preview = Preview.level1;
         public string instructions;
         public int level;
 
@@ -77,7 +78,7 @@ namespace PuzzleBox
     {
         public MenuResult result;
         public MenuType type;
-        public Texture2D optionText;
+        public String optionText;
         public string optionString;
 
 
@@ -87,7 +88,7 @@ namespace PuzzleBox
         public static Texture2D menu_medium;
         public static Texture2D menu_high;
 
-        public MenuOption(MenuResult result, Texture2D optionText, String helpText)
+        public MenuOption(MenuResult result, String optionText, String helpText)
         {
             this.result = result;
             this.optionText = optionText;
@@ -102,7 +103,7 @@ namespace PuzzleBox
             this.type = MenuType.Normal;
         }
 
-        public MenuOption(MenuType type, Texture2D optionText)
+        public MenuOption(MenuType type, String optionText)
         {
             this.result = MenuResult.None;
             this.optionText = optionText;
@@ -119,7 +120,8 @@ namespace PuzzleBox
         TimerFreq,
         MusicToggle,
         SoundToggle,
-        HelpToggle
+        HelpToggle,
+        FullScreenToggle
     }
 
     public enum MenuClass
@@ -176,9 +178,9 @@ namespace PuzzleBox
         int headerY = 20;
         int headerWidth = 824;
         int headerHeight = 150;
-        int doctorX = 600;
+        int doctorX = 625;
         int doctorY = 375;
-        int optionListX = 100;
+        int optionListX = 75;
         int optionListY = 220;
         int optionGap = 60;
         int optionWidth = 250;
@@ -212,14 +214,14 @@ namespace PuzzleBox
             this.score = score;
         }
 
-        public void AddMenuItem(MenuResult result, Texture2D image)
+        public void AddMenuItem(MenuResult result, String text)
         {
-            optionList.Add(new MenuOption(result, image, "BUG"));
+            optionList.Add(new MenuOption(result, text, "BUG"));
         }
 
-        public void AddMenuItem(MenuType type, Texture2D image)
+        public void AddMenuItem(MenuType type, String text)
         {
-            optionList.Add(new MenuOption(type, image));
+            optionList.Add(new MenuOption(type, text));
         }
 
         public void SelectDown()
@@ -264,39 +266,60 @@ namespace PuzzleBox
                     p.distance = 50;
                     p.scale = 1f;
                     OrbRenderer.DrawOrb(p, State.READY, 0f);
+                    Game.spriteBatch.DrawString(Game.menuFont, optionList[i].optionText, new Vector2(optionListX, optionListY + i * optionGap), Color.LightGreen);
                 }
-                Game.spriteBatch.Draw(optionList[i].optionText, new Rectangle(optionListX, optionListY + i * optionGap, optionWidth, optionHeight), Color.White);
+                else
+                    Game.spriteBatch.DrawString(Game.menuFont,optionList[i].optionText, new Vector2(optionListX, optionListY + i * optionGap), Color.White);
                 if (optionList[i].type == MenuType.SoundToggle)
                 {
                     if (Game.gameSettings.soundEffectsEnabled)
                     {
-                        Game.spriteBatch.Draw(MenuOption.menu_on, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                        //Game.spriteBatch.Draw(MenuOption.menu_on, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "On", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
                     }
                     else
                     {
-                        Game.spriteBatch.Draw(MenuOption.menu_off, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                        //Game.spriteBatch.Draw(MenuOption.menu_off, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "Off", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
                     }
                 }
                 if (optionList[i].type == MenuType.HelpToggle)
                 {
                     if (Game.gameSettings.displayControls)
                     {
-                        Game.spriteBatch.Draw(MenuOption.menu_on, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                        //Game.spriteBatch.Draw(MenuOption.menu_on, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "On", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
                     }
                     else
                     {
-                        Game.spriteBatch.Draw(MenuOption.menu_off, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                        //Game.spriteBatch.Draw(MenuOption.menu_off, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "Off", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
+                    }
+                }
+                if (optionList[i].type == MenuType.FullScreenToggle)
+                {
+                    if (Game.gameSettings.fullScreen)
+                    {
+                        //Game.spriteBatch.Draw(MenuOption.menu_on, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "On", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
+                    }
+                    else
+                    {
+                        //Game.spriteBatch.Draw(MenuOption.menu_off, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "Off", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
                     }
                 }
                 if (optionList[i].type == MenuType.MusicToggle)
                 {
                     if (Game.gameSettings.musicEnabled)
                     {
-                        Game.spriteBatch.Draw(MenuOption.menu_on, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                        //Game.spriteBatch.Draw(MenuOption.menu_on, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "On", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
                     }
                     else
                     {
-                        Game.spriteBatch.Draw(MenuOption.menu_off, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                        //Game.spriteBatch.Draw(MenuOption.menu_off, new Rectangle(optionListX + 230, optionListY + i * optionGap, 100, optionHeight), Color.White);
+                        Game.spriteBatch.DrawString(Game.menuFont, "Off", new Vector2(optionListX + 320, optionListY + i * optionGap), Color.White);
                     }
                 }
                 if (optionList[i].type == MenuType.ToggleFreq)
@@ -428,6 +451,22 @@ namespace PuzzleBox
                     {
                         SoundEffects.PlayClick();
                         Game.gameSettings.displayControls = !Game.gameSettings.displayControls;
+                    }
+                    if (optionList[selectedIndex].type == MenuType.FullScreenToggle)
+                    {
+                        SoundEffects.PlayClick();
+                        if (Game.gameSettings.fullScreen)
+                        {
+                            Game.graphics.IsFullScreen = false;
+                            Game.graphics.ApplyChanges();
+                            Game.gameSettings.fullScreen = false;
+                        }
+                        else
+                        {
+                            Game.graphics.IsFullScreen = true;
+                            Game.graphics.ApplyChanges();
+                            Game.gameSettings.fullScreen = true;
+                        }
                     }
                     if (optionList[selectedIndex].type == MenuType.MusicToggle)
                     {

@@ -60,8 +60,9 @@ namespace PuzzleBox
         public static int screenSizeY = 400;
         public static int screenCenterX;
         public static int screenCenterY;        
-        GraphicsDeviceManager graphics;
+        public static GraphicsDeviceManager graphics;
         public static SpriteFont spriteFont;
+        public static SpriteFont menuFont;
 
         public Game()
         {
@@ -70,11 +71,14 @@ namespace PuzzleBox
             gameSettings.displayControls = data.displayHelp;
             gameSettings.musicEnabled = data.musicEnabled;
             gameSettings.soundEffectsEnabled = data.soundEffectsEnabled;                 
+            gameSettings.fullScreen = data.fullScreen;
             graphics = new GraphicsDeviceManager(this);
             graphics.PreparingDeviceSettings += new EventHandler<PreparingDeviceSettingsEventArgs>(graphics_PreparingDeviceSettings);
             //this.graphics.PreferredBackBufferWidth = 800;
             //this.graphics.PreferredBackBufferHeight = 480;
-            //this.graphics.IsFullScreen = true;
+            if(gameSettings.fullScreen)
+                graphics.IsFullScreen = true;
+            
 
             Logger.Init();
             Content.RootDirectory = "Content";
@@ -113,31 +117,27 @@ namespace PuzzleBox
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            MenuOption.menu_off = Content.Load<Texture2D>("off");
-            MenuOption.menu_on = Content.Load<Texture2D>("on");
-            MenuOption.menu_low = Content.Load<Texture2D>("low");
-            MenuOption.menu_medium = Content.Load<Texture2D>("medium");
-            MenuOption.menu_high = Content.Load<Texture2D>("high");
-            mainMenu.background = Content.Load<Texture2D>("mainmenu");
+            mainMenu.background = Content.Load<Texture2D>("background");
             mainMenu.header = Content.Load<Texture2D>("title");
             settingsMenu.background = Content.Load<Texture2D>("mainmenu");
             settingsMenu.header = Content.Load<Texture2D>("title");            
-            mainMenu.AddMenuItem(MenuResult.GoToTimeAttack, Content.Load<Texture2D>("timeattack"),"Score as many points as you can within the \ntime limit.");
-            mainMenu.AddMenuItem(MenuResult.GoToPuzzle, Content.Load<Texture2D>("puzzle"), "Solve a series of unique challenges.");
-            mainMenu.AddMenuItem(MenuResult.GoToMoveChallenge, Content.Load<Texture2D>("moveChallenge"), "Score as many points as you can with a \nlimited number of moves.");
-            mainMenu.AddMenuItem(MenuResult.GoToTutorial, Content.Load<Texture2D>("tutorial"), "Learn to play Jellyfish, MD");
-            mainMenu.AddMenuItem(MenuResult.GoToJellyfishCity, Content.Load<Texture2D>("jellycity"), "Check in on your former patients!");
-            mainMenu.AddMenuItem(MenuResult.GoToSettings, Content.Load<Texture2D>("settings"), "Change settings for Jellyfish, MD");
-            mainMenu.AddMenuItem(MenuResult.Quit, Content.Load<Texture2D>("quit"), "Quit Jellyfish, MD??");
+            mainMenu.AddMenuItem(MenuResult.GoToTimeAttack, "Emergency Room","Score as many points as you can within the \ntime limit.");
+            mainMenu.AddMenuItem(MenuResult.GoToPuzzle, "Challenge", "Solve a series of unique challenges.");
+            mainMenu.AddMenuItem(MenuResult.GoToMoveChallenge, "Operation", "Score as many points as you can with a \nlimited number of moves.");
+            mainMenu.AddMenuItem(MenuResult.GoToTutorial, "Tutorial", "Learn to play Jellyfish, MD");
+            mainMenu.AddMenuItem(MenuResult.GoToJellyfishCity, "Jellyfish Parade", "Check in on your former patients!");
+            mainMenu.AddMenuItem(MenuResult.GoToSettings, "Settings", "Change settings for Jellyfish, MD");
+            mainMenu.AddMenuItem(MenuResult.Quit, "Quit", "Quit Jellyfish, MD??");
             gameOverMenu.background = Content.Load<Texture2D>("background");
-            gameOverMenu.header = Content.Load<Texture2D>("gameover");
-            gameOverMenu.AddMenuItem(MenuResult.StartTimeAttack, Content.Load<Texture2D>("replay"));
-            gameOverMenu.AddMenuItem(MenuResult.GoToMainMenu, Content.Load<Texture2D>("returntomenu"));
-            gameOverMenu.AddMenuItem(MenuResult.GoToLevelSelect, Content.Load<Texture2D>("returntolevelselect"));
-            settingsMenu.AddMenuItem(MenuResult.GoToMainMenu, Content.Load<Texture2D>("returntomenu"));
-            settingsMenu.AddMenuItem(MenuType.SoundToggle, Content.Load<Texture2D>("soundeffects_setting")); 
-            settingsMenu.AddMenuItem(MenuType.MusicToggle, Content.Load<Texture2D>("music_setting"));
-            settingsMenu.AddMenuItem(MenuType.HelpToggle, Content.Load<Texture2D>("help_setting"));            
+            gameOverMenu.header = Content.Load<Texture2D>("title");
+            gameOverMenu.AddMenuItem(MenuResult.StartTimeAttack, "Replay");
+            gameOverMenu.AddMenuItem(MenuResult.GoToMainMenu, "Main Menu");
+            gameOverMenu.AddMenuItem(MenuResult.GoToLevelSelect, "Level Select");
+            settingsMenu.AddMenuItem(MenuResult.GoToMainMenu, "Return to Main Menu");
+            settingsMenu.AddMenuItem(MenuType.SoundToggle, "Sound Effects"); 
+            settingsMenu.AddMenuItem(MenuType.MusicToggle, "Music");
+            settingsMenu.AddMenuItem(MenuType.HelpToggle, "Help Overlay");
+            settingsMenu.AddMenuItem(MenuType.FullScreenToggle, "Full Screen");            
             LevelSelectMenu.star = Content.Load<Texture2D>("star");
             LevelSelectMenu.emptyStar = Content.Load<Texture2D>("emptyStar");                 
             gameOverMenu.emptyStar = Content.Load<Texture2D>("emptyStar");
@@ -154,6 +154,7 @@ namespace PuzzleBox
             HelpOverlay.help_rightbutton = Content.Load<Texture2D>("help_rightbutton");
             HelpOverlay.help_x = Content.Load<Texture2D>("help_x");
             spriteFont = Content.Load<SpriteFont>("SpriteFont1");
+            menuFont = Content.Load<SpriteFont>("SpriteFont2");
             OrbRenderer.orbTexture = Content.Load<Texture2D>("orb");
             OrbRenderer.orbCrackedLeftTexture = Content.Load<Texture2D>("orb-cracked-left");
             OrbRenderer.orbCrackedRightTexture = Content.Load<Texture2D>("orb-cracked-right");
@@ -161,13 +162,13 @@ namespace PuzzleBox
             OrbRenderer.orbFragmentLeftTexture = Content.Load<Texture2D>("orb-fragment-left");
             OrbRenderer.orbFragmentRightTexture = Content.Load<Texture2D>("orb-fragment-right");
             OrbRenderer.orbFragmentTopTexture = Content.Load<Texture2D>("orb-fragment-top");
-            OrbRenderer.numbersTexture = Content.Load<Texture2D>("numbers");
-            OrbRenderer.clocknumbersTexture = Content.Load<Texture2D>("clocknumbers");
             OrbRenderer.doubleTexture = Content.Load<Texture2D>("double");
-            OrbRenderer.toggleTexture = Content.Load<Texture2D>("toggle");
+            OrbRenderer.toggleInnerTexture = Content.Load<Texture2D>("toggle_inner");
+            OrbRenderer.toggleOuterTexture = Content.Load<Texture2D>("toggle_outer");
             OrbRenderer.highlightTexture = Content.Load<Texture2D>("highlight");
+            OrbRenderer.haloTexture = Content.Load<Texture2D>("halo");
             OrbRenderer.backgroundTexture = Content.Load<Texture2D>("background");
-            OrbRenderer.vortexTexture = Content.Load<Texture2D>("vortex");
+            OrbRenderer.bubbleTexture = Content.Load<Texture2D>("bubble");
             JellyfishRenderer.jellytexture = Content.Load<Texture2D>("baseballhat");
             JellyfishRenderer.orangeJelly = Content.Load<Texture2D>("patientzero");
             JellyfishRenderer.mysteryJelly = Content.Load<Texture2D>("mysterypatient");
@@ -187,6 +188,35 @@ namespace PuzzleBox
             JellyfishRenderer.libraryJelly = Content.Load<Texture2D>("librarianjelly");
             JellyfishRenderer.baseballJelly2 = Content.Load<Texture2D>("baseballjelly");
             JellyfishRenderer.mogulJelly = Content.Load<Texture2D>("mogoljelly");
+            JellyfishRenderer.artistJelly = Content.Load<Texture2D>("artistjelly");
+            JellyfishRenderer.bikerJelly = Content.Load<Texture2D>("bikerjelly");
+            JellyfishRenderer.birthdayJelly = Content.Load<Texture2D>("birthdayjelly");
+            JellyfishRenderer.capnJelly = Content.Load<Texture2D>("capnjelly");
+            JellyfishRenderer.chefJelly = Content.Load<Texture2D>("chefjelly");
+            JellyfishRenderer.explorerJelly = Content.Load<Texture2D>("explorerjelly");
+            JellyfishRenderer.fortuneJelly = Content.Load<Texture2D>("fortunejelly");
+            JellyfishRenderer.karateJelly = Content.Load<Texture2D>("karatejelly");
+            JellyfishRenderer.kingJelly = Content.Load<Texture2D>("kingjelly");
+            Preview.level1 = Content.Load<Texture2D>("level1");
+            Preview.level2 = Content.Load<Texture2D>("level2");
+            Preview.level3 = Content.Load<Texture2D>("level3");
+            Preview.level4 = Content.Load<Texture2D>("level4");
+            Preview.level5 = Content.Load<Texture2D>("level5");
+            Preview.level6 = Content.Load<Texture2D>("level6");
+            Preview.level7 = Content.Load<Texture2D>("level7");
+            Preview.level8 = Content.Load<Texture2D>("level8");
+            Preview.level9 = Content.Load<Texture2D>("level9");
+            Preview.level10 = Content.Load<Texture2D>("level10");
+            Preview.level11 = Content.Load<Texture2D>("level11");
+            Preview.level12 = Content.Load<Texture2D>("level12");
+            Preview.level13 = Content.Load<Texture2D>("level13");
+            Preview.level14 = Content.Load<Texture2D>("level14");
+            Preview.level15 = Content.Load<Texture2D>("level15");
+            Preview.level16 = Content.Load<Texture2D>("level16");
+            Preview.level17 = Content.Load<Texture2D>("level17");
+            Preview.level18 = Content.Load<Texture2D>("level18");
+            Preview.level19 = Content.Load<Texture2D>("level19");
+
 
             SoundEffects.soundSwoosh = Content.Load<SoundEffect>("swoosh");
             SoundEffects.soundBloop = Content.Load<SoundEffect>("bloop");
@@ -297,7 +327,10 @@ namespace PuzzleBox
                     metaState = MetaState.MainMenu;
                 }
                 if (result == MenuResult.ResumeGame)
+                {
+                    summaryMenu.state = SummaryMenuState.NURSEIN;
                     metaState = MetaState.GamePlay;
+                }
                 if (result == MenuResult.GoToLevelSelect)
                 {
                     if (currentSettings.mode == GameMode.TimeAttack)
@@ -424,10 +457,12 @@ namespace PuzzleBox
                     {
                         selectMenu = new LevelSelectMenu();
                         selectMenu.state = LevelSelectMenu.SelectMenuState.LOAD;
+                        
                         if (currentSettings.mode == GameMode.MoveChallenge)
                         {
                             metaState = MetaState.Settings_Move;
                             selectMenu.cooldown = 250;
+                            selectMenu.currentLevel = gameSettings.moveChallengeViewLevel;
                             selectMenu.levelList = SettingsLoader.LoadMoveCountLevels();
                             currentSettings.mode = GameMode.MoveChallenge;
                         }
@@ -435,6 +470,7 @@ namespace PuzzleBox
                         {
                             metaState = MetaState.Settings_TimeAttack;
                             selectMenu.cooldown = 250;
+                            selectMenu.currentLevel = gameSettings.timeAttackViewLevel;
                             selectMenu.levelList = SettingsLoader.LoadTimeAttackLevels();
                             currentSettings.mode = GameMode.TimeAttack;
                         }
@@ -443,6 +479,7 @@ namespace PuzzleBox
                             metaState = MetaState.Settings_Puzzle;
                             selectMenu.cooldown = 250;
                             selectMenu.levelList = SettingsLoader.LoadPuzzleLevels();
+                            selectMenu.currentLevel = gameSettings.puzzleViewLevel;
                             currentSettings.mode = GameMode.Puzzle;
                         }
                     }
@@ -549,6 +586,7 @@ namespace PuzzleBox
                     data.soundEffectsEnabled = gameSettings.soundEffectsEnabled;
                     data.musicEnabled = gameSettings.musicEnabled;
                     data.displayHelp = gameSettings.displayControls;
+                    data.fullScreen = gameSettings.fullScreen;
                     HighScoreTracker.SaveHighScores(data);
                     Logger.CloseLogger();
                     this.Exit();
@@ -566,6 +604,7 @@ namespace PuzzleBox
             bgColor.B = 84;
             GraphicsDevice.Clear(bgColor);
             Game.spriteBatch.Begin();
+            spriteBatch.Draw(mainMenu.background, new Rectangle(0, 0, screenSizeX, screenSizeY), Color.White);
 
             if (metaState == MetaState.JellyfishCity)
                 jellyCity.Draw();

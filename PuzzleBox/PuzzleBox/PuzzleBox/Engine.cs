@@ -65,7 +65,7 @@ namespace PuzzleBox
 
         #region Member Variables
 
-        public static ControlMode mode = ControlMode.EDITOR;
+        public static ControlMode mode = ControlMode.NORMAL;
         Random automator;
         public PuzzleNode selectedNode = null;
         public List<PuzzleNode> selectedQueue = null;
@@ -98,7 +98,10 @@ namespace PuzzleBox
         MasterGrid masterGrid;
         PuzzleBox prevPuzzleBox;
         MasterGrid prevMasterGrid;
+        PuzzleBox newPuzzleBox;
+        MasterGrid newMasterGrid;        
         int prevCubeDistance;
+        int newCubeDistance;
         public State gameState = State.RESUMING;
         int animateTime = 0;
         int maxAnimateTime = 250;
@@ -120,6 +123,7 @@ namespace PuzzleBox
         Vector2 shift;
         Vector2 targetShift;
         Vector2 savedShift;
+        bool firstResume = true;
 
         // Screen display
         public static int spacing = 60;
@@ -142,9 +146,13 @@ namespace PuzzleBox
         {
             if (mode != ControlMode.EDITOR)
             {
-                puzzleBox = prevPuzzleBox.Copy();
-                masterGrid = prevMasterGrid.Copy();
-                cubeDistance = prevCubeDistance;
+                //puzzleBox = prevPuzzleBox.Copy();
+                //masterGrid = prevMasterGrid.Copy();
+                newPuzzleBox = prevPuzzleBox.Copy();
+                newMasterGrid = prevMasterGrid.Copy();
+                puzzleBox.Mark();
+                masterGrid.Mark();
+                newCubeDistance = prevCubeDistance;
                 //gameState = State.NEWSET;
                 pendingResult = GameStopCause.NONE;
                 gameState = State.VANISH;
@@ -298,8 +306,15 @@ namespace PuzzleBox
                         }
                         else
                         {
-                            Matcher.Reset(puzzleBox, masterGrid);
+                            newPuzzleBox = new PuzzleBox();
+                            newMasterGrid = new MasterGrid();                            
+                            Matcher.Reset(newPuzzleBox, newMasterGrid);
+                            newPuzzleBox.activeZ = puzzleBox.activeZ;
+                            newCubeDistance = cubeDistance;
                             gameState = State.VANISH;
+                            puzzleBox.Mark();
+                            masterGrid.Mark();
+                            animateTime = 0;
                         }
                     }
                     else
@@ -357,13 +372,17 @@ namespace PuzzleBox
                 Matcher.Clear(puzzleBox, masterGrid);
                 gameState = State.READY;
                 animateTime = 0;
-                if (Game.currentSettings.mode == GameMode.Tutorial)
+                if (Game.currentSettings.mode == GameMode.Tutorial && firstResume == true)
                 {
+                    firstResume = false;
                     return GameStopCause.TUTORIAL_TEXT;
                 }
             }
             if (gameState == State.VANISH && animateTime == maxAnimateTime)
             {
+                puzzleBox = newPuzzleBox.Copy();
+                masterGrid = newMasterGrid.Copy();
+                cubeDistance = newCubeDistance;
                 gameState = State.NEWSET;
                 animateTime = 0;
             }
@@ -373,7 +392,7 @@ namespace PuzzleBox
                 gameState = State.READY;
                 animateTime = 0;
                 if (Game.currentSettings.mode == GameMode.Tutorial)
-                {
+                {                    
                     return GameStopCause.TUTORIAL_TEXT;
                 }
             }
@@ -874,7 +893,7 @@ namespace PuzzleBox
         public void Draw(GameTime gameTime)
         {
             
-            OrbRenderer.DrawBackground();
+            //OrbRenderer.DrawBackground();
 
             // Calculate tilt data
             if (gameState != State.PAUSING && gameState != State.RESUMING && GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Length() > .95f)

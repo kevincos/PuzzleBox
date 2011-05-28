@@ -118,17 +118,17 @@ namespace PuzzleBox
             {
                 JellyfishRenderer.DrawJellyfish(doctorX, doctorY, 100, JellyfishRenderer.doctorJellyfish, .75f, SpriteEffects.FlipHorizontally);
                 JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
-                Game.spriteBatch.DrawString(Game.spriteFont, "Hey there! Jellyfish Surgery is very tricky, but \nNurse Jellyfish will teach you the basics..", new Vector2(speechX - 260, speechY - 15), Color.Black);
+                Game.spriteBatch.DrawString(Game.spriteFont, "Hey there! Jellyfish Surgery is very tricky, but \nNurse Jellyfish will teach you the basics..", new Vector2(speechX - 260, speechY), Color.Black);
             }
             if (state == TutorialLauncherState.NURSETEXT)
             {
                 JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
-                Game.spriteBatch.DrawString(Game.spriteFont, "Welcome! You must be Doctor Jellyfish's \nnew assistant. Look! Here he is now...", new Vector2(speechX - 260, speechY - 15), Color.Black);
+                Game.spriteBatch.DrawString(Game.spriteFont, "Welcome! You must be Doctor Jellyfish's \nnew assistant. Look! Here he is now...", new Vector2(speechX - 260, speechY), Color.Black);
             }
             if (state == TutorialLauncherState.FINALTEXT)
             {
                 JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
-                Game.spriteBatch.DrawString(Game.spriteFont, "We can practice on Mister Jellyfish here! \nLet's take a look inside and get started...", new Vector2(speechX - 260, speechY - 15), Color.Black);
+                Game.spriteBatch.DrawString(Game.spriteFont, "We can practice on Mister Jellyfish here! \nLet's take a look inside and get started...", new Vector2(speechX - 260, speechY), Color.Black);
             }
 
         }        

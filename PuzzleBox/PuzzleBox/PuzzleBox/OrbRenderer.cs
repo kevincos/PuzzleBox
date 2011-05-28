@@ -9,6 +9,7 @@ namespace PuzzleBox
 {
     class OrbRenderer
     {
+        public static Texture2D bubbleTexture;
         public static Texture2D orbTexture;
         public static Texture2D orbCrackedLeftTexture;
         public static Texture2D orbCrackedRightTexture;
@@ -16,13 +17,15 @@ namespace PuzzleBox
         public static Texture2D orbFragmentLeftTexture;
         public static Texture2D orbFragmentRightTexture;
         public static Texture2D orbFragmentTopTexture;
-        public static Texture2D numbersTexture;
-        public static Texture2D clocknumbersTexture;
-        public static Texture2D toggleTexture;
+        //public static Texture2D numbersTexture;
+        //public static Texture2D clocknumbersTexture;
         public static Texture2D doubleTexture;
         public static Texture2D highlightTexture;
+        public static Texture2D haloTexture;
         public static Texture2D backgroundTexture;
         public static Texture2D vortexTexture;
+        public static Texture2D toggleInnerTexture;
+        public static Texture2D toggleOuterTexture;
         
         public static void DrawScoreBonus(ScoringSet set)
         {
@@ -110,16 +113,34 @@ namespace PuzzleBox
 
         public static void DrawOrb(PuzzleNode node, int x, int y, int size)
         {
-            Game.spriteBatch.Draw(orbTexture,
-                new Rectangle(x,y, size, size), new Rectangle(0, 0, 64, 64),
-                node.color);
+            if (node.color != Color.Gray)
+            {
+                if (node.toggleOrb)
+                {
+                    Game.spriteBatch.Draw(toggleInnerTexture,
+                        new Rectangle(x, y, size, size), new Rectangle(0, 0, 64, 64),
+                        node.color);
+                }
+                else
+                {
+                    Game.spriteBatch.Draw(orbTexture,
+                        new Rectangle(x, y, size, size), new Rectangle(0, 0, 64, 64),
+                        node.color);
+                }
+            }
+            else
+            {
+                Game.spriteBatch.Draw(bubbleTexture,
+                    new Rectangle(x, y, size, size), new Rectangle(0, 0, 64, 64),
+                    Color.White);
+            }
             if (node.bonus == 2)
             {
                 Game.spriteBatch.Draw(doubleTexture,
                     new Rectangle(x, y, size, size), new Rectangle(0, 0, 64, 64),
                     node.color);            
             }
-            if (node.moveCountdownOrb == true)
+            /*if (node.moveCountdownOrb == true)
             {
                 int texX = 64*(node.countdown % 4);
                 int texY = 64*(node.countdown / 4);
@@ -134,12 +155,22 @@ namespace PuzzleBox
                 Game.spriteBatch.Draw(clocknumbersTexture,
                     new Rectangle(x, y, size, size), new Rectangle(texX, texY, 64, 64),
                     node.color);
-            }
+            }*/
             if (node.toggleOrb == true)
             {
-                Game.spriteBatch.Draw(toggleTexture,
+                if (node.toggleColor != Color.Gray)
+                {
+                    Game.spriteBatch.Draw(toggleOuterTexture,
+                        new Rectangle(x, y, size, size), new Rectangle(0, 0, 64, 64),
+                        node.toggleColor);
+                }
+                else
+                {
+                    Game.spriteBatch.Draw(bubbleTexture,
                     new Rectangle(x, y, size, size), new Rectangle(0, 0, 64, 64),
-                    node.toggleColor);
+                        node.toggleColor);
+                }
+
             }
         }
 
@@ -151,17 +182,42 @@ namespace PuzzleBox
             highlightColor.R = (Byte)(Math.Max(0, (1 - .03 * delta)) * highlightColor.R);
             highlightColor.G = (Byte)(Math.Max(0, (1 - .03 * delta)) * highlightColor.G);
             highlightColor.B = (Byte)(Math.Max(0, (1 - .03 * delta)) * highlightColor.B);
-            if (node.selected)
+            if (node.color == Color.Gray)
             {
-                Game.spriteBatch.Draw(highlightTexture,
-                    new Rectangle(node.screenX - (int)(21 * node.scale), node.screenY - (int)(21 * node.scale), (int)(42 * node.scale), (int)(42 * node.scale)), new Rectangle(0, 0, 64, 64),
-                    Color.White);   
+                highlightColor.A = 0;
+                highlightColor.R = (Byte)(Math.Max(0, (1 - .03 * delta)) * 75);
+                highlightColor.G = (Byte)(Math.Max(0, (1 - .03 * delta)) * 75);
+                highlightColor.B = (Byte)(Math.Max(0, (1 - .03 * delta)) * 75);
             }
-            if (node.selected == false && !(node.marked == true && (gameState == State.VANISH || gameState == State.NEWSET)))
+            if (node.color == Color.Gray && node.toggleColor == Color.Gray && gameState!=State.VANISH && gameState!=State.NEWSET)
             {
                 Game.spriteBatch.Draw(highlightTexture,
                     new Rectangle(node.screenX - (int)(21 * node.scale), node.screenY - (int)(21 * node.scale), (int)(42 * node.scale), (int)(42 * node.scale)), new Rectangle(0, 0, 64, 64),
-                    highlightColor);   
+                    highlightColor);
+            }
+            else
+            {
+                if (node.selected)
+                {
+                    Game.spriteBatch.Draw(haloTexture,
+                        new Rectangle(node.screenX - (int)(21 * node.scale), node.screenY - (int)(21 * node.scale), (int)(42 * node.scale), (int)(42 * node.scale)), new Rectangle(0, 0, 64, 64),
+                        Color.White);
+                }
+                if (node.selected == false && !(node.marked == true && (gameState == State.VANISH || gameState == State.NEWSET)))
+                {
+                    if (gameState == State.DESTROY || gameState == State.VANISH || gameState == State.REGENERATE)
+                    {
+                        Game.spriteBatch.Draw(highlightTexture,
+                            new Rectangle(node.screenX - (int)(21 * node.scale), node.screenY - (int)(21 * node.scale), (int)(42 * node.scale), (int)(42 * node.scale)), new Rectangle(0, 0, 64, 64),
+                            highlightColor);
+                    }
+                    else
+                    {
+                        Game.spriteBatch.Draw(haloTexture,
+                            new Rectangle(node.screenX - (int)(21 * node.scale), node.screenY - (int)(21 * node.scale), (int)(42 * node.scale), (int)(42 * node.scale)), new Rectangle(0, 0, 64, 64),
+                            highlightColor);
+                    }
+                }
             }
             if (node.marked)
             {

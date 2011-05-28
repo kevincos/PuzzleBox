@@ -36,9 +36,9 @@ namespace PuzzleBox
         int headerY = 20;
         int headerWidth = 824;
         int headerHeight = 150;
-        int doctorX = 600;
+        int doctorX = 625;
         int doctorY = 375;
-        int optionListX = 100;
+        int optionListX = 75;
         int optionListY = 220;
         int optionGap = 60;
         int optionWidth = 250;
@@ -51,9 +51,9 @@ namespace PuzzleBox
             optionList = new List<MenuOption>();
         }
 
-        public void AddMenuItem(MenuResult result, Texture2D image, String helpText)
+        public void AddMenuItem(MenuResult result, String optionText, String helpText)
         {
-            optionList.Add(new MenuOption(result, image, helpText));
+            optionList.Add(new MenuOption(result, optionText, helpText));
         }
 
         public void Draw()
@@ -65,8 +65,8 @@ namespace PuzzleBox
                 if (i == selectedIndex)
                 {
                     PuzzleNode p = new PuzzleNode(Color.Blue);
-                    p.screenX = optionListX-25;
-                    p.screenY = optionListY +optionHeight/2+ i * optionGap;
+                    p.screenX = optionListX - 25;
+                    p.screenY = optionListY + optionHeight / 2 + i * optionGap;
                     if (state == MainMenuState.ANIMATEDOWN)
                         p.screenY -= (int)(optionGap * (1f - (float)animateTime / (float)250));
                     if (state == MainMenuState.ANIMATEUP)
@@ -75,8 +75,12 @@ namespace PuzzleBox
                     p.distance = 50;
                     p.scale = 1f;
                     OrbRenderer.DrawOrb(p, State.READY, 0f);
+                    Game.spriteBatch.DrawString(Game.menuFont, optionList[i].optionText, new Vector2(optionListX, optionListY + i * optionGap), Color.LightGreen);
                 }
-                Game.spriteBatch.Draw(optionList[i].optionText, new Rectangle(optionListX, optionListY + i * optionGap, optionWidth, optionHeight), Color.White);
+                else
+                {
+                    Game.spriteBatch.DrawString(Game.menuFont, optionList[i].optionText, new Vector2(optionListX, optionListY + i * optionGap), Color.White);
+                }
             }
             if (state == MainMenuState.DOCTORIN)
             {
@@ -96,8 +100,7 @@ namespace PuzzleBox
             if (state == MainMenuState.READY)
             {
                 JellyfishRenderer.DrawSpeechBubble2(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
-                Game.spriteBatch.DrawString(Game.spriteFont, optionList[selectedIndex].optionString, new Vector2(speechX - 250, speechY - 15), Color.Black);
-                
+                Game.spriteBatch.DrawString(Game.spriteFont, optionList[selectedIndex].optionString, new Vector2(speechX - 255, speechY+5), Color.Black);                
             }
         }
 

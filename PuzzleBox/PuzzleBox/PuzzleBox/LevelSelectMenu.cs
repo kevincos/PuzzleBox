@@ -49,7 +49,7 @@ namespace PuzzleBox
         //int infoLine = 20;
         int highScoreX = 440;
         int highScoreY = 430;
-        int highScoreLine = 20;
+        int highScoreLine = 22;
         int ratingX = 410;
         int ratingY = 570;
 
@@ -60,6 +60,9 @@ namespace PuzzleBox
         int docShift = 350;
         int speechX = 500;
         int speechY = 600;
+        int previewOffset = 100;
+        int previewX = 500;
+        int previewY = 430;
 
         int numSwaps = 0;
         int swapTime = 500;
@@ -314,21 +317,24 @@ namespace PuzzleBox
 
                 // Draw stars
                 LevelData levelData = GetLevelData(currentLevel);
+                int ratingOffset = 0;
+                if(levelList[currentLevel].mode==GameMode.Puzzle)
+                    ratingOffset = previewOffset;
                 for (int i = 0; i < 3; i++)
                 {
                     Game.spriteBatch.Draw(emptyStar,
-                        new Rectangle(ratingX + 75 * i, ratingY + 40, 64, 64), Color.White);
+                        new Rectangle(ratingX + 75 * i - ratingOffset, ratingY + 40, 64, 64), Color.White);
                 }
                 if (levelData.played == true)
                 {
                     Game.spriteBatch.Draw(star,
-                            new Rectangle(ratingX, ratingY + 40, 64, 64), Color.White);
+                            new Rectangle(ratingX - ratingOffset, ratingY + 40, 64, 64), Color.White);
                     if (levelData.rank >= 2)
                         Game.spriteBatch.Draw(star,
-                            new Rectangle(ratingX + 75, ratingY + 40, 64, 64), Color.White);
+                            new Rectangle(ratingX + 75 - ratingOffset, ratingY + 40, 64, 64), Color.White);
                     if (levelData.rank >= 3)
                         Game.spriteBatch.Draw(star,
-                            new Rectangle(ratingX + 150, ratingY + 40, 64, 64), Color.White);
+                            new Rectangle(ratingX + 150 - ratingOffset, ratingY + 40, 64, 64), Color.White);
                 }
                 if (levelList[currentLevel].mode == GameMode.TimeAttack)
                 {
@@ -339,7 +345,7 @@ namespace PuzzleBox
                         difficultyString = "Standard";
                     if (levelList[currentLevel].difficulty == Difficulty.HARD)
                         difficultyString = "Advanced";
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Difficulty: " + difficultyString, new Vector2(highScoreX - 40, highScoreY), Color.LightGreen); 
+                    Game.spriteBatch.DrawString(Game.spriteFont, "Difficulty: " + difficultyString, new Vector2(highScoreX - 20, highScoreY), Color.LightGreen); 
                     
                     Game.spriteBatch.DrawString(Game.spriteFont, "High Scores", new Vector2(highScoreX, highScoreY+30), Color.LightGreen);
 
@@ -359,7 +365,7 @@ namespace PuzzleBox
                         difficultyString = "Standard";
                     if (levelList[currentLevel].difficulty == Difficulty.HARD)
                         difficultyString = "Advanced";
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Difficulty: " + difficultyString, new Vector2(highScoreX - 40, highScoreY), Color.LightGreen); 
+                    Game.spriteBatch.DrawString(Game.spriteFont, "Difficulty: " + difficultyString, new Vector2(highScoreX - 20, highScoreY), Color.LightGreen); 
                     
                     Game.spriteBatch.DrawString(Game.spriteFont, "High Scores", new Vector2(highScoreX, highScoreY+30), Color.LightGreen);
                     if (highScoreData == null)
@@ -378,15 +384,16 @@ namespace PuzzleBox
                         difficultyString = "Standard";
                     if (levelList[currentLevel].difficulty == Difficulty.HARD)
                         difficultyString = "Advanced";
-                    Game.spriteBatch.DrawString(Game.spriteFont, "Difficulty: "+difficultyString, new Vector2(highScoreX-40, highScoreY), Color.LightGreen); 
-                    Game.spriteBatch.DrawString(Game.spriteFont, "High Scores", new Vector2(highScoreX, highScoreY+30), Color.LightGreen);
+                    Game.spriteBatch.DrawString(Game.spriteFont, "Difficulty: "+difficultyString, new Vector2(highScoreX-20 - previewOffset, highScoreY), Color.LightGreen); 
+                    Game.spriteBatch.DrawString(Game.spriteFont, "High Scores", new Vector2(highScoreX -previewOffset, highScoreY+30), Color.LightGreen);
                     if (highScoreData == null)
                         highScoreData = HighScoreTracker.LoadHighScores();                    
                     for (int i = 1; i < 6; i++)
                     {
                         TimeSpan t = new TimeSpan(0, 0, 0, 0, levelData.highScores[i - 1]);
-                        Game.spriteBatch.DrawString(Game.spriteFont, string.Format("{0}:{1} - {2}:{3:D2}", i,levelData.playerNames[i - 1], t.Minutes, t.Seconds), new Vector2(highScoreX, highScoreY + highScoreLine * i + 35), Color.LightGreen);                        
-                    }                    
+                        Game.spriteBatch.DrawString(Game.spriteFont, string.Format("{0}:{1} - {2}:{3:D2}", i,levelData.playerNames[i - 1], t.Minutes, t.Seconds), new Vector2(highScoreX-previewOffset, highScoreY + highScoreLine * i + 35), Color.LightGreen);                        
+                    }
+                    Game.spriteBatch.Draw(levelList[currentLevel].preview, new Rectangle(previewX, previewY, 625/2, 469/2), Color.White);
                 }
             }
             if (state == SelectMenuState.TEXT)
@@ -399,7 +406,7 @@ namespace PuzzleBox
                     else
                         JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
                     String text = textPieces[currentTextPiece].Split(':')[1];
-                    Game.spriteBatch.DrawString(Game.spriteFont, text, new Vector2(speechX - 250, speechY - 15), Color.Black);
+                    Game.spriteBatch.DrawString(Game.spriteFont, text, new Vector2(speechX - 250, speechY), Color.Black);
                 }
                 else
                 {
@@ -408,16 +415,16 @@ namespace PuzzleBox
                     {
                         if (levelList[currentLevel].difficulty == Difficulty.MEDIUM)
                         {
-                            Game.spriteBatch.DrawString(Game.spriteFont, "Earn two stars on any Beginner puzzle \nto unlock this patient!", new Vector2(speechX - 250, speechY - 15), Color.Black);
+                            Game.spriteBatch.DrawString(Game.spriteFont, "Earn two stars on any Beginner puzzle \nto unlock this patient!", new Vector2(speechX - 250, speechY), Color.Black);
                         }
                         else if (levelList[currentLevel].difficulty == Difficulty.HARD)
                         {
-                            Game.spriteBatch.DrawString(Game.spriteFont, "Earn two stars on any Standard puzzle \nto unlock this patient!", new Vector2(speechX - 250, speechY - 15), Color.Black);
+                            Game.spriteBatch.DrawString(Game.spriteFont, "Earn two stars on any Standard puzzle \nto unlock this patient!", new Vector2(speechX - 250, speechY), Color.Black);
                         }
                     }
                     else
                     {
-                        Game.spriteBatch.DrawString(Game.spriteFont, "Earn two stars on the previous jellyfish \nto unlock this patient!", new Vector2(speechX - 250, speechY - 15), Color.Black);
+                        Game.spriteBatch.DrawString(Game.spriteFont, "Earn two stars on the previous jellyfish \nto unlock this patient!", new Vector2(speechX - 250, speechY), Color.Black);
                     }
                 }
 

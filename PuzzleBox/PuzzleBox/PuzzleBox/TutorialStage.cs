@@ -470,8 +470,8 @@ namespace PuzzleBox
             "Finally, Challenge mode will give you some\n"+
             "tricky puzzles to solve.:"+
             "You'll need to use what you've learned here to\n"+
-            "pop all of the bubbles in each patient. If you\n"+
-            "make a wrong move, you might get stuck!:"+
+            "pop all of the bubbles in each patient. If you make\n"+
+            "a wrong move, you might get stuck!:"+
             "Luckily, in Challenge mode, you can press B to\n"+
             "undo your last move if you make a mistake.:"+
             "You'll be awarded a rating after each patient.\n"+

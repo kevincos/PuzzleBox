@@ -45,15 +45,15 @@ namespace PuzzleBox
             {
                 optionList.Add(new MenuOption(MenuResult.GoToResults, "Continue"));
             }
-            else if (TutorialStage.phase != TutorialPhase.None && endOfSection == true)
-            {
-                optionList.Add(new MenuOption(MenuResult.GoToResults, "Continue"));
-                optionList.Add(new MenuOption(MenuResult.Replay, "Practice"));                            
-            }
             else if (TutorialStage.phase==TutorialPhase.Fail)
             {
                 optionList.Add(new MenuOption(MenuResult.Replay, "Try Again"));
                 optionList.Add(new MenuOption(MenuResult.GoToMainMenu, "Main Menu"));
+            }
+            else if (TutorialStage.phase != TutorialPhase.None && endOfSection == true)
+            {
+                optionList.Add(new MenuOption(MenuResult.GoToResults, "Continue"));
+                optionList.Add(new MenuOption(MenuResult.Replay, "Practice"));
             }
             else if (win)
                 optionList.Add(new MenuOption(MenuResult.GoToResults, "Continue"));
@@ -82,17 +82,17 @@ namespace PuzzleBox
                 if (Game.metaState != MetaState.GamePlay)
                 {
                     JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
-                    Game.spriteBatch.DrawString(Game.spriteFont, text, new Vector2(speechX - 260, speechY - 22), Color.Black);
-                    int offSet = 50;
+                    Game.spriteBatch.DrawString(Game.spriteFont, text, new Vector2(speechX - 260, speechY - 5), Color.Black);
+                    int offSet = 20;
                     for (int i = 0; i < optionList.Count(); i++)
                     {
                         if (i == selectedOption)
                         {
-                            Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count - 2) * 130 + offSet, speechY + 28), Color.Blue);
+                            Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count - 2) * 130 + offSet, speechY + 55), Color.Blue);
                         }
                         else
                         {
-                            Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count - 2) * 130 + offSet, speechY + 28), Color.Black);
+                            Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count - 2) * 130 + offSet, speechY + 55), Color.Black);
                         }
                         offSet += optionList[i].optionString.Length * 10 + 40;
                     }
