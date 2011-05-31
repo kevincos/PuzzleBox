@@ -164,7 +164,7 @@ namespace PuzzleBox
         {
             introText = "" +
             "Look at all these bubbles inside Mister\n"+
-            "Jellyfish! The colored ones are toxic! Lets\n" +
+            "Jellyfish! The colored ones are toxic! Let's\n" +
             "see if we can get rid of them.:"+
             "Use the Left Control Stick to rotate the\n" +
             "bubbles in Mister Jellyfish's body.:" +
@@ -223,8 +223,8 @@ namespace PuzzleBox
         {
             introText = "" +
             "In addition to rotations, you can use the Left\n" +
-            "Right Triggers to push and pull the bubbles in\n" +
-            "the Jellyfish's body.:" +
+            "and Right Triggers to push and pull the bubbles\n" +
+            "in the Jellyfish's body.:" +
             "That way, you can change which layer of bubbles\n" +
             "aligns with the tentacles.:" +
             "Also, you can use the Right Control Stick at any\n" +

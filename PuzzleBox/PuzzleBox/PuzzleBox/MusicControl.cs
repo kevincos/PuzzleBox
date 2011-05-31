@@ -9,8 +9,8 @@ namespace PuzzleBox
 {
     class MusicControl
     {
-        public static Song track1;
-        public static Song track2;
+        public static Song music_menu;
+        public static Song music_game;
 
         public static Song currentTrack;
 
@@ -18,11 +18,11 @@ namespace PuzzleBox
         {
             if (Game.gameSettings.musicEnabled)
             {
-                if (currentTrack != track1)
+                if (currentTrack != music_menu)
                 {
                     MediaPlayer.IsRepeating = true;
-                    MediaPlayer.Play(track1);
-                    currentTrack = track1;
+                    MediaPlayer.Play(music_menu);
+                    currentTrack = music_menu;
                 }
             }
         }
@@ -31,11 +31,11 @@ namespace PuzzleBox
         {
             if (Game.gameSettings.musicEnabled)
             {
-                if (currentTrack != track2)
+                if (currentTrack != music_game)
                 {
                     MediaPlayer.IsRepeating = true;
-                    MediaPlayer.Play(track2);
-                    currentTrack = track2;
+                    MediaPlayer.Play(music_game);
+                    currentTrack = music_game;
                 }
             }
         }
@@ -55,10 +55,28 @@ namespace PuzzleBox
         {
             if (Game.gameSettings.musicEnabled)
             {
-                MediaPlayer.Resume();
+                if (Game.metaState == MetaState.GamePlay)
+                {
+                    if (currentTrack == music_game)
+                        MediaPlayer.Resume();
+                    else
+                    {
+                        currentTrack = music_game;
+                        MediaPlayer.Play(currentTrack);
+                    }
+                }
+                else
+                {
+                    if (currentTrack == music_menu)
+                        MediaPlayer.Resume();
+                    else
+                    {
+                        currentTrack = music_menu;
+                        MediaPlayer.Play(currentTrack);
+                    }
+                }
             }
         }
 
     }
-
 }

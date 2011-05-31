@@ -468,7 +468,10 @@ namespace PuzzleBox
                         else
                         {
                             Game.gameSettings.musicEnabled = true;
-                            MusicControl.PlayGameMusic();
+                            if (Game.currentSettings.mode == GameMode.Tutorial)
+                                MusicControl.PlayMenuMusic();
+                            else
+                                MusicControl.PlayGameMusic();
                         }
                         cooldown = 250;
                     }

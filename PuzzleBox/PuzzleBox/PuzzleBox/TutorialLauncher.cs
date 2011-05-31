@@ -92,11 +92,11 @@ namespace PuzzleBox
         {
             if (state != TutorialLauncherState.ZOOM)
             {
-                JellyfishRenderer.DrawJellyfish(jellyX, jellyY, 100, JellyfishRenderer.baseballJelly2, 1f, SpriteEffects.None);
+                JellyfishRenderer.DrawJellyfish(jellyX, jellyY, 100, JellyfishRenderer.yellowJelly, 1f, SpriteEffects.None);
             }
             if (state == TutorialLauncherState.ZOOM)
             {
-                JellyfishRenderer.DrawJellyfish(jellyX, jellyY, 100, JellyfishRenderer.baseballJelly2, (1f * animateTime) / (1f * maxAnimateTime), SpriteEffects.None);
+                JellyfishRenderer.DrawJellyfish(jellyX, jellyY, 100, JellyfishRenderer.yellowJelly, (1f * animateTime) / (1f * maxAnimateTime), SpriteEffects.None);
             }
             if (state == TutorialLauncherState.NURSEIN)
             {

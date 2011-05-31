@@ -198,6 +198,14 @@ namespace PuzzleBox
             JellyfishRenderer.karateJelly = Content.Load<Texture2D>("karatejelly");
             JellyfishRenderer.kingJelly = Content.Load<Texture2D>("kingjelly");
             JellyfishRenderer.hookerJelly = Content.Load<Texture2D>("jellyofthenight");
+            JellyfishRenderer.ballerinaJelly = Content.Load<Texture2D>("ballerinajelly");
+            JellyfishRenderer.cowboyJelly = Content.Load<Texture2D>("cowboyjelly");
+            JellyfishRenderer.greenJelly = Content.Load<Texture2D>("greenjelly");
+            JellyfishRenderer.yellowJelly = Content.Load<Texture2D>("yellowjelly");
+            JellyfishRenderer.redJelly = Content.Load<Texture2D>("redjelly");
+            JellyfishRenderer.ninjaJelly = Content.Load<Texture2D>("ninjajelly");
+            JellyfishRenderer.queenJelly = Content.Load<Texture2D>("queenjelly");
+            JellyfishRenderer.newsieJelly = Content.Load<Texture2D>("newsiejelly");            
             Preview.level1 = Content.Load<Texture2D>("level1");
             Preview.level2 = Content.Load<Texture2D>("level2");
             Preview.level3 = Content.Load<Texture2D>("level3");
@@ -223,8 +231,8 @@ namespace PuzzleBox
             SoundEffects.soundBloop = Content.Load<SoundEffect>("bloop");
             SoundEffects.soundClick = Content.Load<SoundEffect>("click");
             SoundEffects.soundBeep = Content.Load<SoundEffect>("beep");
-            MusicControl.track1 = Content.Load<Song>("track1");
-            MusicControl.track2 = Content.Load<Song>("track2");
+            MusicControl.music_menu = Content.Load<Song>("music_menu");
+            MusicControl.music_game = Content.Load<Song>("music_game");
         }
 
         protected override void UnloadContent()
@@ -267,7 +275,7 @@ namespace PuzzleBox
                         summaryMenu.text = "Looks like you're out of moves, Doctor! \nLet's see how you did...";
                     if(currentSettings.mode == GameMode.TimeAttack)
                         summaryMenu.text = "Time's up, Doctor! Let's see \nhow you did...";
-                    
+                    MusicControl.PlayMenuMusic();
                     metaState = MetaState.Summary;                    
                 }
                 if (cause == GameStopCause.WIN)
@@ -278,6 +286,7 @@ namespace PuzzleBox
                     summaryMenu = new SummaryMenu(true);
                     summaryMenu.text = "Way to go, Doctor! You did it!";
                     metaState = MetaState.Summary;
+                    MusicControl.PlayMenuMusic();
                 }
                 if (cause == GameStopCause.TUTORIAL_TEXT)
                 {
@@ -336,6 +345,7 @@ namespace PuzzleBox
                 }
                 if (result == MenuResult.GoToLevelSelect)
                 {
+                    MusicControl.PlayMenuMusic();
                     if (currentSettings.mode == GameMode.TimeAttack)
                         metaState = MetaState.Settings_TimeAttack;
                     if (currentSettings.mode == GameMode.Puzzle)
@@ -424,6 +434,7 @@ namespace PuzzleBox
                 }
                 if (result == MenuResult.GoToLevelSelect)
                 {
+                    MusicControl.PlayMenuMusic();
                     if (currentSettings.mode == GameMode.TimeAttack)
                         metaState = MetaState.Settings_TimeAttack;
                     if (currentSettings.mode == GameMode.Puzzle)
@@ -445,6 +456,7 @@ namespace PuzzleBox
                     currentSettings = selectMenu.GetCurrentSettings();
                     currentSettings.level = selectMenu.currentLevel;
                     p1engine = new Engine(-1);
+                    MusicControl.PlayGameMusic();
                     metaState = MetaState.GamePlay;
                 }
             }
@@ -586,6 +598,7 @@ namespace PuzzleBox
                 if (result == MenuResult.StartPuzzle)
                 {
                     p1engine = new Engine(-1);
+
                     metaState = MetaState.GamePlay;
                 }
                 if (result == MenuResult.GoToSurvival)
