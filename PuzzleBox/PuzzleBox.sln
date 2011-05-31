@@ -17,8 +17,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{DBFAE8EA-E3B8-4210-80E4-7E3B85949272}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{DBFAE8EA-E3B8-4210-80E4-7E3B85949272}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{DBFAE8EA-E3B8-4210-80E4-7E3B85949272}.Debug|x86.ActiveCfg = Debug|x86
-		{DBFAE8EA-E3B8-4210-80E4-7E3B85949272}.Debug|x86.Build.0 = Debug|x86
+		{DBFAE8EA-E3B8-4210-80E4-7E3B85949272}.Debug|x86.ActiveCfg = Release|x86
+		{DBFAE8EA-E3B8-4210-80E4-7E3B85949272}.Debug|x86.Build.0 = Release|x86
 		{DBFAE8EA-E3B8-4210-80E4-7E3B85949272}.Debug|Xbox 360.ActiveCfg = Debug|x86
 		{DBFAE8EA-E3B8-4210-80E4-7E3B85949272}.Debug|Xbox 360.Build.0 = Debug|x86
 		{DBFAE8EA-E3B8-4210-80E4-7E3B85949272}.Release|Mixed Platforms.ActiveCfg = Release|x86

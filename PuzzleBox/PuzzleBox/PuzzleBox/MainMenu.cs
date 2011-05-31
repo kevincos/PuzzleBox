@@ -102,7 +102,8 @@ namespace PuzzleBox
                 JellyfishRenderer.DrawSpeechBubble2(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
                 Game.spriteBatch.DrawString(Game.spriteFont, optionList[selectedIndex].optionString, new Vector2(speechX - 255, speechY+5), Color.Black);                
             }
-            Game.spriteBatch.DrawString(Game.spriteFont, "Created by Kevin Costello. Artwork by Rachel K Sreebny", new Vector2(280, 725), Color.LightGray,0,Vector2.Zero,.75f,SpriteEffects.None,0);
+            Game.spriteBatch.DrawString(Game.spriteFont, "Created by Kevin Costello. Artwork by Rachel K Sreebny", new Vector2(280, 720), Color.LightGray,0,Vector2.Zero,.75f,SpriteEffects.None,0);
+            Game.spriteBatch.DrawString(Game.spriteFont, "Music by <??????????????????>", new Vector2(375, 742), Color.LightGray, 0, Vector2.Zero, .75f, SpriteEffects.None, 0);
         }
 
         public MenuResult Update(GameTime gameTime)

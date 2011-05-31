@@ -197,6 +197,7 @@ namespace PuzzleBox
             JellyfishRenderer.fortuneJelly = Content.Load<Texture2D>("fortunejelly");
             JellyfishRenderer.karateJelly = Content.Load<Texture2D>("karatejelly");
             JellyfishRenderer.kingJelly = Content.Load<Texture2D>("kingjelly");
+            JellyfishRenderer.hookerJelly = Content.Load<Texture2D>("jellyofthenight");
             Preview.level1 = Content.Load<Texture2D>("level1");
             Preview.level2 = Content.Load<Texture2D>("level2");
             Preview.level3 = Content.Load<Texture2D>("level3");

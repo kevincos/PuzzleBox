@@ -22,7 +22,7 @@ namespace PuzzleBox
 
         public static void LoadLevel(string fileName, PuzzleBox box, MasterGrid grid)
         {
-            String loadPath = fileName;
+            String loadPath = "Data\\"+fileName;
             try
             {
                 r = new StreamReader(loadPath);

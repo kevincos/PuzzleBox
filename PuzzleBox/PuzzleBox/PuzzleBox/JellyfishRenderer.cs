@@ -41,6 +41,7 @@ namespace PuzzleBox
         public static Texture2D karateJelly;
         public static Texture2D explorerJelly;
         public static Texture2D kingJelly;
+        public static Texture2D hookerJelly;
 
         public static Texture2D transparentBody;
         public static Texture2D transparentRing;

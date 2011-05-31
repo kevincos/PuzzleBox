@@ -42,7 +42,7 @@ namespace PuzzleBox
 
         int selectedJellyX = 517;
         int selectedJellyY = 300;
-        int nameX = 420;
+        int nameX = 390;
         int nameY = 120;
         //int infoX = 120;
         //int infoY = 450;
@@ -313,7 +313,7 @@ namespace PuzzleBox
                 if(currentLevel > 0)
                     Game.spriteBatch.DrawString(Game.spriteFont, "<", new Vector2(nameX, nameY), Color.LightGreen);
                 if (currentLevel < levelList.Count-1)
-                    Game.spriteBatch.DrawString(Game.spriteFont, ">", new Vector2(nameX+200, nameY), Color.LightGreen);
+                    Game.spriteBatch.DrawString(Game.spriteFont, ">", new Vector2(nameX+250, nameY), Color.LightGreen);
 
                 // Draw stars
                 LevelData levelData = GetLevelData(currentLevel);
