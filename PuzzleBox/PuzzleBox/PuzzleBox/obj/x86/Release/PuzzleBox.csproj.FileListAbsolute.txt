@@ -79,10 +79,6 @@ E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\swoosh.xnb
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\click.xnb
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\beep.xnb
-E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\track1.xnb
-E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\track2.xnb
-E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\track1.wma
-E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\track2.wma
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Release\ResolveAssemblyReference.cache
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Release\Microsoft.Xna.Framework.RuntimeProfile.txt
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Jellyfish MD.exe
@@ -90,3 +86,15 @@ E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Jellyfis
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Release\Jellyfish MD.exe
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Release\Jellyfish MD.pdb
 E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\jellyofthenight.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\ballerinajelly.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\cowboyjelly.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\newsiejelly.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\ninjajelly.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\queenjelly.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\redjelly.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\yellowjelly.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\greenjelly.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\music_game.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\music_menu.xnb
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\music_game.wma
+E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\music_menu.wma

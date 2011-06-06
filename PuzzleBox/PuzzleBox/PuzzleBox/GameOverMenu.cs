@@ -429,7 +429,7 @@ namespace PuzzleBox
                 GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
                 Vector2 leftStick = gamePadState.ThumbSticks.Left;
                 Vector2 rightStick = gamePadState.ThumbSticks.Right;
-                if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -.95 || rightStick.Y < -.95)
+                if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -Game.gameSettings.controlStickTrigger || rightStick.Y < -Game.gameSettings.controlStickTrigger)
                 {
                     SoundEffects.PlayClick();
                     Char[] cArray = initials.ToCharArray();
@@ -440,7 +440,7 @@ namespace PuzzleBox
                     initials = new String(cArray);
                     cooldown = 100;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > .95 || rightStick.Y > .95)
+                if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > Game.gameSettings.controlStickTrigger || rightStick.Y > Game.gameSettings.controlStickTrigger)
                 {
                     SoundEffects.PlayClick();
                     Char[] cArray = initials.ToCharArray();
@@ -506,7 +506,7 @@ namespace PuzzleBox
                     state = GameOverMenuState.DOCTOROUT;
                     SoundEffects.PlayScore();
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -.95 || rightStick.Y < -.95)
+                if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -Game.gameSettings.controlStickTrigger || rightStick.Y < -Game.gameSettings.controlStickTrigger)
                 {
                     if (selectedIndex < optionList.Count() - 1)
                     {
@@ -517,7 +517,7 @@ namespace PuzzleBox
                         SoundEffects.PlayMove();
                     }
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > .95 || rightStick.Y > .95)
+                if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > Game.gameSettings.controlStickTrigger || rightStick.Y > Game.gameSettings.controlStickTrigger)
                 {
                     if (selectedIndex > 0)
                     {

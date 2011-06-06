@@ -15,6 +15,7 @@ namespace PuzzleBox
         public int puzzleViewLevel = 0;
         public int timeAttackViewLevel = 0;
         public int moveChallengeViewLevel = 0;
-        
+
+        public float controlStickTrigger = .25f;
     }
 }

@@ -181,7 +181,7 @@ namespace PuzzleBox
                 }
                 if (state == SelectMenuState.READY)
                 {
-                    if (Keyboard.GetState().IsKeyDown(Keys.Left) || leftStick.X < -.95 || rightStick.X < -.95)
+                    if (Keyboard.GetState().IsKeyDown(Keys.Left) || leftStick.X < -Game.gameSettings.controlStickTrigger || rightStick.X < -Game.gameSettings.controlStickTrigger)
                     {                        
                         if (currentLevel > 0)
                         {
@@ -200,7 +200,7 @@ namespace PuzzleBox
                             animateTime = 0;
                         }
                     }
-                    if (Keyboard.GetState().IsKeyDown(Keys.Right) || leftStick.X > .95 || rightStick.X > .95)
+                    if (Keyboard.GetState().IsKeyDown(Keys.Right) || leftStick.X > Game.gameSettings.controlStickTrigger || rightStick.X > Game.gameSettings.controlStickTrigger)
                     {
                         if (currentLevel < levelList.Count - 1)
                         {

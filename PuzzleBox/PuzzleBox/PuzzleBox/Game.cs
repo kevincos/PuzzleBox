@@ -388,6 +388,7 @@ namespace PuzzleBox
                     else
                     {
                         p1engine = new Engine(-1);
+                        MusicControl.PlayGameMusic();
                         metaState = MetaState.GamePlay;
                     }
                 }
@@ -508,6 +509,7 @@ namespace PuzzleBox
                     if (result == MenuResult.StartTimeAttack)
                     {
                         p1engine = new Engine(-1);
+                        MusicControl.PlayGameMusic();
                         metaState = MetaState.GamePlay;
                     }
                 }

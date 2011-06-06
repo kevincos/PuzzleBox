@@ -53,11 +53,11 @@ namespace PuzzleBox
             // Easy Levels
 
             levels[0].levelfilename = "puzzle2.txt";
-            levels[0].name = "Professor Jellyfish";
+            levels[0].name = "Miss Jellyfish";
             levels[0].difficulty = Difficulty.EASY;
             levels[0].winType = WinType.CLEAR;
             levels[0].loseType = LoseType.NOMOVES;
-            levels[0].texture = JellyfishRenderer.profJelly;
+            levels[0].texture = JellyfishRenderer.redJelly;
             levels[0].instructions = "N:Doctor, it looks like we'll need to match \nsets of 3 or more bubbles to heal this patient! -D:Remember, if you make a mistake, press the \nB Button to undo your last move. -N: Good luck!";
 
             levels[1].levelfilename = "puzzle5.txt";
@@ -86,6 +86,7 @@ namespace PuzzleBox
             levels[4].difficulty = Difficulty.EASY;
             levels[4].texture = JellyfishRenderer.explorerJelly;
             levels[4].preview = Preview.level5;
+            levels[4].three_star = 40000;
             levels[4].instructions = "N:Gosh! That's a lot of bubbles to deal with.\nAny advice, Doctor?-D:I think we should try and match bubbles from \ndifferent tentacles as evenly as possible.-N:Good idea. That way we won't get stuck.";
 
             levels[5].levelfilename = "puzzle15.txt";
@@ -96,6 +97,7 @@ namespace PuzzleBox
             levels[5].dangerColorDisplay = "GREEN";
             levels[5].texture = JellyfishRenderer.fortuneJelly;
             levels[5].preview = Preview.level6;
+            levels[5].three_star = 20000;
             levels[5].instructions = "N:Oh no! This Jellyfish is allergic to Green toxins.\nIf we pop a Green bubble, the toxin will poison him. -D:We'll do the best we can. Try to pop everything\nEXCEPT the Green bubbles. -N:I hope thats enough to cure him!";
 
             // Standard Levels
@@ -135,22 +137,23 @@ namespace PuzzleBox
             levels[10].difficulty = Difficulty.MEDIUM;
             levels[10].preview = Preview.level11;
             levels[10].instructions = "N:I'm not so sure about this one. Any advice, \nDoctor?-D:Keep in mind that no matter what rotations you \ndo, it's impossible to match a bubble in the corner\nof the body with a middle tentacle. -D:Does that make any sense? -N:I'm not sure. Maybe it'll be clearer\nonce we're inside!";
-            levels[10].texture = JellyfishRenderer.greenJelly;
-            levels[10].name = "Baby Jellyfish";            
+            levels[10].texture = JellyfishRenderer.mogulJelly;
+            levels[10].name = "Mogul Jellyfish";            
 
             levels[11].levelfilename = "puzzle12.txt";            
             levels[11].difficulty = Difficulty.MEDIUM;
             levels[11].preview = Preview.level12;
             levels[11].instructions = "N:What do you think, Doctor? -D:I could give you some advice, but I\nthink you're ready to tackle this one on your own. -N:How exciting!";
-            levels[11].texture = JellyfishRenderer.yellowJelly;
-            levels[11].name = "Mister Jellyfish";
+            levels[11].texture = JellyfishRenderer.profJelly;
+            levels[11].three_star = 20000;
+            levels[11].name = "Professor Jellyfish";
             
             levels[12].levelfilename = "puzzle17.txt";           
             levels[12].difficulty = Difficulty.MEDIUM;
             levels[12].preview = Preview.level13;
             levels[12].instructions = "N:Ack! More of this weird shifty bubbles.-D:Don't worry. It'll take some work, but\nI'm sure we can do it!";
-            levels[12].texture = JellyfishRenderer.redJelly;
-            levels[12].name = "Miss Jellyfish";
+            levels[12].texture = JellyfishRenderer.newsieJelly;
+            levels[12].name = "Newsie Jellyfish";
 
             levels[13].levelfilename = "puzzle18.txt";
             levels[13].name = "King Jellyfish";
@@ -175,8 +178,8 @@ namespace PuzzleBox
             levels[15].dangerColorDisplay = "RED";
             levels[15].difficulty = Difficulty.HARD;
             levels[15].preview = Preview.level16;
-            levels[15].name = "Newsie Jellyfish";
-            levels[15].texture = JellyfishRenderer.newsieJelly;
+            levels[15].name = "Birthday Jellyfish";
+            levels[15].texture = JellyfishRenderer.birthdayJelly;
                                     
             levels[16].levelfilename = "puzzle16.txt";
             levels[16].name = "Biker Jellyfish";
@@ -228,14 +231,14 @@ namespace PuzzleBox
                 s.three_star = 3000;
                 levels.Add(s);
             }
-            levels[0].name = "Baseball Jellyfish";
+            levels[0].name = "Mister Jellyfish";
             levels[0].grayOrbStart = 24;
-            levels[0].texture = JellyfishRenderer.baseballJelly2;
+            levels[0].texture = JellyfishRenderer.yellowJelly;
             levels[0].two_star = 300;
             levels[0].three_star = 1000;
-            levels[1].name = "Mogul Jellyfish";
+            levels[1].name = "Baseball Jellyfish";
             levels[1].difficulty = Difficulty.MEDIUM;
-            levels[1].texture = JellyfishRenderer.mogulJelly;
+            levels[1].texture = JellyfishRenderer.baseballJelly2;
             levels[2].name = "Karate Jellyfish";
             levels[2].grayOrbStart = 0;
             levels[2].texture = JellyfishRenderer.karateJelly;
@@ -269,9 +272,9 @@ namespace PuzzleBox
                 s.three_star = 3000;
                 levels.Add(s);
             }
-            levels[0].name = "Birthday Jellyfish";
+            levels[0].name = "Baby Jellyfish";
             levels[0].grayOrbStart = 24;
-            levels[0].texture = JellyfishRenderer.birthdayJelly;
+            levels[0].texture = JellyfishRenderer.greenJelly;
             levels[0].two_star = 300;
             levels[0].three_star = 1000;
             levels[1].name = "Captain Jellyfish";

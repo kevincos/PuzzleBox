@@ -148,7 +148,7 @@ namespace PuzzleBox
                     animateTime = 0;
                     state = MainMenuState.DOCTOROUT;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -.95 || rightStick.Y < -.95)
+                if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -Game.gameSettings.controlStickTrigger || rightStick.Y < -Game.gameSettings.controlStickTrigger)
                 {
                     if (selectedIndex < optionList.Count() - 1)
                     {
@@ -159,7 +159,7 @@ namespace PuzzleBox
                         cooldown = 250;
                     }
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > .95 || rightStick.Y > .95)
+                if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > Game.gameSettings.controlStickTrigger || rightStick.Y > Game.gameSettings.controlStickTrigger)
                 {
                     if (selectedIndex > 0)
                     {

@@ -111,7 +111,7 @@ namespace PuzzleBox
                     state = PauseMenuState.NURSEOUT;
                     SoundEffects.PlayMove();
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Right) || leftStick.X > .95 || rightStick.X > .95)
+                if (Keyboard.GetState().IsKeyDown(Keys.Right) || leftStick.X > Game.gameSettings.controlStickTrigger || rightStick.X > Game.gameSettings.controlStickTrigger)
                 {
                     selectedOption++;
                     SoundEffects.PlayClick();
@@ -119,7 +119,7 @@ namespace PuzzleBox
                         selectedOption = optionList.Count() - 1;
                     cooldown = 250;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Left) || leftStick.X < -.95 || rightStick.X < -.95)
+                if (Keyboard.GetState().IsKeyDown(Keys.Left) || leftStick.X < -Game.gameSettings.controlStickTrigger || rightStick.X < -Game.gameSettings.controlStickTrigger)
                 {
                     selectedOption--;
                     SoundEffects.PlayClick();

@@ -378,11 +378,11 @@ namespace PuzzleBox
                 GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
                 Vector2 leftStick = gamePadState.ThumbSticks.Left;
                 Vector2 rightStick = gamePadState.ThumbSticks.Right;
-                if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -.95 || rightStick.Y < -.95)
+                if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -Game.gameSettings.controlStickTrigger || rightStick.Y < -Game.gameSettings.controlStickTrigger)
                 {
                     SelectDown();                    
                 }
-                else if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > .95 || rightStick.Y > .95)
+                else if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > Game.gameSettings.controlStickTrigger || rightStick.Y > Game.gameSettings.controlStickTrigger)
                 {
                     SelectUp();                    
                 }

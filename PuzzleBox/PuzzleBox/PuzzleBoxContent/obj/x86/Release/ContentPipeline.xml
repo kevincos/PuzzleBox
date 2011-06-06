@@ -740,33 +740,105 @@
       <Time>2000-11-23T06:33:52-08:00</Time>
     </Item>
     <Item>
-      <Source>track1.mp3</Source>
-      <Name>track1</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\track1.xnb</Output>
-      <Extra>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\track1.wma</Extra>
-      <Time>2011-05-20T15:39:53.1195049-07:00</Time>
-    </Item>
-    <Item>
-      <Source>track2.mp3</Source>
-      <Name>track2</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\track2.xnb</Output>
-      <Extra>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\track2.wma</Extra>
-      <Time>2011-05-20T15:39:16.6387247-07:00</Time>
-    </Item>
-    <Item>
       <Source>jellyofthenight.png</Source>
       <Name>jellyofthenight</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\jellyofthenight.xnb</Output>
-      <Time>2011-05-28T16:24:14-07:00</Time>
+      <Time>2011-05-31T12:30:19.2465347-07:00</Time>
+    </Item>
+    <Item>
+      <Source>ballerinajelly.png</Source>
+      <Name>ballerinajelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\ballerinajelly.xnb</Output>
+      <Time>2011-05-31T12:30:19.2435346-07:00</Time>
+    </Item>
+    <Item>
+      <Source>cowboyjelly.png</Source>
+      <Name>cowboyjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\cowboyjelly.xnb</Output>
+      <Time>2011-05-31T12:30:19.2445346-07:00</Time>
+    </Item>
+    <Item>
+      <Source>newsiejelly.png</Source>
+      <Name>newsiejelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\newsiejelly.xnb</Output>
+      <Time>2011-05-31T12:30:19.3845415-07:00</Time>
+    </Item>
+    <Item>
+      <Source>ninjajelly.png</Source>
+      <Name>ninjajelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\ninjajelly.xnb</Output>
+      <Time>2011-05-31T12:30:19.3855415-07:00</Time>
+    </Item>
+    <Item>
+      <Source>queenjelly.png</Source>
+      <Name>queenjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\queenjelly.xnb</Output>
+      <Time>2011-05-31T12:30:19.3875416-07:00</Time>
+    </Item>
+    <Item>
+      <Source>redjelly.png</Source>
+      <Name>redjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\redjelly.xnb</Output>
+      <Time>2011-05-31T12:30:19.3885417-07:00</Time>
+    </Item>
+    <Item>
+      <Source>yellowjelly.png</Source>
+      <Name>yellowjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\yellowjelly.xnb</Output>
+      <Time>2011-05-31T12:30:19.3885417-07:00</Time>
+    </Item>
+    <Item>
+      <Source>greenjelly.png</Source>
+      <Name>greenjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\greenjelly.xnb</Output>
+      <Time>2011-05-31T12:30:19.2455347-07:00</Time>
+    </Item>
+    <Item>
+      <Source>music_game.mp3</Source>
+      <Name>music_game</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\music_game.xnb</Output>
+      <Extra>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\music_game.wma</Extra>
+      <Time>2011-05-31T12:30:19.3215384-07:00</Time>
+    </Item>
+    <Item>
+      <Source>music_menu.mp3</Source>
+      <Name>music_menu</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\music_menu.xnb</Output>
+      <Extra>E:\git_projects\puzzlebox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\music_menu.wma</Extra>
+      <Time>2011-05-31T12:30:19.3825414-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
