@@ -22,10 +22,10 @@ namespace PuzzleBox
 
         public static void LoadLevel(string fileName, PuzzleBox box, MasterGrid grid)
         {
-            String loadPath = "Data\\"+fileName;
+            String loadPath = "LevelData\\"+fileName;
             try
             {
-                r = new StreamReader(loadPath);
+                r = new StreamReader(TitleContainer.OpenStream(loadPath));
             }
             catch (Exception e)
             {
@@ -81,7 +81,7 @@ namespace PuzzleBox
         {
             try
             {
-                w = new StreamWriter(savePath);
+                w = new StreamWriter(TitleContainer.OpenStream(savePath));
             }
             catch (Exception e)
             {
