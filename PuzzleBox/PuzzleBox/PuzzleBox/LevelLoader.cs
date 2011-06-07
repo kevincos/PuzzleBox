@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PuzzleBox
 {
-    class LevelLoader
+    public class LevelLoader
     {        
         public static String savePath = "newPuzzle" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".txt";
 

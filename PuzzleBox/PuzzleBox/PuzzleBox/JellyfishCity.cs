@@ -22,12 +22,12 @@ namespace PuzzleBox
         SPAWN
     }
 
-    class Jellyfish
+    public class Jellyfish
     {
         public Jellyfish(Texture2D tex)
         {
-            posX = JellyfishCity.r.Next(100,924);
-            posY = JellyfishCity.r.Next(100, 668);            
+            posX = JellyfishCity.r.Next(100,Game.screenSizeX-100);
+            posY = JellyfishCity.r.Next(100, Game.screenSizeY - 100);            
             
             texture = tex;
         }
@@ -41,18 +41,18 @@ namespace PuzzleBox
             else
                 velX += (((float)(JellyfishCity.r.NextDouble()))*.001f-.0005f)*gameTime.ElapsedGameTime.Milliseconds;
             velY += (((float)(JellyfishCity.r.NextDouble()))*.001f-.0005f)* gameTime.ElapsedGameTime.Milliseconds;
-            if (posX > 850)
+            if (posX > Game.screenSizeX - 200)
                 velX -= .01f;
             if (posX <150)
                 velX += .01f;
             
             if (posY < -100)
-                posY = 870;
+                posY = Game.screenSizeY+100;
             if (velY > 0)
                 velY = 0;
             if (posX < -60f)
-                posX = 1074f;
-            if (posX > 1084f)
+                posX = Game.screenSizeX+50;
+            if (posX > Game.screenSizeX+80)
                 posX = -50f;
             if (velY < -.2f)
                 velY = -.2f;
@@ -74,7 +74,7 @@ namespace PuzzleBox
         public bool left = false;
     }
 
-    class JellyfishCity
+    public class JellyfishCity
     {
         int nurseX = 150;
         int nurseY = 400;

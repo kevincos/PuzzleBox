@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace PuzzleBox
 {
-    class SettingsLoader
+    public class SettingsLoader
     {
         public static Settings Tutorial()
         {

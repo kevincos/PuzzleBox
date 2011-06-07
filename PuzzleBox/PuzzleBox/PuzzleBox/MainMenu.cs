@@ -21,10 +21,10 @@ namespace PuzzleBox
         ANIMATEDOWN
     }
 
-    class MainMenu
+    public class MainMenu
     {
-        public Texture2D background;
-        public Texture2D header;
+        public static Texture2D background;
+        public static Texture2D header;
 
         int animateTime = 0;
         MainMenuState state = MainMenuState.DOCTORIN;
@@ -32,23 +32,63 @@ namespace PuzzleBox
         int selectedIndex = 0;
         List<MenuOption> optionList;
         int cooldown = 0;
-        int headerX = 100;
-        int headerY = 20;
-        int headerWidth = 824;
-        int headerHeight = 150;
-        int doctorX = 625;
-        int doctorY = 375;
-        int optionListX = 75;
-        int optionListY = 220;
-        int optionGap = 60;
-        int optionWidth = 250;
-        int optionHeight = 60;
-        int speechX = 712;
-        int speechY = 600;
+        int headerX;
+        int headerY;
+        int headerWidth;
+        int headerHeight;
+        int doctorX;
+        int doctorY;
+        int optionListX;
+        int optionListY;
+        int optionGap;
+        int optionHeight;
+        int speechX;
+        int speechY;
+        int creditsX;
+        int creditsY;
 
         public MainMenu()
         {
             optionList = new List<MenuOption>();
+            ApplyResolutionChanges();    
+        }
+
+        public void ApplyResolutionChanges()
+        {
+            if (Game.gameSettings.wideScreen)
+            {
+                headerX = 225;
+                headerY = 20;
+                headerWidth = 824;
+                headerHeight = 150;
+                doctorX = 725;
+                doctorY = 325;
+                optionListX = 150;
+                optionListY = 170;
+                optionGap = 60;                
+                optionHeight = 60;
+                speechX = 802;
+                speechY = 530;
+                creditsX = 425;
+                creditsY = 650;
+            }
+            else
+            {
+                headerX = 100;
+                headerY = 20;
+                headerWidth = 824;
+                headerHeight = 150;
+                doctorX = 625;
+                doctorY = 375;
+                optionListX = 75;
+                optionListY = 220;
+                optionGap = 60;
+                optionHeight = 60;
+                speechX = 712;
+                speechY = 590;
+                creditsX = 300;
+                creditsY = 700;
+            }
         }
 
         public void AddMenuItem(MenuResult result, String optionText, String helpText)
@@ -102,8 +142,8 @@ namespace PuzzleBox
                 JellyfishRenderer.DrawSpeechBubble2(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
                 Game.spriteBatch.DrawString(Game.spriteFont, optionList[selectedIndex].optionString, new Vector2(speechX - 255, speechY+5), Color.Black);                
             }
-            Game.spriteBatch.DrawString(Game.spriteFont, "Created by Kevin Costello. Artwork by Rachel K Sreebny", new Vector2(280, 720), Color.LightGray,0,Vector2.Zero,.75f,SpriteEffects.None,0);
-            Game.spriteBatch.DrawString(Game.spriteFont, "Music by Kevin MacLeod", new Vector2(375, 742), Color.LightGray, 0, Vector2.Zero, .75f, SpriteEffects.None, 0);
+            Game.spriteBatch.DrawString(Game.spriteFont, "Created by Kevin Costello. Artwork by Rachel K Sreebny", new Vector2(creditsX, creditsY), Color.LightGray, 0, Vector2.Zero, .75f, SpriteEffects.None, 0);
+            Game.spriteBatch.DrawString(Game.spriteFont, "Music by Kevin MacLeod", new Vector2(creditsX+95, creditsY+22), Color.LightGray, 0, Vector2.Zero, .75f, SpriteEffects.None, 0);
         }
 
         public MenuResult Update(GameTime gameTime)

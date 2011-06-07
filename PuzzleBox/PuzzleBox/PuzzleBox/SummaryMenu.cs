@@ -12,14 +12,14 @@ using Microsoft.Xna.Framework.Media;
 
 namespace PuzzleBox
 {
-    enum SummaryMenuState
+    public enum SummaryMenuState
     {
         NURSEIN,
         NURSEOUT,
         READY
     }
 
-    class SummaryMenu
+    public class SummaryMenu
     {
         int animateTime = 0;
         public SummaryMenuState state = SummaryMenuState.NURSEIN;
@@ -28,10 +28,10 @@ namespace PuzzleBox
         List<MenuOption> optionList;
         int cooldown = 100;
 
-        int nurseX = 150;
-        int nurseY = 400;
-        int speechX = 512;
-        int speechY = 600;
+        int nurseX ;
+        int nurseY ;
+        int speechX ;
+        int speechY ;
 
         public String text = "Way to go, Doctor!";
         public bool win = true;
@@ -63,6 +63,25 @@ namespace PuzzleBox
                 optionList.Add(new MenuOption(MenuResult.Replay, "Try Again"));
                 optionList.Add(new MenuOption(MenuResult.GoToLevelSelect, "Level Select"));
                 optionList.Add(new MenuOption(MenuResult.GoToMainMenu, "Main Menu"));
+            }
+            ApplyResolutionChanges();
+        }
+
+        public void ApplyResolutionChanges()
+        {
+            if (Game.gameSettings.wideScreen)
+            {
+                nurseX = 200;
+                nurseY = 360;
+                speechX = 652;
+                speechY = 600;
+            }
+            else
+            {
+                nurseX = 150;
+                nurseY = 400;
+                speechX = 512;
+                speechY = 600;
             }
         }
 

@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace PuzzleBox
 {
-    class Countdown
+    public class Countdown
     {
         int posX;
         int posY;
@@ -59,7 +59,8 @@ namespace PuzzleBox
             }
         }
     }
-    class Countup
+
+    public class Countup
     {
         int posX;
         int posY;

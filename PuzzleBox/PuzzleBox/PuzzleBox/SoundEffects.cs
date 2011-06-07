@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace PuzzleBox
 {
-    class SoundEffects
+    public class SoundEffects
     {
         public static SoundEffect soundSwoosh;
         public static SoundEffect soundBloop;

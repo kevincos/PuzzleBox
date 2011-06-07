@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace PuzzleBox
 {
-    enum GameOverMenuState
+    public enum GameOverMenuState
     {
         DOCTORIN,
         DOCTOROUT,
@@ -23,13 +23,13 @@ namespace PuzzleBox
         INITIALS
     }
 
-    class GameOverMenu
+    public class GameOverMenu
     {
-        public Texture2D background;
-        public Texture2D header;
+        public static Texture2D background;
+        public static Texture2D header;
 
-        public Texture2D emptyStar;
-        public Texture2D star;
+        public static Texture2D emptyStar;
+        public static Texture2D star;
 
         public int score = 0;
         public int level = 0;
@@ -48,7 +48,6 @@ namespace PuzzleBox
         int optionListX = 120;
         int optionListY = 200;
         int optionGap = 50;
-        int optionWidth = 250;
         int optionHeight = 50;
         int scoreX = 120;
         int scoreY = 390;
@@ -69,11 +68,56 @@ namespace PuzzleBox
         public GameOverMenu()
         {
             optionList = new List<MenuOption>();
+            ApplyResolutionChanges();
         }
 
         public void AddMenuItem(MenuResult result, String text)
         {
             optionList.Add(new MenuOption(result, text, "BUG"));
+        }
+
+        public void ApplyResolutionChanges()
+        {
+            if (Game.gameSettings.wideScreen)
+            {
+                headerX = 225;
+                headerY = 20;
+                headerWidth = 824;
+                headerHeight = 150;
+                doctorX = 725;
+                doctorY = 325;
+                optionListX = 150;
+                optionListY = 150;
+                optionGap = 60;                
+                optionHeight = 60;
+                speechX = 802;
+                speechY = 580;
+                scoreX = 150;
+                scoreY = 330;
+                highScoreX = 150;
+                highScoreY = 460;
+                highScoreLine = 30;
+            }
+            else
+            {
+                headerX = 100;
+                headerY = 20;
+                headerWidth = 824;
+                headerHeight = 150;
+                doctorX = 625;
+                doctorY = 375;
+                optionListX = 75;
+                optionListY = 190;
+                optionGap = 60;
+                optionHeight = 60;
+                speechX = 712;
+                speechY = 590;
+                scoreX = 75;
+                scoreY = 390;
+                highScoreX = 75;
+                highScoreY = 500;
+                highScoreLine = 30;
+            }
         }
 
         public void Draw()

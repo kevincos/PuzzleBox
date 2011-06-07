@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace PuzzleBox
 {
-    class MusicControl
+    public class MusicControl
     {
         public static Song music_menu;
         public static Song music_game;

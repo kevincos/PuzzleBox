@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PuzzleBox
 {
-    class Fragment
+    public class Fragment
     {
         public Color color;
         public int posX;

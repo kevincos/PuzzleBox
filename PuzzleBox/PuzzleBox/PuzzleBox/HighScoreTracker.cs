@@ -16,6 +16,8 @@ namespace PuzzleBox
         public bool musicEnabled = true;
         public bool soundEffectsEnabled = true;
         public bool fullScreen = false;
+        public bool wideScreen = false;
+        public bool keyboardControls = false;
         public LevelData[] timeAttackLevels;
         public LevelData[] moveChallengeLevels;
         public LevelData[] puzzleLevels;
@@ -45,8 +47,9 @@ namespace PuzzleBox
         }
     }
 
-    class HighScoreTracker
+    public class HighScoreTracker
     {
+        public static StorageDevice device = null;
         public static string highScorePath = "Data\\highscores.txt";
 
         public static LevelData GetHighScoresForLevel(GameMode mode, int level)
@@ -69,8 +72,16 @@ namespace PuzzleBox
 
         public static void InitializeHighScores()
         {
-            if (false == File.Exists(highScorePath))
+            // Open a storage container.
+            IAsyncResult result =
+                device.BeginOpenContainer("StorageDemo", null, null);
+            result.AsyncWaitHandle.WaitOne();
+            StorageContainer container = device.EndOpenContainer(result);
+            result.AsyncWaitHandle.Close();
+
+            if(false == container.FileExists("highscores.sav"))
             {
+
                 HighScoreData defaultData = new HighScoreData();
                 for(int i = 0; i < 3; i++)
                 {
@@ -138,9 +149,16 @@ namespace PuzzleBox
 
         public static void SaveHighScores(HighScoreData data)
         {
-            
+            // Open a storage container.
+            IAsyncResult result =
+                device.BeginOpenContainer("StorageDemo", null, null);
+            result.AsyncWaitHandle.WaitOne();
+            StorageContainer container = device.EndOpenContainer(result);
+            result.AsyncWaitHandle.Close();
+
             // Open the file, creating it if necessary
-            FileStream stream = File.Open(highScorePath, FileMode.Create);
+            //FileStream stream = File.Open(highScorePath, FileMode.Create);
+            Stream stream = container.OpenFile("highscores.sav", FileMode.Create);
             
             try
             {
@@ -162,10 +180,17 @@ namespace PuzzleBox
         
             HighScoreData data;
 
-            
+            // Open a storage container.
+            IAsyncResult result =
+                device.BeginOpenContainer("StorageDemo", null, null);
+            result.AsyncWaitHandle.WaitOne();
+            StorageContainer container = device.EndOpenContainer(result);
+            result.AsyncWaitHandle.Close();
+
             // Open the file
-            FileStream stream = File.Open(highScorePath, FileMode.OpenOrCreate,
-            FileAccess.Read);
+            Stream stream = container.OpenFile("highscores.sav",FileMode.Open);
+            //FileStream stream = File.Open(highScorePath, FileMode.OpenOrCreate,
+            //FileAccess.Read);
             try
             {
 

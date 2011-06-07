@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PuzzleBox
 {
-    class PuzzleNode : IComparable
+    public class PuzzleNode : IComparable
     {
         private static Random r;
 

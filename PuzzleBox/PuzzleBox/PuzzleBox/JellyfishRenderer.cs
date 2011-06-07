@@ -14,8 +14,8 @@ namespace PuzzleBox
         BASEBALL,
         AGENT
     }
-    
-    class JellyfishRenderer
+
+    public class JellyfishRenderer
     {
 
         public static Texture2D jellytexture;

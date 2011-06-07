@@ -19,7 +19,7 @@ namespace PuzzleBox
         READY
     }
 
-    class PauseMenu
+    public class PauseMenu
     {
         int animateTime = 0;
         PauseMenuState state = PauseMenuState.NURSEIN;
@@ -28,10 +28,10 @@ namespace PuzzleBox
         List<MenuOption> optionList;
         int cooldown = 0;
 
-        int nurseX = 150;
-        int nurseY = 400;
-        int speechX = 512;
-        int speechY = 600;
+        int nurseX ;
+        int nurseY ;
+        int speechX ;
+        int speechY ;
 
         public PauseMenu()
         {
@@ -47,6 +47,25 @@ namespace PuzzleBox
             {
                 optionList.Add(new MenuOption(MenuResult.ResumeGame, "Resume"));
                 optionList.Add(new MenuOption(MenuResult.GoToMainMenu, "Main Menu"));
+            }
+            ApplyResolutionChanges();
+        }
+
+        public void ApplyResolutionChanges()
+        {
+            if (Game.gameSettings.wideScreen)
+            {
+                nurseX = 250;
+                nurseY = 360;
+                speechX = 632;
+                speechY = 600;
+            }
+            else
+            {
+                nurseX = 150;
+                nurseY = 400;
+                speechX = 512;
+                speechY = 600;
             }
         }
 

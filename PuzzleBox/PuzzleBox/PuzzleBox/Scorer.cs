@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PuzzleBox
 {
-    class ScoringSet
+    public class ScoringSet
     {
         public int start = -1;
         public int end = -1;

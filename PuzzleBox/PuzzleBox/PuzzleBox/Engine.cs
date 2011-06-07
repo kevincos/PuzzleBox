@@ -60,7 +60,7 @@ namespace PuzzleBox
         EDITOR
     }
 
-    class Engine
+    public class Engine
     {
 
         #region Member Variables
@@ -85,10 +85,8 @@ namespace PuzzleBox
         List<Fragment> fragmentList;
         List<ScoringSet> scoreList;
 
-        int jellyX = 517;
-        int jellyY = 400;
-        int jellyBodyY = 437; //420
-
+        int shiftScreenSizeX = 1024;
+      
         // Game state
         int cooldown = 0;
         public static Countdown timer = new Countdown(0,0,0);
@@ -137,6 +135,10 @@ namespace PuzzleBox
         List<PuzzleNode> zBuffer;
         #endregion
 
+        public void ApplyResolutionChanges()
+        {
+        }
+
         public bool IsBackAvailable()
         {
             return prevPuzzleBox != null;
@@ -177,19 +179,20 @@ namespace PuzzleBox
 
         public Engine(int tutorialStage)
         {
+            ApplyResolutionChanges();
             Logger.ClearLogger();
             automator = new Random();
             cubeDistance = 0;
             cubeDistanceGoal = 0;
             if (Game.currentSettings.displayTimer && Game.currentSettings.countdownTimer)
             {
-                timer = new Countdown(Game.currentSettings.initialTime, 850, 700);
+                timer = new Countdown(Game.currentSettings.initialTime, Game.screenSizeX - 200, Game.screenSizeY - 100);
                 timer.enabled = true;
                 clock.enabled = false;
             }
             else if (Game.currentSettings.displayTimer && Game.currentSettings.countdownTimer != true)
             {
-                clock = new Countup(0, 850, 700);
+                clock = new Countup(0, Game.screenSizeX - 200, Game.screenSizeY - 100);
                 clock.enabled = true;
                 timer.enabled = false;
 
@@ -214,7 +217,7 @@ namespace PuzzleBox
                 Matcher.Reset(puzzleBox, masterGrid);
                 Matcher.Clear(puzzleBox, masterGrid);
                 gameState = State.RESUMING;
-                MusicControl.PlayGameMusic();
+                //MusicControl.PlayGameMusic();
             }
             else if (tutorialStage!=-1)
             {
@@ -972,14 +975,14 @@ namespace PuzzleBox
                 }
             }
 
-            if (shift.Length() > (1.0f * Game.screenSizeX) / 4f * tiltScale)
+            if (shift.Length() > (1.0f * shiftScreenSizeX) / 4f * tiltScale)
             {
                 shift.Normalize();
-                shift = shift * (1.0f * Game.screenSizeX) / 4f * tiltScale;
+                shift = shift * (1.0f * shiftScreenSizeX) / 4f * tiltScale;
             }
-            
-            int vortexShiftX = (int)(shift.X / Game.screenSizeX * -90f);
-            int vortexShiftY = (int)(shift.Y / Game.screenSizeX * -90f);
+
+            int vortexShiftX = (int)(shift.X / shiftScreenSizeX * -90f);
+            int vortexShiftY = (int)(shift.Y / shiftScreenSizeX * -90f);
 
             int opacity = 100;
             if (gameState == State.PAUSING)
@@ -1002,8 +1005,8 @@ namespace PuzzleBox
                             for (int z = 0; z < 40; z++)
                             {
                                 float distance = baseDistance - 5 * (z + 1);
-                                int screenX = Game.screenCenterX + (x - centerGridIndex) * spacing + (int)(shift.X / Game.screenSizeX * distance);
-                                int screenY = Game.screenCenterY + (y - centerGridIndex) * spacing + (int)(shift.Y / Game.screenSizeX * distance);
+                                int screenX = Game.screenCenterX + (x - centerGridIndex) * spacing + (int)(shift.X / shiftScreenSizeX * distance);
+                                int screenY = Game.screenCenterY + (y - centerGridIndex) * spacing + (int)(shift.Y / shiftScreenSizeX * distance);
                                 int modifier = (int)(Math.Sqrt(baseDistance - distance) * spacing / 10);
                                 if (x > centerGridIndex)
                                     screenX += modifier;
@@ -1164,8 +1167,8 @@ namespace PuzzleBox
                         {
                             Vector3 p = new Vector3((animatedX - centerBoxIndex) * spacing, (animatedY - centerBoxIndex) * spacing, (animatedZ - centerBoxIndex) * spacing);
                             int distance = (int)CameraUtils.GetDistance(v, cameraBasePos, p) + cubeDistance;
-                            puzzleBox[x, y, z].screenX = Game.screenCenterX + CameraUtils.GetScreenX(v, cameraBasePos, u, p) + (int)(shift.X / Game.screenSizeX * distance);
-                            puzzleBox[x, y, z].screenY = Game.screenCenterY + CameraUtils.GetScreenY(v, cameraBasePos, u, p) + (int)(shift.Y / Game.screenSizeX * distance);
+                            puzzleBox[x, y, z].screenX = Game.screenCenterX + CameraUtils.GetScreenX(v, cameraBasePos, u, p) + (int)(shift.X / shiftScreenSizeX * distance);
+                            puzzleBox[x, y, z].screenY = Game.screenCenterY + CameraUtils.GetScreenY(v, cameraBasePos, u, p) + (int)(shift.Y / shiftScreenSizeX * distance);
                             puzzleBox[x, y, z].distance = distance;
                             puzzleBox[x, y, z].scale = scale;
 
@@ -1197,8 +1200,8 @@ namespace PuzzleBox
                         }
                         //if (!(animatedX > 6f || animatedX < 0f || animatedY < 0f || animatedY > 6f))
                         {
-                            masterGrid[x, y].screenX = (int)(Game.screenCenterX + (animatedX - centerGridIndex) * spacing + (shift.X / Game.screenSizeX * baseDistance));
-                            masterGrid[x, y].screenY = (int)(Game.screenCenterY + (animatedY - centerGridIndex) * spacing + (shift.Y / Game.screenSizeX * baseDistance));
+                            masterGrid[x, y].screenX = (int)(Game.screenCenterX + (animatedX - centerGridIndex) * spacing + (shift.X / shiftScreenSizeX * baseDistance));
+                            masterGrid[x, y].screenY = (int)(Game.screenCenterY + (animatedY - centerGridIndex) * spacing + (shift.Y / shiftScreenSizeX * baseDistance));
                             masterGrid[x, y].distance = baseDistance;
                             masterGrid[x, y].scale = scale;
                             zBuffer.Add(masterGrid[x, y]);
@@ -1217,8 +1220,8 @@ namespace PuzzleBox
                                 }
                                 if (distance <= baseDistance && distance >= baseDistance - 40 * 5)
                                 {
-                                    masterGrid.queues[x, y][z].screenX = Game.screenCenterX + (x - centerGridIndex) * spacing + (int)(shift.X / Game.screenSizeX * distance);
-                                    masterGrid.queues[x, y][z].screenY = Game.screenCenterY + (y - centerGridIndex) * spacing + (int)(shift.Y / Game.screenSizeX * distance);
+                                    masterGrid.queues[x, y][z].screenX = Game.screenCenterX + (x - centerGridIndex) * spacing + (int)(shift.X / shiftScreenSizeX * distance);
+                                    masterGrid.queues[x, y][z].screenY = Game.screenCenterY + (y - centerGridIndex) * spacing + (int)(shift.Y / shiftScreenSizeX * distance);
                                     int modifier = (int)(Math.Sqrt(baseDistance - distance) * spacing / 10);
                                     if (x > centerGridIndex)
                                         masterGrid.queues[x, y][z].screenX += modifier;
@@ -1270,20 +1273,23 @@ namespace PuzzleBox
 
             String message = "Score: " + currentScore;
 
-            if (Game.currentSettings.displayScore)            
-                Game.spriteBatch.DrawString(Game.spriteFont, message, new Vector2(850,665), Color.LightGreen);
+            if (Game.currentSettings.displayScore)
+                Game.spriteBatch.DrawString(Game.spriteFont, message, new Vector2(Game.screenSizeX - 200, Game.screenSizeY - 70), Color.LightGreen);
 
-            JellyfishRenderer.DrawTransparentJellyfish(Game.screenCenterX + (int)(shift.X / Game.screenSizeX * baseDistance), jellyBodyY + (int)(shift.Y / Game.screenSizeX * baseDistance), 10, 1f);
+            //JellyfishRenderer.DrawTransparentJellyfish(Game.screenCenterX + (int)(shift.X / shiftScreenSizeX * baseDistance), jellyBodyY + (int)(shift.Y / shiftScreenSizeX * baseDistance), 10, 1f);
+            JellyfishRenderer.DrawTransparentJellyfish(Game.screenCenterX + (int)(shift.X / shiftScreenSizeX * baseDistance), Game.screenCenterY + 52 + (int)(shift.Y / shiftScreenSizeX * baseDistance), 10, 1f);
 
             if (gameState == State.PAUSING && animateTime > maxAnimateTime)
             {
                 opacity = (int)((100f * (animateTime-maxAnimateTime)) / maxAnimateTime);
-                JellyfishRenderer.DrawJellyfish(jellyX, jellyY, opacity,Game.currentSettings.texture,1f);
+                JellyfishRenderer.DrawJellyfish(Game.screenCenterX+4, Game.screenCenterY+14, opacity, Game.currentSettings.texture, 1f);
+                //JellyfishRenderer.DrawJellyfish(jellyX, jellyY, opacity, Game.currentSettings.texture, 1f);
             }
             if (gameState == State.RESUMING && animateTime < maxAnimateTime)
             {
                 opacity = (int)((100f * (animateTime)) / maxAnimateTime);
-                JellyfishRenderer.DrawJellyfish(jellyX, jellyY, 100 - opacity, Game.currentSettings.texture,1f);
+                JellyfishRenderer.DrawJellyfish(Game.screenCenterX+4, Game.screenCenterY+14, 100 - opacity, Game.currentSettings.texture, 1f);
+                //JellyfishRenderer.DrawJellyfish(jellyX, jellyY, 100 - opacity, Game.currentSettings.texture, 1f);                
             }
 
             timer.Draw();
@@ -1291,9 +1297,9 @@ namespace PuzzleBox
             if (Game.currentSettings.mode == GameMode.MoveChallenge)
             {
                 if(movesRemaining > 10)
-                    Game.spriteBatch.DrawString(Game.spriteFont, string.Format("MOVES: {0}", movesRemaining), new Vector2(850, 640), Color.White);
+                    Game.spriteBatch.DrawString(Game.spriteFont, string.Format("MOVES: {0}", movesRemaining), new Vector2(Game.screenSizeX - 200, Game.screenSizeY-100), Color.White);
                 else
-                    Game.spriteBatch.DrawString(Game.spriteFont, string.Format("MOVES: {0}", movesRemaining), new Vector2(850, 640-5), Color.Red,0f,Vector2.Zero,1.3f,SpriteEffects.None,0);
+                    Game.spriteBatch.DrawString(Game.spriteFont, string.Format("MOVES: {0}", movesRemaining), new Vector2(Game.screenSizeX - 200, Game.screenSizeY - 105), Color.Red, 0f, Vector2.Zero, 1.3f, SpriteEffects.None, 0);
             }
 
             // Draw controls info

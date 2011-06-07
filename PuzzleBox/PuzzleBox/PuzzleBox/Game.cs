@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Storage;
 
 namespace PuzzleBox
 {
@@ -23,7 +24,9 @@ namespace PuzzleBox
         Settings,
         Summary,
         JellyfishCity,
-        Tutorial
+        Tutorial,
+        GetDevice,
+        InitialLoad
     }
 
     public enum GameMode
@@ -39,22 +42,22 @@ namespace PuzzleBox
     /// </summary>
     public class Game : Microsoft.Xna.Framework.Game
     {
-        Engine p1engine;
+        public static Engine p1engine;
         
         public static Settings currentSettings;
         public static GameSettings gameSettings;
 
 
-        MainMenu mainMenu;
-        GameOverMenu gameOverMenu;
-        LevelSelectMenu selectMenu;
-        PauseMenu pauseMenu;
-        SummaryMenu summaryMenu;
-        JellyfishCity jellyCity;
-        TutorialLauncher tutorialLauncher;
-        Menu settingsMenu;
+        public static MainMenu mainMenu;
+        public static GameOverMenu gameOverMenu;
+        public static LevelSelectMenu selectMenu;
+        public static PauseMenu pauseMenu;
+        public static SummaryMenu summaryMenu;
+        public static JellyfishCity jellyCity;
+        public static TutorialLauncher tutorialLauncher;
+        public static Menu settingsMenu;
 
-        public static MetaState metaState = MetaState.MainMenu;
+        public static MetaState metaState = MetaState.GetDevice;
         public static SpriteBatch spriteBatch;
         public static int screenSizeX = 800;
         public static int screenSizeY = 400;
@@ -63,85 +66,78 @@ namespace PuzzleBox
         public static GraphicsDeviceManager graphics;
         public static SpriteFont spriteFont;
         public static SpriteFont menuFont;
+        public static Game JellyfishMD;
+
+        void GetDevice(IAsyncResult result)
+        {
+            HighScoreTracker.device = StorageDevice.EndShowSelector(result);
+        }
+
 
         public Game()
         {
-            HighScoreData data = HighScoreTracker.LoadHighScores();
-            gameSettings = new GameSettings();
-            gameSettings.displayControls = data.displayHelp;
-            gameSettings.musicEnabled = data.musicEnabled;
-            gameSettings.soundEffectsEnabled = data.soundEffectsEnabled;                 
-            gameSettings.fullScreen = data.fullScreen;
-            graphics = new GraphicsDeviceManager(this);
-            graphics.PreparingDeviceSettings += new EventHandler<PreparingDeviceSettingsEventArgs>(graphics_PreparingDeviceSettings);
-            //this.graphics.PreferredBackBufferWidth = 800;
-            //this.graphics.PreferredBackBufferHeight = 480;
-            if(gameSettings.fullScreen)
-                graphics.IsFullScreen = true;
-            
+            JellyfishMD = this;
+            graphics = new GraphicsDeviceManager(JellyfishMD);
 
-            Logger.Init();
-            Content.RootDirectory = "Content";
-            currentSettings = new Settings();
-            p1engine = new Engine(-1);
-            mainMenu = new MainMenu();
-            pauseMenu = new PauseMenu();
-            summaryMenu = new SummaryMenu(false);
-            gameOverMenu = new GameOverMenu();
-            selectMenu = new LevelSelectMenu();
-            tutorialLauncher = new TutorialLauncher();
-            settingsMenu = new Menu(MenuClass.SettingsMenu);
-        }
+            this.Components.Add(new GamerServicesComponent(this));
+        }        
 
-        void graphics_PreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+
+        public static void UpdateResolution()
         {
-            DisplayMode displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
-            e.GraphicsDeviceInformation.PresentationParameters.BackBufferFormat = displayMode.Format;
-            e.GraphicsDeviceInformation.PresentationParameters.BackBufferWidth = 1024;
-            e.GraphicsDeviceInformation.PresentationParameters.BackBufferHeight = 768;
-            //e.GraphicsDeviceInformation.PresentationParameters.BackBufferWidth = 1280;
-            //e.GraphicsDeviceInformation.PresentationParameters.BackBufferHeight = 720;
+            graphics.IsFullScreen = gameSettings.fullScreen;
+            if (Game.gameSettings.wideScreen)
+            {
+                Game.graphics.PreferredBackBufferWidth = 1280;
+                Game.graphics.PreferredBackBufferHeight = 720;
+                JellyfishMD.Window.BeginScreenDeviceChange(gameSettings.fullScreen);
+                JellyfishMD.Window.EndScreenDeviceChange(JellyfishMD.Window.ScreenDeviceName, 1280, 720);
+                Game.graphics.ApplyChanges();
+            }
+            else
+            {
+                Game.graphics.PreferredBackBufferWidth = 1024;
+                Game.graphics.PreferredBackBufferHeight = 768;
+                JellyfishMD.Window.BeginScreenDeviceChange(gameSettings.fullScreen);
+                JellyfishMD.Window.EndScreenDeviceChange(JellyfishMD.Window.ScreenDeviceName, 1024, 768);
+                Game.graphics.ApplyChanges();
+            }
+            screenSizeX = Game.graphics.GraphicsDevice.Viewport.Width;
+            screenSizeY = Game.graphics.GraphicsDevice.Viewport.Height;
+            screenCenterX = screenSizeX / 2;
+            screenCenterY = screenSizeY / 2;
+
+            mainMenu.ApplyResolutionChanges();
+            settingsMenu.ApplyResolutionChanges();
+            tutorialLauncher.ApplyResolutionChanges();
+            pauseMenu.ApplyResolutionChanges();
+            summaryMenu.ApplyResolutionChanges();
+            gameOverMenu.ApplyResolutionChanges();
         }
 
         protected override void Initialize()
         {
-            base.Initialize();
-            screenSizeX = GraphicsDevice.Viewport.Width;
-            screenSizeY = GraphicsDevice.Viewport.Height;
-            screenCenterX = screenSizeX / 2;
-            screenCenterY = screenSizeY / 2;            
+            StorageDevice.BeginShowSelector(
+                    PlayerIndex.One, this.GetDevice, (Object)"GetDevice for Player One");
 
-            
+            Logger.Init();
         }
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            mainMenu.background = Content.Load<Texture2D>("background");
-            mainMenu.header = Content.Load<Texture2D>("title");
-            settingsMenu.background = Content.Load<Texture2D>("mainmenu");
-            settingsMenu.header = Content.Load<Texture2D>("title");            
-            mainMenu.AddMenuItem(MenuResult.GoToTimeAttack, "Emergency Room","Score as many points as you can within the \ntime limit.");
-            mainMenu.AddMenuItem(MenuResult.GoToMoveChallenge, "Operation", "Score as many points as you can with a \nlimited number of moves.");
-            mainMenu.AddMenuItem(MenuResult.GoToPuzzle, "Challenge", "Solve a series of unique challenges.");
-            mainMenu.AddMenuItem(MenuResult.GoToTutorial, "Tutorial", "Learn to play Jellyfish, MD");
-            mainMenu.AddMenuItem(MenuResult.GoToJellyfishCity, "Jellyfish Parade", "Check in on your former patients!");
-            mainMenu.AddMenuItem(MenuResult.GoToSettings, "Settings", "Change settings for Jellyfish, MD");
-            mainMenu.AddMenuItem(MenuResult.Quit, "Quit", "Quit Jellyfish, MD??");
-            gameOverMenu.background = Content.Load<Texture2D>("background");
-            gameOverMenu.header = Content.Load<Texture2D>("title");
-            gameOverMenu.AddMenuItem(MenuResult.StartTimeAttack, "Replay");
-            gameOverMenu.AddMenuItem(MenuResult.GoToMainMenu, "Main Menu");
-            gameOverMenu.AddMenuItem(MenuResult.GoToLevelSelect, "Level Select");
-            settingsMenu.AddMenuItem(MenuResult.GoToMainMenu, "Return to Menu");
-            settingsMenu.AddMenuItem(MenuType.SoundToggle, "Sound Effects"); 
-            settingsMenu.AddMenuItem(MenuType.MusicToggle, "Music");
-            settingsMenu.AddMenuItem(MenuType.HelpToggle, "Help Overlay");
-            settingsMenu.AddMenuItem(MenuType.FullScreenToggle, "Full Screen");            
+            Content.RootDirectory = "Content";
+
+            MainMenu.background = Content.Load<Texture2D>("background");
+            MainMenu.header = Content.Load<Texture2D>("title");
+            Menu.background = Content.Load<Texture2D>("mainmenu");
+            Menu.header = Content.Load<Texture2D>("title");            
+            GameOverMenu.background = Content.Load<Texture2D>("background");
+            GameOverMenu.header = Content.Load<Texture2D>("title");
+
             LevelSelectMenu.star = Content.Load<Texture2D>("star");
             LevelSelectMenu.emptyStar = Content.Load<Texture2D>("emptyStar");                 
-            gameOverMenu.emptyStar = Content.Load<Texture2D>("emptyStar");
-            gameOverMenu.star = Content.Load<Texture2D>("star");
+            GameOverMenu.emptyStar = Content.Load<Texture2D>("emptyStar");
+            GameOverMenu.star = Content.Load<Texture2D>("star");
             HelpOverlay.help_hide = Content.Load<Texture2D>("help_hide");
             HelpOverlay.help_show = Content.Load<Texture2D>("help_show");
             HelpOverlay.help_sound = Content.Load<Texture2D>("help_sound");
@@ -245,18 +241,91 @@ namespace PuzzleBox
             // Controls
             //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
               //  this.Exit();
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (HighScoreTracker.device!=null && Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 HighScoreData data = HighScoreTracker.LoadHighScores();
                 data.soundEffectsEnabled = gameSettings.soundEffectsEnabled;
                 data.musicEnabled = gameSettings.musicEnabled;
                 data.displayHelp = gameSettings.displayControls;
+                data.wideScreen = gameSettings.wideScreen;
+                data.keyboardControls = gameSettings.keyboardControls;
                 HighScoreTracker.SaveHighScores(data);
                 Logger.CloseLogger();
                 this.Exit();
             }
+            if (metaState == MetaState.GetDevice)
+            {
+                base.Initialize();
+                StorageDevice.BeginShowSelector(
+                    PlayerIndex.One, this.GetDevice, "Select Storage Device");
+                metaState = MetaState.InitialLoad;
+            }
+            if (metaState == MetaState.InitialLoad && HighScoreTracker.device != null)
+            {
+                HighScoreData data = HighScoreTracker.LoadHighScores();
+                gameSettings = new GameSettings();
+                gameSettings.displayControls = data.displayHelp;
+                gameSettings.musicEnabled = data.musicEnabled;
+                gameSettings.soundEffectsEnabled = data.soundEffectsEnabled;
+                gameSettings.fullScreen = data.fullScreen;
+                gameSettings.wideScreen = data.wideScreen;
+                gameSettings.keyboardControls = data.keyboardControls;
+                currentSettings = new Settings();
+                p1engine = new Engine(-1);
+                mainMenu = new MainMenu();
+                pauseMenu = new PauseMenu();
+                summaryMenu = new SummaryMenu(false);
+                gameOverMenu = new GameOverMenu();
+                selectMenu = new LevelSelectMenu();
+                tutorialLauncher = new TutorialLauncher();
+                settingsMenu = new Menu(MenuClass.SettingsMenu);
+                spriteBatch = new SpriteBatch(GraphicsDevice);
+                mainMenu.AddMenuItem(MenuResult.GoToTimeAttack, "Emergency Room", "Score as many points as you can within the \ntime limit.");
+                mainMenu.AddMenuItem(MenuResult.GoToMoveChallenge, "Operation", "Score as many points as you can with a \nlimited number of moves.");
+                mainMenu.AddMenuItem(MenuResult.GoToPuzzle, "Challenge", "Solve a series of unique challenges.");
+                mainMenu.AddMenuItem(MenuResult.GoToTutorial, "Tutorial", "Learn to play Jellyfish, MD");
+                mainMenu.AddMenuItem(MenuResult.GoToJellyfishCity, "Jellyfish Parade", "Check in on your former patients!");
+                mainMenu.AddMenuItem(MenuResult.GoToSettings, "Settings", "Change settings for Jellyfish, MD");
+                mainMenu.AddMenuItem(MenuResult.Quit, "Quit", "Quit Jellyfish, MD??");
+                gameOverMenu.AddMenuItem(MenuResult.StartTimeAttack, "Replay");
+                gameOverMenu.AddMenuItem(MenuResult.GoToMainMenu, "Main Menu");
+                gameOverMenu.AddMenuItem(MenuResult.GoToLevelSelect, "Level Select");
+                settingsMenu.AddMenuItem(MenuResult.GoToMainMenu, "Return to Menu");
+                settingsMenu.AddMenuItem(MenuType.SoundToggle, "Sound Effects");
+                settingsMenu.AddMenuItem(MenuType.MusicToggle, "Music");
+                settingsMenu.AddMenuItem(MenuType.HelpToggle, "Help Overlay");
+                settingsMenu.AddMenuItem(MenuType.FullScreenToggle, "Full Screen");
+                settingsMenu.AddMenuItem(MenuType.WideScreenToggle, "Wide Screen");                
+                UpdateResolution();
 
-
+                currentSettings = new Settings();
+                p1engine = new Engine(-1);
+                mainMenu = new MainMenu();
+                pauseMenu = new PauseMenu();
+                summaryMenu = new SummaryMenu(false);
+                gameOverMenu = new GameOverMenu();
+                selectMenu = new LevelSelectMenu();
+                tutorialLauncher = new TutorialLauncher();
+                settingsMenu = new Menu(MenuClass.SettingsMenu);
+                spriteBatch = new SpriteBatch(GraphicsDevice);
+                mainMenu.AddMenuItem(MenuResult.GoToTimeAttack, "Emergency Room", "Score as many points as you can within the \ntime limit.");
+                mainMenu.AddMenuItem(MenuResult.GoToMoveChallenge, "Operation", "Score as many points as you can with a \nlimited number of moves.");
+                mainMenu.AddMenuItem(MenuResult.GoToPuzzle, "Challenge", "Solve a series of unique challenges.");
+                mainMenu.AddMenuItem(MenuResult.GoToTutorial, "Tutorial", "Learn to play Jellyfish, MD");
+                mainMenu.AddMenuItem(MenuResult.GoToJellyfishCity, "Jellyfish Parade", "Check in on your former patients!");
+                mainMenu.AddMenuItem(MenuResult.GoToSettings, "Settings", "Change settings for Jellyfish, MD");
+                mainMenu.AddMenuItem(MenuResult.Quit, "Quit", "Quit Jellyfish, MD??");
+                gameOverMenu.AddMenuItem(MenuResult.StartTimeAttack, "Replay");
+                gameOverMenu.AddMenuItem(MenuResult.GoToMainMenu, "Main Menu");
+                gameOverMenu.AddMenuItem(MenuResult.GoToLevelSelect, "Level Select");
+                settingsMenu.AddMenuItem(MenuResult.GoToMainMenu, "Return to Menu");
+                settingsMenu.AddMenuItem(MenuType.SoundToggle, "Sound Effects");
+                settingsMenu.AddMenuItem(MenuType.MusicToggle, "Music");
+                settingsMenu.AddMenuItem(MenuType.HelpToggle, "Help Overlay");
+                settingsMenu.AddMenuItem(MenuType.FullScreenToggle, "Full Screen");
+                settingsMenu.AddMenuItem(MenuType.WideScreenToggle, "Wide Screen");
+                metaState = MetaState.MainMenu;
+            }
             if (metaState == MetaState.GamePlay)
             {
                 GameStopCause cause = p1engine.Update(gameTime);
@@ -518,7 +587,7 @@ namespace PuzzleBox
             {
                 MenuResult result = settingsMenu.Update(gameTime);
                 if (result == MenuResult.GoToMainMenu)
-                {
+                {                    
                     metaState = MetaState.MainMenu;
                 }
             }
@@ -614,6 +683,8 @@ namespace PuzzleBox
                     data.musicEnabled = gameSettings.musicEnabled;
                     data.displayHelp = gameSettings.displayControls;
                     data.fullScreen = gameSettings.fullScreen;
+                    data.wideScreen = gameSettings.wideScreen;
+                    data.keyboardControls = gameSettings.keyboardControls;
                     HighScoreTracker.SaveHighScores(data);
                     Logger.CloseLogger();
                     this.Exit();
@@ -626,12 +697,14 @@ namespace PuzzleBox
 
         protected override void Draw(GameTime gameTime)
         {
+            if (metaState == MetaState.InitialLoad)
+                return;
             Color bgColor = Color.DarkBlue;
             bgColor.R = 14;
             bgColor.B = 84;
             GraphicsDevice.Clear(bgColor);
             Game.spriteBatch.Begin();
-            spriteBatch.Draw(mainMenu.background, new Rectangle(0, 0, screenSizeX, screenSizeY), Color.White);
+            spriteBatch.Draw(MainMenu.background, new Rectangle(0, 0, screenSizeX, screenSizeY), Color.White);
 
             if (metaState == MetaState.JellyfishCity)
                 jellyCity.Draw();

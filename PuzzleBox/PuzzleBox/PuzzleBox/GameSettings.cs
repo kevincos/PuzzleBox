@@ -11,6 +11,8 @@ namespace PuzzleBox
         public bool soundEffectsEnabled = true;
         public bool displayControls = true;
         public bool fullScreen = true;
+        public bool wideScreen = true;
+        public bool keyboardControls = false;
 
         public int puzzleViewLevel = 0;
         public int timeAttackViewLevel = 0;

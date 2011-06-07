@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PuzzleBox
 {
-    class PuzzleBox
+    public class PuzzleBox
     {
         private static int size = Engine.boxSize;
 

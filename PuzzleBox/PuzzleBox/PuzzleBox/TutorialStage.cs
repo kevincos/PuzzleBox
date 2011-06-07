@@ -24,7 +24,7 @@ namespace PuzzleBox
         ShouldersOnly
     }
 
-    class TutorialStage
+    public class TutorialStage
     {
         public static TutorialPhase phase = TutorialPhase.None ;
         //Intro Text

@@ -22,22 +22,53 @@ namespace PuzzleBox
         DOCTOROUT,
         FINALTEXT
     }
-    class TutorialLauncher
+
+    public class TutorialLauncher
     {
-        int nurseX = 150;
-        int nurseY = 400;
-        int doctorX = 850;
-        int doctorY = 400;
-        int speechX = 512;
-        int speechY = 600;
-        int jellyX = 517;
-        int jellyY = 400;
-        int jellyBodyY = 437;
+        int nurseX;
+        int nurseY;
+        int doctorX;
+        int doctorY;
+        int speechX;
+        int speechY;
+        int jellyX;
+        int jellyY;        
 
         int cooldown = 0;
         int animateTime = 0;
         int maxAnimateTime = 500;
         TutorialLauncherState state = TutorialLauncherState.ZOOM;
+
+        public TutorialLauncher()
+        {
+            ApplyResolutionChanges();
+        }
+
+        public void ApplyResolutionChanges()
+        {
+            if (Game.gameSettings.wideScreen)
+            {
+                nurseX = 200;
+                nurseY = 360;
+                doctorX = 1050;
+                doctorY = 360;
+                speechX = 652;
+                speechY = 600;
+                jellyX = Game.screenCenterX + 4;
+                jellyY = Game.screenCenterY +14;
+            }
+            else
+            {
+                nurseX = 150;
+                nurseY = 400;
+                doctorX = 850;
+                doctorY = 400;
+                speechX = 512;
+                speechY = 600;
+                jellyX = 517;
+                jellyY = 400;        
+            }
+        }
 
         public MenuResult Update(GameTime gameTime)
         {

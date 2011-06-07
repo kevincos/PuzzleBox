@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PuzzleBox
 {
-    class OrbRenderer
+    public class OrbRenderer
     {
         public static Texture2D bubbleTexture;
         public static Texture2D orbTexture;

@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace PuzzleBox
 {
-    class LevelSelectMenu
+    public  class LevelSelectMenu
     {
         public enum SelectMenuState
         {
@@ -40,29 +40,25 @@ namespace PuzzleBox
         string[] textPieces;
         int currentTextPiece;
 
-        int selectedJellyX = 517;
-        int selectedJellyY = 300;
-        int nameX = 390;
-        int nameY = 120;
-        //int infoX = 120;
-        //int infoY = 450;
-        //int infoLine = 20;
-        int highScoreX = 440;
-        int highScoreY = 430;
-        int highScoreLine = 22;
-        int ratingX = 410;
-        int ratingY = 570;
-
-        int doctorX = 250;
-        int doctorY = 300;
-        int nurseX = 800;
-        int nurseY = 300;
-        int docShift = 350;
-        int speechX = 500;
-        int speechY = 600;
-        int previewOffset = 100;
-        int previewX = 500;
-        int previewY = 430;
+        int selectedJellyX;
+        int selectedJellyY;
+        int nameX ;
+        int nameY;
+        int highScoreX;
+        int highScoreY;
+        int highScoreLine;
+        int ratingX ;
+        int ratingY;
+        int doctorX ;
+        int doctorY;
+        int nurseX ;
+        int nurseY;
+        int docShift;
+        int speechX;
+        int speechY;
+        int previewOffset;
+        int previewX;
+        int previewY;
 
         int numSwaps = 0;
         int swapTime = 500;
@@ -71,6 +67,60 @@ namespace PuzzleBox
         HighScoreData highScoreData = null;
 
         public SelectMenuState state = SelectMenuState.READY;
+
+        public LevelSelectMenu()
+        {
+            ApplyResolutionChanges();
+        }
+
+        public void ApplyResolutionChanges()
+        {
+            if (Game.gameSettings.wideScreen)
+            {
+                selectedJellyX = Game.screenCenterX+4;
+                selectedJellyY = Game.screenCenterY -86;
+                nameX = 510;
+                nameY = 90;
+                highScoreX = 560;
+                highScoreY = 410;
+                highScoreLine = 22;
+                ratingX = 530;
+                ratingY = 550;
+                doctorX = 350;
+                doctorY = 300;
+                nurseX = 950;
+                nurseY = 300;
+                docShift = 450;
+                speechX = 600;
+                speechY = 600;
+                previewOffset = 100;
+                previewX = 620;
+                previewY = 410;
+            }
+            else
+            {
+                selectedJellyX = Game.screenCenterX + 4;
+                selectedJellyY = Game.screenCenterY - 86;
+                nameX = 390;
+                nameY = 120;
+                highScoreX = 440;
+                highScoreY = 430;
+                highScoreLine = 22;
+                ratingX = 410;
+                ratingY = 570;
+                doctorX = 250;
+                doctorY = 300;
+                nurseX = 800;
+                nurseY = 300;
+                docShift = 350;
+                speechX = 500;
+                speechY = 600;
+                previewOffset = 100;
+                previewX = 500;
+                previewY = 430;
+            }
+
+        }
 
         public Settings GetCurrentSettings()
         {

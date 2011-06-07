@@ -6,7 +6,7 @@ using System.IO;
 
 namespace PuzzleBox
 {
-    class Logger
+    public class Logger
     {
         public static StreamWriter w;
 

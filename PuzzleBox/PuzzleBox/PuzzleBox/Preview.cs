@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PuzzleBox
 {
-    class Preview
+    public class Preview
     {
         public static Texture2D level1;
         public static Texture2D level2;
