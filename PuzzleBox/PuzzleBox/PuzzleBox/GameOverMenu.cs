@@ -128,7 +128,7 @@ namespace PuzzleBox
             {
                 if (i == selectedIndex && state != GameOverMenuState.INITIALS)
                 {
-                    PuzzleNode p = new PuzzleNode(Color.Blue);
+                    PuzzleNode p = new PuzzleNode(Game.jellyBlue);
                     p.screenX = optionListX-25;
                     p.screenY = optionListY +optionHeight/2+ i * optionGap;
                     if (state == GameOverMenuState.ANIMATEDOWN)
@@ -470,10 +470,10 @@ namespace PuzzleBox
             }
             if (state == GameOverMenuState.INITIALS && cooldown == 0)
             {
-                GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+                GamePadState gamePadState = GamePad.GetState(Game.playerIndex);
                 Vector2 leftStick = gamePadState.ThumbSticks.Left;
                 Vector2 rightStick = gamePadState.ThumbSticks.Right;
-                if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -Game.gameSettings.controlStickTrigger || rightStick.Y < -Game.gameSettings.controlStickTrigger)
+                if (gamePadState.IsButtonDown(Buttons.DPadDown) || gamePadState.IsButtonDown(Buttons.DPadDown) || gamePadState.IsButtonDown(Buttons.DPadDown) || Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -Game.gameSettings.controlStickTrigger || rightStick.Y < -Game.gameSettings.controlStickTrigger)
                 {
                     SoundEffects.PlayClick();
                     Char[] cArray = initials.ToCharArray();
@@ -484,7 +484,7 @@ namespace PuzzleBox
                     initials = new String(cArray);
                     cooldown = 100;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > Game.gameSettings.controlStickTrigger || rightStick.Y > Game.gameSettings.controlStickTrigger)
+                if (gamePadState.IsButtonDown(Buttons.DPadUp) || gamePadState.IsButtonDown(Buttons.DPadUp) || Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > Game.gameSettings.controlStickTrigger || rightStick.Y > Game.gameSettings.controlStickTrigger)
                 {
                     SoundEffects.PlayClick();
                     Char[] cArray = initials.ToCharArray();
@@ -495,7 +495,7 @@ namespace PuzzleBox
                     initials = new String(cArray);
                     cooldown = 100;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Right) || gamePadState.IsButtonDown(Buttons.A))
+                if (gamePadState.IsButtonDown(Buttons.DPadRight) || gamePadState.IsButtonDown(Buttons.DPadRight) || Keyboard.GetState().IsKeyDown(Keys.Right) || gamePadState.IsButtonDown(Buttons.A))
                 {
 
                     currentCharacter++;
@@ -527,7 +527,7 @@ namespace PuzzleBox
                         SoundEffects.PlayClick();
                     }
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Left) || gamePadState.IsButtonDown(Buttons.B))
+                if (gamePadState.IsButtonDown(Buttons.DPadLeft) || gamePadState.IsButtonDown(Buttons.DPadLeft) || Keyboard.GetState().IsKeyDown(Keys.Left) || gamePadState.IsButtonDown(Buttons.B))
                 {
                     SoundEffects.PlayClick();
                     if (currentCharacter > 0)
@@ -539,7 +539,7 @@ namespace PuzzleBox
             }
             if (state == GameOverMenuState.READY && cooldown == 0)
             {
-                GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+                GamePadState gamePadState = GamePad.GetState(Game.playerIndex);
                 Vector2 leftStick = gamePadState.ThumbSticks.Left;
                 Vector2 rightStick = gamePadState.ThumbSticks.Right;
 
@@ -550,7 +550,7 @@ namespace PuzzleBox
                     state = GameOverMenuState.DOCTOROUT;
                     SoundEffects.PlayScore();
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -Game.gameSettings.controlStickTrigger || rightStick.Y < -Game.gameSettings.controlStickTrigger)
+                if (gamePadState.IsButtonDown(Buttons.DPadDown) || gamePadState.IsButtonDown(Buttons.DPadDown) || gamePadState.IsButtonDown(Buttons.DPadDown) || Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -Game.gameSettings.controlStickTrigger || rightStick.Y < -Game.gameSettings.controlStickTrigger)
                 {
                     if (selectedIndex < optionList.Count() - 1)
                     {
@@ -561,7 +561,7 @@ namespace PuzzleBox
                         SoundEffects.PlayMove();
                     }
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > Game.gameSettings.controlStickTrigger || rightStick.Y > Game.gameSettings.controlStickTrigger)
+                if (gamePadState.IsButtonDown(Buttons.DPadUp) || gamePadState.IsButtonDown(Buttons.DPadUp) || Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > Game.gameSettings.controlStickTrigger || rightStick.Y > Game.gameSettings.controlStickTrigger)
                 {
                     if (selectedIndex > 0)
                     {

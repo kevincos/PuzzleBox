@@ -73,12 +73,6 @@ Content\level6.xnb
 Content\level7.xnb
 Content\level8.xnb
 Content\level9.xnb
-Content\SpriteFont1.xnb
-Content\SpriteFont2.xnb
-Content\bloop.xnb
-Content\swoosh.xnb
-Content\click.xnb
-Content\beep.xnb
 Content\jellyofthenight.xnb
 Content\ballerinajelly.xnb
 Content\cowboyjelly.xnb
@@ -88,6 +82,12 @@ Content\queenjelly.xnb
 Content\redjelly.xnb
 Content\yellowjelly.xnb
 Content\greenjelly.xnb
+Content\SpriteFont1.xnb
+Content\SpriteFont2.xnb
+Content\bloop.xnb
+Content\swoosh.xnb
+Content\click.xnb
+Content\beep.xnb
 Content\music_game.xnb
 Content\music_game.wma
 Content\music_menu.xnb

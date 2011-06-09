@@ -2,22 +2,13 @@
 <XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
   <Asset Type="Pipeline:BuildItemCollection">
     <Item>
-      <Source>clocknumbers.png</Source>
-      <Name>clocknumbers</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\clocknumbers.xnb</Output>
-      <Time>2011-04-25T19:18:12.6974782-07:00</Time>
-    </Item>
-    <Item>
       <Source>orb.png</Source>
       <Name>orb</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\orb.xnb</Output>
-      <Time>2011-04-04T14:31:40.1009997-07:00</Time>
+      <Time>2011-05-27T14:34:25-07:00</Time>
     </Item>
     <Item>
       <Source>double.png</Source>
@@ -35,7 +26,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\orb-cracked-left.xnb</Output>
-      <Time>2011-04-08T21:28:17.1439057-07:00</Time>
+      <Time>2011-05-27T14:58:26-07:00</Time>
     </Item>
     <Item>
       <Source>orb-cracked-right.png</Source>
@@ -44,7 +35,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\orb-cracked-right.xnb</Output>
-      <Time>2011-04-08T21:28:17.1439057-07:00</Time>
+      <Time>2011-05-27T14:58:10-07:00</Time>
     </Item>
     <Item>
       <Source>orb-cracked-top.png</Source>
@@ -53,7 +44,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\orb-cracked-top.xnb</Output>
-      <Time>2011-04-08T21:28:17.1439057-07:00</Time>
+      <Time>2011-05-27T14:58:40-07:00</Time>
     </Item>
     <Item>
       <Source>orb-fragment-left.png</Source>
@@ -83,31 +74,13 @@
       <Time>2011-04-08T21:28:17.1439057-07:00</Time>
     </Item>
     <Item>
-      <Source>numbers.png</Source>
-      <Name>numbers</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\numbers.xnb</Output>
-      <Time>2011-04-11T15:28:28.2389511-07:00</Time>
-    </Item>
-    <Item>
-      <Source>toggle.png</Source>
-      <Name>toggle</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\toggle.xnb</Output>
-      <Time>2011-04-11T15:28:28.2389511-07:00</Time>
-    </Item>
-    <Item>
       <Source>highlight.png</Source>
       <Name>highlight</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\highlight.xnb</Output>
-      <Time>2011-04-11T15:28:28.2233511-07:00</Time>
+      <Time>2011-05-27T13:58:22.9462926-07:00</Time>
     </Item>
     <Item>
       <Source>background.png</Source>
@@ -116,34 +89,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\background.xnb</Output>
-      <Time>2011-04-27T20:52:50.327467-07:00</Time>
-    </Item>
-    <Item>
-      <Source>vortex.png</Source>
-      <Name>vortex</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\vortex.xnb</Output>
-      <Time>2011-04-11T20:57:13.9116539-07:00</Time>
-    </Item>
-    <Item>
-      <Source>collect.png</Source>
-      <Name>collect</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\collect.xnb</Output>
-      <Time>2011-04-16T10:40:33.4901145-07:00</Time>
-    </Item>
-    <Item>
-      <Source>help.png</Source>
-      <Name>help</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\help.xnb</Output>
-      <Time>2011-04-16T10:40:33.4971149-07:00</Time>
+      <Time>2011-05-27T13:26:34.5851406-07:00</Time>
     </Item>
     <Item>
       <Source>mainmenu.png</Source>
@@ -155,220 +101,13 @@
       <Time>2011-04-27T20:52:50.3898671-07:00</Time>
     </Item>
     <Item>
-      <Source>puzzle.png</Source>
-      <Name>puzzle</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\puzzle.xnb</Output>
-      <Time>2011-04-16T10:40:33.5241164-07:00</Time>
-    </Item>
-    <Item>
-      <Source>survival.png</Source>
-      <Name>survival</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\survival.xnb</Output>
-      <Time>2011-04-16T10:40:33.5301168-07:00</Time>
-    </Item>
-    <Item>
-      <Source>timeattack.png</Source>
-      <Name>timeattack</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\timeattack.xnb</Output>
-      <Time>2011-04-16T10:40:33.5321169-07:00</Time>
-    </Item>
-    <Item>
       <Source>title.png</Source>
       <Name>title</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\title.xnb</Output>
-      <Time>2011-04-27T20:52:50.4054671-07:00</Time>
-    </Item>
-    <Item>
-      <Source>paused.png</Source>
-      <Name>paused</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\paused.xnb</Output>
-      <Time>2011-04-16T10:40:33.5201162-07:00</Time>
-    </Item>
-    <Item>
-      <Source>resume.png</Source>
-      <Name>resume</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\resume.xnb</Output>
-      <Time>2011-04-16T10:40:33.5271166-07:00</Time>
-    </Item>
-    <Item>
-      <Source>returntomenu.png</Source>
-      <Name>returntomenu</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\returntomenu.xnb</Output>
-      <Time>2011-04-16T10:40:33.5281166-07:00</Time>
-    </Item>
-    <Item>
-      <Source>gameover.png</Source>
-      <Name>gameover</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\gameover.xnb</Output>
-      <Time>2011-04-16T10:40:33.4961148-07:00</Time>
-    </Item>
-    <Item>
-      <Source>newgame.png</Source>
-      <Name>newgame</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\newgame.xnb</Output>
-      <Time>2011-04-16T10:40:33.5121157-07:00</Time>
-    </Item>
-    <Item>
-      <Source>replay.png</Source>
-      <Name>replay</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\replay.xnb</Output>
-      <Time>2011-04-16T10:40:33.5261165-07:00</Time>
-    </Item>
-    <Item>
-      <Source>colors.png</Source>
-      <Name>colors</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\colors.xnb</Output>
-      <Time>2011-04-16T10:40:33.4931146-07:00</Time>
-    </Item>
-    <Item>
-      <Source>suvrvivalheader.png</Source>
-      <Name>suvrvivalheader</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\suvrvivalheader.xnb</Output>
-      <Time>2011-04-16T10:40:33.5311168-07:00</Time>
-    </Item>
-    <Item>
-      <Source>timeattackheader.png</Source>
-      <Name>timeattackheader</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\timeattackheader.xnb</Output>
-      <Time>2011-04-16T10:40:33.534117-07:00</Time>
-    </Item>
-    <Item>
-      <Source>counterorbs.png</Source>
-      <Name>counterorbs</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\counterorbs.xnb</Output>
-      <Time>2011-04-16T10:40:33.4941147-07:00</Time>
-    </Item>
-    <Item>
-      <Source>timerorbs.png</Source>
-      <Name>timerorbs</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\timerorbs.xnb</Output>
-      <Time>2011-04-16T10:40:33.535117-07:00</Time>
-    </Item>
-    <Item>
-      <Source>toggleorbs.png</Source>
-      <Name>toggleorbs</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\toggleorbs.xnb</Output>
-      <Time>2011-04-16T10:40:33.5651188-07:00</Time>
-    </Item>
-    <Item>
-      <Source>high.png</Source>
-      <Name>high</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\high.xnb</Output>
-      <Time>2011-04-16T10:40:33.499115-07:00</Time>
-    </Item>
-    <Item>
-      <Source>low.png</Source>
-      <Name>low</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\low.xnb</Output>
-      <Time>2011-04-16T10:40:33.5041153-07:00</Time>
-    </Item>
-    <Item>
-      <Source>medium.png</Source>
-      <Name>medium</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\medium.xnb</Output>
-      <Time>2011-04-16T10:40:33.5091155-07:00</Time>
-    </Item>
-    <Item>
-      <Source>off.png</Source>
-      <Name>off</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\off.xnb</Output>
-      <Time>2011-04-16T10:40:33.5191161-07:00</Time>
-    </Item>
-    <Item>
-      <Source>lifebar.png</Source>
-      <Name>lifebar</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\lifebar.xnb</Output>
-      <Time>2011-04-16T10:40:33.5021151-07:00</Time>
-    </Item>
-    <Item>
-      <Source>pointer.png</Source>
-      <Name>pointer</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\pointer.xnb</Output>
-      <Time>2011-04-16T10:40:33.5231164-07:00</Time>
-    </Item>
-    <Item>
-      <Source>minus.png</Source>
-      <Name>minus</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\minus.xnb</Output>
-      <Time>2011-04-16T10:40:33.5111157-07:00</Time>
-    </Item>
-    <Item>
-      <Source>plus.png</Source>
-      <Name>plus</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\plus.xnb</Output>
-      <Time>2011-04-16T10:40:33.5221163-07:00</Time>
+      <Time>2011-05-28T10:01:23-07:00</Time>
     </Item>
     <Item>
       <Source>patientzero.png</Source>
@@ -431,7 +170,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\drjelly.xnb</Output>
-      <Time>2011-04-27T20:52:50.3742671-07:00</Time>
+      <Time>2011-05-28T11:56:46-07:00</Time>
     </Item>
     <Item>
       <Source>nursejelly.png</Source>
@@ -440,7 +179,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\nursejelly.xnb</Output>
-      <Time>2011-04-27T20:52:50.3898671-07:00</Time>
+      <Time>2011-05-28T11:53:39-07:00</Time>
     </Item>
     <Item>
       <Source>speechbubble.png</Source>
@@ -449,16 +188,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\speechbubble.xnb</Output>
-      <Time>2011-04-27T20:52:50.4054671-07:00</Time>
-    </Item>
-    <Item>
-      <Source>moveChallenge.png</Source>
-      <Name>moveChallenge</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\moveChallenge.xnb</Output>
-      <Time>2011-05-18T13:48:48.8355408-07:00</Time>
+      <Time>2011-05-28T09:34:28-07:00</Time>
     </Item>
     <Item>
       <Source>star.png</Source>
@@ -467,7 +197,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\star.xnb</Output>
-      <Time>2011-05-18T15:59:37.084435-07:00</Time>
+      <Time>2011-05-28T09:59:03-07:00</Time>
     </Item>
     <Item>
       <Source>emptystar.png</Source>
@@ -476,16 +206,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\emptystar.xnb</Output>
-      <Time>2011-05-18T15:59:21.3295338-07:00</Time>
-    </Item>
-    <Item>
-      <Source>quit.png</Source>
-      <Name>quit</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\quit.xnb</Output>
-      <Time>2011-05-19T17:16:27.2145815-07:00</Time>
+      <Time>2011-05-28T09:49:16-07:00</Time>
     </Item>
     <Item>
       <Source>mysterypatient.png</Source>
@@ -497,22 +218,13 @@
       <Time>2011-05-19T17:16:26.6529805-07:00</Time>
     </Item>
     <Item>
-      <Source>returntolevelselect.png</Source>
-      <Name>returntolevelselect</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\returntolevelselect.xnb</Output>
-      <Time>2011-05-19T20:25:37.7066598-07:00</Time>
-    </Item>
-    <Item>
       <Source>speechbubble2.png</Source>
       <Name>speechbubble2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\speechbubble2.xnb</Output>
-      <Time>2011-05-20T11:05:24.5333721-07:00</Time>
+      <Time>2011-05-28T09:36:53-07:00</Time>
     </Item>
     <Item>
       <Source>SpriteFont1.spritefont</Source>
@@ -521,7 +233,7 @@
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\SpriteFont1.xnb</Output>
-      <Time>2011-04-11T21:05:48.3390775-07:00</Time>
+      <Time>2011-05-27T16:30:26.4993187-07:00</Time>
     </Item>
     <Item>
       <Source>bloop.wav</Source>
@@ -558,26 +270,6 @@
       <Options>None</Options>
       <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\beep.xnb</Output>
       <Time>2011-05-21T14:09:53.0109476-07:00</Time>
-    </Item>
-    <Item>
-      <Source>track1.mp3</Source>
-      <Name>track1</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\track1.xnb</Output>
-      <Extra>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\track1.wma</Extra>
-      <Time>2011-05-21T14:09:53.1709567-07:00</Time>
-    </Item>
-    <Item>
-      <Source>track2.mp3</Source>
-      <Name>track2</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\track2.xnb</Output>
-      <Extra>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\track2.wma</Extra>
-      <Time>2011-05-21T14:09:53.2799629-07:00</Time>
     </Item>
     <Item>
       <Source>baseballjelly.png</Source>
@@ -643,22 +335,510 @@
       <Time>2011-05-21T21:02:16-07:00</Time>
     </Item>
     <Item>
-      <Source>tutorial.png</Source>
-      <Name>tutorial</Name>
+      <Source>help_hide.png</Source>
+      <Name>help_hide</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\tutorial.xnb</Output>
-      <Time>2011-05-22T15:24:59.6859786-07:00</Time>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\help_hide.xnb</Output>
+      <Time>2011-05-28T09:02:52-07:00</Time>
     </Item>
     <Item>
-      <Source>jellycity.png</Source>
-      <Name>jellycity</Name>
+      <Source>help_leftbutton.png</Source>
+      <Name>help_leftbutton</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\jellycity.xnb</Output>
-      <Time>2011-05-22T15:24:16.8505285-07:00</Time>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\help_leftbutton.xnb</Output>
+      <Time>2011-05-28T09:56:11-07:00</Time>
+    </Item>
+    <Item>
+      <Source>help_leftstick.png</Source>
+      <Name>help_leftstick</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\help_leftstick.xnb</Output>
+      <Time>2011-05-28T09:10:15-07:00</Time>
+    </Item>
+    <Item>
+      <Source>help_lefttrigger.png</Source>
+      <Name>help_lefttrigger</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\help_lefttrigger.xnb</Output>
+      <Time>2011-05-28T09:53:54-07:00</Time>
+    </Item>
+    <Item>
+      <Source>help_music.png</Source>
+      <Name>help_music</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\help_music.xnb</Output>
+      <Time>2011-05-28T09:53:03-07:00</Time>
+    </Item>
+    <Item>
+      <Source>help_rightbutton.png</Source>
+      <Name>help_rightbutton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\help_rightbutton.xnb</Output>
+      <Time>2011-05-28T09:19:08-07:00</Time>
+    </Item>
+    <Item>
+      <Source>help_righttrigger.png</Source>
+      <Name>help_righttrigger</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\help_righttrigger.xnb</Output>
+      <Time>2011-05-28T09:54:22-07:00</Time>
+    </Item>
+    <Item>
+      <Source>help_show.png</Source>
+      <Name>help_show</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\help_show.xnb</Output>
+      <Time>2011-05-28T09:22:10-07:00</Time>
+    </Item>
+    <Item>
+      <Source>help_sound.png</Source>
+      <Name>help_sound</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\help_sound.xnb</Output>
+      <Time>2011-05-28T09:24:55-07:00</Time>
+    </Item>
+    <Item>
+      <Source>help_undo.png</Source>
+      <Name>help_undo</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\help_undo.xnb</Output>
+      <Time>2011-05-28T09:27:43-07:00</Time>
+    </Item>
+    <Item>
+      <Source>help_x.png</Source>
+      <Name>help_x</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\help_x.xnb</Output>
+      <Time>2011-05-28T09:30:56-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level1.png</Source>
+      <Name>level1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor">0, 0, 0, 255</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level1.xnb</Output>
+      <Time>2011-05-27T15:32:49.8044184-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level2.png</Source>
+      <Name>level2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor">0, 0, 0, 255</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level2.xnb</Output>
+      <Time>2011-05-27T15:32:45.4391687-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level3.png</Source>
+      <Name>level3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor">0, 0, 0, 255</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level3.xnb</Output>
+      <Time>2011-05-27T15:32:48.363336-07:00</Time>
+    </Item>
+    <Item>
+      <Source>bubble.png</Source>
+      <Name>bubble</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\bubble.xnb</Output>
+      <Time>2011-05-27T14:42:56-07:00</Time>
+    </Item>
+    <Item>
+      <Source>toggle_inner.png</Source>
+      <Name>toggle_inner</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\toggle_inner.xnb</Output>
+      <Time>2011-05-27T15:18:41-07:00</Time>
+    </Item>
+    <Item>
+      <Source>toggle_outer.png</Source>
+      <Name>toggle_outer</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\toggle_outer.xnb</Output>
+      <Time>2011-05-27T15:18:23-07:00</Time>
+    </Item>
+    <Item>
+      <Source>halo.png</Source>
+      <Name>halo</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\halo.xnb</Output>
+      <Time>2011-05-27T14:00:30.4805872-07:00</Time>
+    </Item>
+    <Item>
+      <Source>artistjelly.png</Source>
+      <Name>artistjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\artistjelly.xnb</Output>
+      <Time>2011-05-27T13:23:44-07:00</Time>
+    </Item>
+    <Item>
+      <Source>bikerjelly.png</Source>
+      <Name>bikerjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\bikerjelly.xnb</Output>
+      <Time>2011-05-27T13:34:33-07:00</Time>
+    </Item>
+    <Item>
+      <Source>birthdayjelly.png</Source>
+      <Name>birthdayjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\birthdayjelly.xnb</Output>
+      <Time>2011-05-27T13:38:47-07:00</Time>
+    </Item>
+    <Item>
+      <Source>capnjelly.png</Source>
+      <Name>capnjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\capnjelly.xnb</Output>
+      <Time>2011-05-27T13:48:34-07:00</Time>
+    </Item>
+    <Item>
+      <Source>chefjelly.png</Source>
+      <Name>chefjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\chefjelly.xnb</Output>
+      <Time>2011-05-27T13:52:29-07:00</Time>
+    </Item>
+    <Item>
+      <Source>explorerjelly.png</Source>
+      <Name>explorerjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\explorerjelly.xnb</Output>
+      <Time>2011-05-27T14:01:07-07:00</Time>
+    </Item>
+    <Item>
+      <Source>fortunejelly.png</Source>
+      <Name>fortunejelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\fortunejelly.xnb</Output>
+      <Time>2011-05-27T14:10:01-07:00</Time>
+    </Item>
+    <Item>
+      <Source>karatejelly.png</Source>
+      <Name>karatejelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\karatejelly.xnb</Output>
+      <Time>2011-05-27T14:17:32-07:00</Time>
+    </Item>
+    <Item>
+      <Source>kingjelly.png</Source>
+      <Name>kingjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\kingjelly.xnb</Output>
+      <Time>2011-05-27T14:21:41-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level10.png</Source>
+      <Name>level10</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level10.xnb</Output>
+      <Time>2011-05-27T15:34:37.5325801-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level11.png</Source>
+      <Name>level11</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level11.xnb</Output>
+      <Time>2011-05-27T15:34:35.502464-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level12.png</Source>
+      <Name>level12</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level12.xnb</Output>
+      <Time>2011-05-27T15:34:33.5753537-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level13.png</Source>
+      <Name>level13</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level13.xnb</Output>
+      <Time>2011-05-27T15:34:30.6221848-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level14.png</Source>
+      <Name>level14</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level14.xnb</Output>
+      <Time>2011-05-27T15:34:29.7851369-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level15.png</Source>
+      <Name>level15</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level15.xnb</Output>
+      <Time>2011-05-27T15:34:28.8260821-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level16.png</Source>
+      <Name>level16</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level16.xnb</Output>
+      <Time>2011-05-27T15:34:25.6809022-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level17.png</Source>
+      <Name>level17</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level17.xnb</Output>
+      <Time>2011-05-27T15:34:24.7468488-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level18.png</Source>
+      <Name>level18</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level18.xnb</Output>
+      <Time>2011-05-27T15:34:23.0317507-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level19.png</Source>
+      <Name>level19</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level19.xnb</Output>
+      <Time>2011-05-27T15:34:22.1016975-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level4.png</Source>
+      <Name>level4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level4.xnb</Output>
+      <Time>2011-05-27T15:34:45.696047-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level5.png</Source>
+      <Name>level5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level5.xnb</Output>
+      <Time>2011-05-27T15:34:43.4029158-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level6.png</Source>
+      <Name>level6</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level6.xnb</Output>
+      <Time>2011-05-27T15:34:42.4178595-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level7.png</Source>
+      <Name>level7</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level7.xnb</Output>
+      <Time>2011-05-27T15:34:41.3557987-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level8.png</Source>
+      <Name>level8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level8.xnb</Output>
+      <Time>2011-05-27T15:34:40.4637477-07:00</Time>
+    </Item>
+    <Item>
+      <Source>level9.png</Source>
+      <Name>level9</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\level9.xnb</Output>
+      <Time>2011-05-27T15:34:36.4875203-07:00</Time>
+    </Item>
+    <Item>
+      <Source>jellyofthenight.png</Source>
+      <Name>jellyofthenight</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\jellyofthenight.xnb</Output>
+      <Time>2011-05-30T21:29:05-07:00</Time>
+    </Item>
+    <Item>
+      <Source>ballerinajelly.png</Source>
+      <Name>ballerinajelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\ballerinajelly.xnb</Output>
+      <Time>2011-05-30T21:37:28-07:00</Time>
+    </Item>
+    <Item>
+      <Source>cowboyjelly.png</Source>
+      <Name>cowboyjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\cowboyjelly.xnb</Output>
+      <Time>2011-05-30T21:21:30-07:00</Time>
+    </Item>
+    <Item>
+      <Source>newsiejelly.png</Source>
+      <Name>newsiejelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\newsiejelly.xnb</Output>
+      <Time>2011-05-30T21:13:54-07:00</Time>
+    </Item>
+    <Item>
+      <Source>ninjajelly.png</Source>
+      <Name>ninjajelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\ninjajelly.xnb</Output>
+      <Time>2011-05-30T21:32:01-07:00</Time>
+    </Item>
+    <Item>
+      <Source>queenjelly.png</Source>
+      <Name>queenjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\queenjelly.xnb</Output>
+      <Time>2011-05-30T21:28:08-07:00</Time>
+    </Item>
+    <Item>
+      <Source>redjelly.png</Source>
+      <Name>redjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\redjelly.xnb</Output>
+      <Time>2011-05-30T21:43:47-07:00</Time>
+    </Item>
+    <Item>
+      <Source>yellowjelly.png</Source>
+      <Name>yellowjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\yellowjelly.xnb</Output>
+      <Time>2011-05-30T21:45:53-07:00</Time>
+    </Item>
+    <Item>
+      <Source>greenjelly.png</Source>
+      <Name>greenjelly</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\greenjelly.xnb</Output>
+      <Time>2011-05-30T21:48:21-07:00</Time>
+    </Item>
+    <Item>
+      <Source>SpriteFont2.spritefont</Source>
+      <Name>SpriteFont2</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\SpriteFont2.xnb</Output>
+      <Time>2011-05-27T20:56:50.2255355-07:00</Time>
+    </Item>
+    <Item>
+      <Source>music_game.mp3</Source>
+      <Name>music_game</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\music_game.xnb</Output>
+      <Extra>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\music_game.wma</Extra>
+      <Time>2011-05-30T21:36:29.1885774-07:00</Time>
+    </Item>
+    <Item>
+      <Source>music_menu.mp3</Source>
+      <Name>music_menu</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\music_menu.xnb</Output>
+      <Extra>C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\music_menu.wma</Extra>
+      <Time>2011-05-30T21:58:10.8070257-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

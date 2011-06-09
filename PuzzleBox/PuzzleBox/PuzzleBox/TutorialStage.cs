@@ -183,11 +183,11 @@ namespace PuzzleBox
             grid.queues[3, 4][1] = new PuzzleNode(Color.Red);
             grid.queues[3, 4][0] = new PuzzleNode(Color.Magenta);
             grid[2, 4] = new PuzzleNode(Color.Orange);
-            grid.queues[2, 4][1] = new PuzzleNode(Color.Blue);
+            grid.queues[2, 4][1] = new PuzzleNode(Game.jellyBlue);
             box[0, 0, 2] = new PuzzleNode(Color.Yellow);
             box[0, 0, 0] = new PuzzleNode(Color.Green);
             box[0, 1, 2] = new PuzzleNode(Color.Orange);
-            box[0, 1, 0] = new PuzzleNode(Color.Blue);
+            box[0, 1, 0] = new PuzzleNode(Game.jellyBlue);
         }
 
 
@@ -211,11 +211,11 @@ namespace PuzzleBox
             grid.queues[3, 4][1] = new PuzzleNode(Color.Red);
             grid.queues[3, 4][0] = new PuzzleNode(Color.Magenta);
             grid[2, 4] = new PuzzleNode(Color.Orange);
-            grid.queues[2, 4][1] = new PuzzleNode(Color.Blue);
+            grid.queues[2, 4][1] = new PuzzleNode(Game.jellyBlue);
             box[0, 0, 2] = new PuzzleNode(Color.Yellow);
             box[0, 0, 0] = new PuzzleNode(Color.Green);
             box[0, 1, 2] = new PuzzleNode(Color.Orange);
-            box[0, 1, 0] = new PuzzleNode(Color.Blue);
+            box[0, 1, 0] = new PuzzleNode(Game.jellyBlue);
 
         }
 
@@ -246,13 +246,13 @@ namespace PuzzleBox
             grid[0, 1] = new PuzzleNode(Color.Red);
             grid.queues[0, 1][1] = new PuzzleNode(Color.Magenta);
             grid[3, 0] = new PuzzleNode(Color.Yellow);
-            grid[4, 3] = new PuzzleNode(Color.Blue);            
+            grid[4, 3] = new PuzzleNode(Game.jellyBlue);            
             grid[1, 4] = new PuzzleNode(Color.Green);
             box[0, 0, 0] = new PuzzleNode(Color.Magenta);
             box[1, 0, 0] = new PuzzleNode(Color.Red);
             box[2, 2, 0] = new PuzzleNode(Color.Green);
             box[1, 0, 2] = new PuzzleNode(Color.Yellow);
-            box[2, 2, 2] = new PuzzleNode(Color.Blue);
+            box[2, 2, 2] = new PuzzleNode(Game.jellyBlue);
         }
 
         public static void Lesson4(PuzzleBox box, MasterGrid grid)
@@ -273,13 +273,13 @@ namespace PuzzleBox
             grid[0, 1] = new PuzzleNode(Color.Green);
             grid[2, 0] = new PuzzleNode(Color.Orange);
             grid[4, 2] = new PuzzleNode(Color.Magenta);
-            grid[3, 4] = new PuzzleNode(Color.Blue);
+            grid[3, 4] = new PuzzleNode(Game.jellyBlue);
             grid[4, 1] = new PuzzleNode(Color.Yellow);
             grid[1, 4] = new PuzzleNode(Color.Red);
             box[0, 0, 0] = new PuzzleNode(Color.Red);
             box[2, 2, 2] = new PuzzleNode(Color.Yellow);
             box[1, 2, 2] = new PuzzleNode(Color.Magenta);
-            box[0, 2, 0] = new PuzzleNode(Color.Blue);
+            box[0, 2, 0] = new PuzzleNode(Game.jellyBlue);
             box[0, 0, 1] = new PuzzleNode(Color.Green);
             box[2, 1, 1] = new PuzzleNode(Color.Orange);
         }
@@ -334,13 +334,13 @@ namespace PuzzleBox
             Clear(box,grid);
             restrictions = ControlRestrictions.None;
             grid[1, 0] = new PuzzleNode(Color.Green);
-            grid[0, 2] = new PuzzleNode(Color.Blue);
+            grid[0, 2] = new PuzzleNode(Game.jellyBlue);
             grid[4, 3] = new PuzzleNode(Color.Yellow);
             box[2, 0, 2] = new PuzzleNode(Color.Green);
             box[2, 1, 2] = new PuzzleNode(Color.Green);
             box[2, 2, 2] = new PuzzleNode(Color.Green);
-            box[1, 2, 0] = new PuzzleNode(Color.Blue);
-            box[1, 2, 1] = new PuzzleNode(Color.Blue);
+            box[1, 2, 0] = new PuzzleNode(Game.jellyBlue);
+            box[1, 2, 1] = new PuzzleNode(Game.jellyBlue);
             box[0, 0, 2] = new PuzzleNode(Color.Yellow);
             box[0, 1, 2] = new PuzzleNode(Color.Yellow);
 
@@ -485,15 +485,15 @@ namespace PuzzleBox
             "to get a better view of bubbles in the back!";
             restrictions = ControlRestrictions.None;
             Clear(box, grid);
-            box[2, 0, 2] = new PuzzleNode(Color.Blue);
-            box[2, 1, 2] = new PuzzleNode(Color.Blue);
-            box[2, 2, 2] = new PuzzleNode(Color.Blue);
-            grid[3, 0] = new PuzzleNode(Color.Blue);
-            grid[3, 4] = new PuzzleNode(Color.Blue);
-            grid[4, 1] = new PuzzleNode(Color.Blue);
-            grid[4, 2] = new PuzzleNode(Color.Blue);
-            grid[4, 3] = new PuzzleNode(Color.Blue);
-            grid[1, 4] = new PuzzleNode(Color.Blue);            
+            box[2, 0, 2] = new PuzzleNode(Game.jellyBlue);
+            box[2, 1, 2] = new PuzzleNode(Game.jellyBlue);
+            box[2, 2, 2] = new PuzzleNode(Game.jellyBlue);
+            grid[3, 0] = new PuzzleNode(Game.jellyBlue);
+            grid[3, 4] = new PuzzleNode(Game.jellyBlue);
+            grid[4, 1] = new PuzzleNode(Game.jellyBlue);
+            grid[4, 2] = new PuzzleNode(Game.jellyBlue);
+            grid[4, 3] = new PuzzleNode(Game.jellyBlue);
+            grid[1, 4] = new PuzzleNode(Game.jellyBlue);            
 
         }
                 

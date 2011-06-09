@@ -43,6 +43,7 @@ namespace PuzzleBox
                 s.instructions = "";
                 s.two_star = 120000;
                 s.three_star = 30000;
+                s.fullVersionOnly = true;
                 
                 levels.Add(s);
             }
@@ -58,6 +59,7 @@ namespace PuzzleBox
             levels[0].winType = WinType.CLEAR;
             levels[0].loseType = LoseType.NOMOVES;
             levels[0].texture = JellyfishRenderer.redJelly;
+            levels[0].fullVersionOnly = false;
             levels[0].instructions = "N:Doctor, it looks like we'll need to match \nsets of 3 or more bubbles to heal this patient! -D:Remember, if you make a mistake, press the \nB Button to undo your last move. -N: Good luck!";
 
             levels[1].levelfilename = "puzzle5.txt";
@@ -65,6 +67,7 @@ namespace PuzzleBox
             levels[1].difficulty = Difficulty.EASY;
             levels[1].texture = JellyfishRenderer.libraryJelly;
             levels[1].preview = Preview.level2;
+            levels[1].fullVersionOnly = false;
             levels[1].instructions = "N:Fascinating! I've never seen bubbles like\nthis before... -N:Each time you take an action, they swap between \nclear and colored states.-D:They'll only match if they're in their colored\n state. This might be tricky. -N:Take your time and experiment until you\nunderstand how these bubbles behave.";
 
             levels[2].levelfilename = "puzzle9.txt";
@@ -72,6 +75,7 @@ namespace PuzzleBox
             levels[2].difficulty = Difficulty.EASY;
             levels[2].preview = Preview.level3;
             levels[2].texture = JellyfishRenderer.officerJelly;
+            levels[2].fullVersionOnly = false;
             levels[2].instructions = "N:Remember how new bubbles slide in from the \ntentacles to replace the ones you've popped? -D:You'll need to pay attention to what colors\nare coming up.-N:Plan ahead so that you don't get stuck!";
         
             levels[3].levelfilename = "puzzle13.txt";
@@ -79,6 +83,7 @@ namespace PuzzleBox
             levels[3].difficulty = Difficulty.EASY;
             levels[3].texture = JellyfishRenderer.artistJelly;
             levels[3].preview = Preview.level4;
+            levels[3].fullVersionOnly = false;
             levels[3].instructions = "N:Hmm... there a lot of orange bubbles at the\ntips of the tentacles. -D:You'll need to match all of them with just\na single orange bubble. -N:There must be a way to do that!";
 
             levels[4].levelfilename = "puzzle14.txt";
@@ -87,6 +92,7 @@ namespace PuzzleBox
             levels[4].texture = JellyfishRenderer.explorerJelly;
             levels[4].preview = Preview.level5;
             levels[4].three_star = 40000;
+            levels[4].fullVersionOnly = false;
             levels[4].instructions = "N:Gosh! That's a lot of bubbles to deal with.\nAny advice, Doctor?-D:I think we should try and match bubbles from \ndifferent tentacles as evenly as possible.-N:Good idea. That way we won't get stuck.";
 
             levels[5].levelfilename = "puzzle15.txt";
@@ -98,7 +104,8 @@ namespace PuzzleBox
             levels[5].texture = JellyfishRenderer.fortuneJelly;
             levels[5].preview = Preview.level6;
             levels[5].three_star = 20000;
-            levels[5].instructions = "N:Oh no! This Jellyfish is allergic to Green toxins.\nIf we pop a Green bubble, the toxin will poison him. -D:We'll do the best we can. Try to pop everything\nEXCEPT the Green bubbles. -N:I hope thats enough to cure him!";
+            levels[5].fullVersionOnly = false;
+            levels[5].instructions = "N:Oh no! This Jellyfish is allergic to Green toxins.\nIf we pop a Green bubble, the toxin will poison her. -D:We'll do the best we can. Try to pop everything\nEXCEPT the Green bubbles. -N:I hope thats enough to cure her!";
 
             // Standard Levels
             levels[6].levelfilename = "puzzle3.txt";
@@ -229,8 +236,12 @@ namespace PuzzleBox
                 s.instructions = "N:Score as many points as you can before time \nruns out!-D:Let's start!";
                 s.two_star = 2000;
                 s.three_star = 3000;
+                s.fullVersionOnly = true;
                 levels.Add(s);
             }
+            levels[0].fullVersionOnly = false;
+            levels[1].fullVersionOnly = false;
+            
             levels[0].name = "Mister Jellyfish";
             levels[0].grayOrbStart = 24;
             levels[0].texture = JellyfishRenderer.yellowJelly;
@@ -270,8 +281,11 @@ namespace PuzzleBox
                 s.instructions = "N:Score as many points as you can before you \nrun out of moves! Take your time, Doctor!-D:Let's start!";
                 s.two_star = 1500;
                 s.three_star = 3000;
+                s.fullVersionOnly = true;
                 levels.Add(s);
             }
+            levels[0].fullVersionOnly = false;
+            
             levels[0].name = "Baby Jellyfish";
             levels[0].grayOrbStart = 24;
             levels[0].texture = JellyfishRenderer.greenJelly;

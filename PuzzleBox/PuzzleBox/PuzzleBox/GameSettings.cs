@@ -6,7 +6,7 @@ using System.Text;
 namespace PuzzleBox
 {
     public class GameSettings
-    {
+    {        
         public bool musicEnabled = true;
         public bool soundEffectsEnabled = true;
         public bool displayControls = true;
@@ -19,5 +19,6 @@ namespace PuzzleBox
         public int moveChallengeViewLevel = 0;
 
         public float controlStickTrigger = .25f;
+        public float controlStickTriggerView = .85f;
     }
 }

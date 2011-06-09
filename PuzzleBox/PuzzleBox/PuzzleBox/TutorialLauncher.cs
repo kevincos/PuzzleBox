@@ -87,7 +87,7 @@ namespace PuzzleBox
             }
             if (state == TutorialLauncherState.NURSETEXT)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
+                if (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(Game.playerIndex).IsButtonDown(Buttons.A))
                 {
                     state = TutorialLauncherState.DOCTORIN;
                     animateTime = 0;
@@ -99,7 +99,7 @@ namespace PuzzleBox
             }
             if (state == TutorialLauncherState.DOCTORTEXT)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
+                if (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(Game.playerIndex).IsButtonDown(Buttons.A))
                 {
                     state = TutorialLauncherState.DOCTOROUT;
                     animateTime = 0;
@@ -111,7 +111,7 @@ namespace PuzzleBox
             }
             if (state == TutorialLauncherState.FINALTEXT)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
+                if (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(Game.playerIndex).IsButtonDown(Buttons.A))
                 {
                     return MenuResult.StartTutorial;
                 }

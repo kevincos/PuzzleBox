@@ -27,7 +27,7 @@ namespace PuzzleBox
         public static Texture2D header;
 
         int animateTime = 0;
-        MainMenuState state = MainMenuState.DOCTORIN;
+        MainMenuState state = MainMenuState.READY;
         MenuResult result = MenuResult.None;
         int selectedIndex = 0;
         List<MenuOption> optionList;
@@ -96,15 +96,29 @@ namespace PuzzleBox
             optionList.Add(new MenuOption(result, optionText, helpText));
         }
 
+        public void RemovePurchase()
+        {
+            for (int i = 0; i < optionList.Count; i++)
+            {
+                if (optionList[i].result == MenuResult.BuyFullGame)
+                {
+                    optionList.RemoveAt(i);
+                    selectedIndex = 0;
+                    break;
+                }
+            }            
+        }
+
         public void Draw()
         {            
             Game.spriteBatch.Draw(background, new Rectangle(0, 0, Game.screenSizeX, Game.screenSizeY), Color.White);
             Game.spriteBatch.Draw(header, new Rectangle(headerX, headerY, headerWidth, headerHeight), Color.White);
+            
             for (int i = 0; i < optionList.Count; i++)
             {
                 if (i == selectedIndex)
                 {
-                    PuzzleNode p = new PuzzleNode(Color.Blue);
+                    PuzzleNode p = new PuzzleNode(Game.jellyBlue);
                     p.screenX = optionListX - 25;
                     p.screenY = optionListY + optionHeight / 2 + i * optionGap;
                     if (state == MainMenuState.ANIMATEDOWN)
@@ -148,6 +162,10 @@ namespace PuzzleBox
 
         public MenuResult Update(GameTime gameTime)
         {
+            if (Guide.IsTrialMode == false)
+            {
+                RemovePurchase();
+            }
             cooldown -= gameTime.ElapsedGameTime.Milliseconds;
             if (cooldown < 0) cooldown = 0;
             if (state == MainMenuState.DOCTORIN || state == MainMenuState.DOCTOROUT || state == MainMenuState.ANIMATEDOWN || state == MainMenuState.ANIMATEUP)
@@ -177,18 +195,21 @@ namespace PuzzleBox
             }
             if (state == MainMenuState.READY && cooldown == 0)
             {
-                GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+                GamePadState gamePadState = GamePad.GetState(Game.playerIndex);
                 Vector2 leftStick = gamePadState.ThumbSticks.Left;
                 Vector2 rightStick = gamePadState.ThumbSticks.Right;
-
+                if (gamePadState.IsButtonDown(Buttons.B))
+                    return MenuResult.ReturnToSplashScreen;
                 if (Keyboard.GetState().IsKeyDown(Keys.Space) || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
                 {
                     SoundEffects.PlayScore();
                     result = optionList[selectedIndex].result;
                     animateTime = 0;
+                    if (result == MenuResult.BuyFullGame)
+                        return result;
                     state = MainMenuState.DOCTOROUT;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -Game.gameSettings.controlStickTrigger || rightStick.Y < -Game.gameSettings.controlStickTrigger)
+                if (gamePadState.IsButtonDown(Buttons.DPadDown) || gamePadState.IsButtonDown(Buttons.DPadDown) || gamePadState.IsButtonDown(Buttons.DPadDown) || Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -Game.gameSettings.controlStickTrigger || rightStick.Y < -Game.gameSettings.controlStickTrigger)
                 {
                     if (selectedIndex < optionList.Count() - 1)
                     {
@@ -199,7 +220,7 @@ namespace PuzzleBox
                         cooldown = 250;
                     }
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > Game.gameSettings.controlStickTrigger || rightStick.Y > Game.gameSettings.controlStickTrigger)
+                if (gamePadState.IsButtonDown(Buttons.DPadUp) || gamePadState.IsButtonDown(Buttons.DPadUp) || Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > Game.gameSettings.controlStickTrigger || rightStick.Y > Game.gameSettings.controlStickTrigger)
                 {
                     if (selectedIndex > 0)
                     {

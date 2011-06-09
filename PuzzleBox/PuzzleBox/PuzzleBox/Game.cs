@@ -25,6 +25,7 @@ namespace PuzzleBox
         Summary,
         JellyfishCity,
         Tutorial,
+        SplashScreen,
         GetDevice,
         InitialLoad
     }
@@ -47,6 +48,7 @@ namespace PuzzleBox
         public static Settings currentSettings;
         public static GameSettings gameSettings;
 
+        public static Color jellyBlue;
 
         public static MainMenu mainMenu;
         public static GameOverMenu gameOverMenu;
@@ -56,11 +58,13 @@ namespace PuzzleBox
         public static JellyfishCity jellyCity;
         public static TutorialLauncher tutorialLauncher;
         public static Menu settingsMenu;
+        public static SplashScreen splashScreen;
 
-        public static MetaState metaState = MetaState.GetDevice;
+        public static MetaState metaState = MetaState.InitialLoad;
         public static SpriteBatch spriteBatch;
         public static int screenSizeX = 800;
         public static int screenSizeY = 400;
+
         public static int screenCenterX;
         public static int screenCenterY;        
         public static GraphicsDeviceManager graphics;
@@ -68,20 +72,64 @@ namespace PuzzleBox
         public static SpriteFont menuFont;
         public static Game JellyfishMD;
 
+        public bool deviceSelected = false;
+
+        public static PlayerIndex playerIndex;
+
+        void NoStorageCallback(IAsyncResult result)
+        {
+            if (0 == Guide.EndShowMessageBox(result))
+                deviceSelected = true;
+            else
+            {
+                splashScreen = new SplashScreen();
+                metaState = MetaState.SplashScreen;
+            }
+        }
+
         void GetDevice(IAsyncResult result)
         {
             HighScoreTracker.device = StorageDevice.EndShowSelector(result);
+            if (HighScoreTracker.device == null)
+            {
+                while (Guide.IsVisible == true)
+                {
+                    System.Threading.Thread.Sleep(100);
+                }
+                Guide.BeginShowMessageBox("No Storage Device Selected",
+                    "You will be unable to save your game progress or high scores.",
+                    new string[] { "OK" },
+                    0, MessageBoxIcon.None, NoStorageCallback, null);                   	              
+            }
+            else
+                deviceSelected = true;
         }
 
 
         public Game()
-        {
+        {            
+            jellyBlue = new Color(40, 75, 255);
             JellyfishMD = this;
-            graphics = new GraphicsDeviceManager(JellyfishMD);
-
+            graphics = new GraphicsDeviceManager(this);
+            
             this.Components.Add(new GamerServicesComponent(this));
-        }        
+            Content.RootDirectory = "Content";            
+        }
 
+        public static void SetSplashResolution()
+        {
+            graphics.IsFullScreen = false;
+            Game.graphics.PreferredBackBufferWidth = 1280;
+            Game.graphics.PreferredBackBufferHeight = 720;
+            JellyfishMD.Window.BeginScreenDeviceChange(false);
+            JellyfishMD.Window.EndScreenDeviceChange(JellyfishMD.Window.ScreenDeviceName, 1280, 720);
+            Game.graphics.ApplyChanges();
+            screenSizeX = Game.graphics.GraphicsDevice.Viewport.Width;
+            screenSizeY = Game.graphics.GraphicsDevice.Viewport.Height;
+            screenCenterX = screenSizeX / 2;
+            screenCenterY = screenSizeY / 2;
+
+        }
 
         public static void UpdateResolution()
         {
@@ -117,16 +165,13 @@ namespace PuzzleBox
 
         protected override void Initialize()
         {
-            StorageDevice.BeginShowSelector(
-                    PlayerIndex.One, this.GetDevice, (Object)"GetDevice for Player One");
-
+            base.Initialize();
+            spriteBatch = new SpriteBatch(GraphicsDevice);            
             Logger.Init();
         }
 
         protected override void LoadContent()
-        {
-            Content.RootDirectory = "Content";
-
+        {            
             MainMenu.background = Content.Load<Texture2D>("background");
             MainMenu.header = Content.Load<Texture2D>("title");
             Menu.background = Content.Load<Texture2D>("mainmenu");
@@ -228,7 +273,7 @@ namespace PuzzleBox
             SoundEffects.soundClick = Content.Load<SoundEffect>("click");
             SoundEffects.soundBeep = Content.Load<SoundEffect>("beep");
             MusicControl.music_menu = Content.Load<Song>("music_menu");
-            MusicControl.music_game = Content.Load<Song>("music_game");
+            MusicControl.music_game = Content.Load<Song>("music_game");            
         }
 
         protected override void UnloadContent()
@@ -238,8 +283,14 @@ namespace PuzzleBox
 
         protected override void Update(GameTime gameTime)
         {
+            if (metaState == MetaState.InitialLoad)
+            {
+                splashScreen = new SplashScreen();
+                metaState = MetaState.SplashScreen;
+            }
+
             // Controls
-            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            //if (GamePad.GetState(Game.playerIndex).Buttons.Back == ButtonState.Pressed)
               //  this.Exit();
             if (HighScoreTracker.device!=null && Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
@@ -253,15 +304,26 @@ namespace PuzzleBox
                 Logger.CloseLogger();
                 this.Exit();
             }
-            if (metaState == MetaState.GetDevice)
+            if (metaState == MetaState.SplashScreen)
             {
-                base.Initialize();
-                StorageDevice.BeginShowSelector(
-                    PlayerIndex.One, this.GetDevice, "Select Storage Device");
-                metaState = MetaState.InitialLoad;
-            }
-            if (metaState == MetaState.InitialLoad && HighScoreTracker.device != null)
+                if (MenuResult.GoToMainMenu == splashScreen.Update(gameTime))
+                {
+                    base.Initialize();
+                    StorageDevice.BeginShowSelector(this.GetDevice, "Select Storage Device");                        
+                }
+
+            }            
+            if (metaState == MetaState.SplashScreen && deviceSelected==true)
             {
+                if (HighScoreTracker.device != null)
+                {
+                    IAsyncResult result =
+                    HighScoreTracker.device.BeginOpenContainer("StorageDemo", null, null);
+                    result.AsyncWaitHandle.WaitOne();
+                    HighScoreTracker.container = HighScoreTracker.device.EndOpenContainer(result);
+                    result.AsyncWaitHandle.Close();
+                }
+
                 HighScoreData data = HighScoreTracker.LoadHighScores();
                 gameSettings = new GameSettings();
                 gameSettings.displayControls = data.displayHelp;
@@ -279,25 +341,7 @@ namespace PuzzleBox
                 selectMenu = new LevelSelectMenu();
                 tutorialLauncher = new TutorialLauncher();
                 settingsMenu = new Menu(MenuClass.SettingsMenu);
-                spriteBatch = new SpriteBatch(GraphicsDevice);
-                mainMenu.AddMenuItem(MenuResult.GoToTimeAttack, "Emergency Room", "Score as many points as you can within the \ntime limit.");
-                mainMenu.AddMenuItem(MenuResult.GoToMoveChallenge, "Operation", "Score as many points as you can with a \nlimited number of moves.");
-                mainMenu.AddMenuItem(MenuResult.GoToPuzzle, "Challenge", "Solve a series of unique challenges.");
-                mainMenu.AddMenuItem(MenuResult.GoToTutorial, "Tutorial", "Learn to play Jellyfish, MD");
-                mainMenu.AddMenuItem(MenuResult.GoToJellyfishCity, "Jellyfish Parade", "Check in on your former patients!");
-                mainMenu.AddMenuItem(MenuResult.GoToSettings, "Settings", "Change settings for Jellyfish, MD");
-                mainMenu.AddMenuItem(MenuResult.Quit, "Quit", "Quit Jellyfish, MD??");
-                gameOverMenu.AddMenuItem(MenuResult.StartTimeAttack, "Replay");
-                gameOverMenu.AddMenuItem(MenuResult.GoToMainMenu, "Main Menu");
-                gameOverMenu.AddMenuItem(MenuResult.GoToLevelSelect, "Level Select");
-                settingsMenu.AddMenuItem(MenuResult.GoToMainMenu, "Return to Menu");
-                settingsMenu.AddMenuItem(MenuType.SoundToggle, "Sound Effects");
-                settingsMenu.AddMenuItem(MenuType.MusicToggle, "Music");
-                settingsMenu.AddMenuItem(MenuType.HelpToggle, "Help Overlay");
-                settingsMenu.AddMenuItem(MenuType.FullScreenToggle, "Full Screen");
-                settingsMenu.AddMenuItem(MenuType.WideScreenToggle, "Wide Screen");                
-                UpdateResolution();
-
+                
                 currentSettings = new Settings();
                 p1engine = new Engine(-1);
                 mainMenu = new MainMenu();
@@ -307,12 +351,12 @@ namespace PuzzleBox
                 selectMenu = new LevelSelectMenu();
                 tutorialLauncher = new TutorialLauncher();
                 settingsMenu = new Menu(MenuClass.SettingsMenu);
-                spriteBatch = new SpriteBatch(GraphicsDevice);
                 mainMenu.AddMenuItem(MenuResult.GoToTimeAttack, "Emergency Room", "Score as many points as you can within the \ntime limit.");
                 mainMenu.AddMenuItem(MenuResult.GoToMoveChallenge, "Operation", "Score as many points as you can with a \nlimited number of moves.");
                 mainMenu.AddMenuItem(MenuResult.GoToPuzzle, "Challenge", "Solve a series of unique challenges.");
                 mainMenu.AddMenuItem(MenuResult.GoToTutorial, "Tutorial", "Learn to play Jellyfish, MD");
-                mainMenu.AddMenuItem(MenuResult.GoToJellyfishCity, "Jellyfish Parade", "Check in on your former patients!");
+                mainMenu.AddMenuItem(MenuResult.BuyFullGame, "Unlock Full Game", "Purchase the full version of Jellyfish, MD"); 
+                mainMenu.AddMenuItem(MenuResult.GoToJellyfishCity, "Jellyfish Parade", "Check in on your former patients!");                
                 mainMenu.AddMenuItem(MenuResult.GoToSettings, "Settings", "Change settings for Jellyfish, MD");
                 mainMenu.AddMenuItem(MenuResult.Quit, "Quit", "Quit Jellyfish, MD??");
                 gameOverMenu.AddMenuItem(MenuResult.StartTimeAttack, "Replay");
@@ -324,9 +368,11 @@ namespace PuzzleBox
                 settingsMenu.AddMenuItem(MenuType.HelpToggle, "Help Overlay");
                 settingsMenu.AddMenuItem(MenuType.FullScreenToggle, "Full Screen");
                 settingsMenu.AddMenuItem(MenuType.WideScreenToggle, "Wide Screen");
+                UpdateResolution();
+
                 metaState = MetaState.MainMenu;
             }
-            if (metaState == MetaState.GamePlay)
+            if (metaState == MetaState.GamePlay && IsActive==true)
             {
                 GameStopCause cause = p1engine.Update(gameTime);
                 if (cause == GameStopCause.PAUSE)
@@ -615,6 +661,37 @@ namespace PuzzleBox
             else if (metaState == MetaState.MainMenu)
             {
                 MenuResult result = mainMenu.Update(gameTime);
+                if (result == MenuResult.ReturnToSplashScreen)
+                {
+                    HighScoreData data = HighScoreTracker.LoadHighScores();
+                    data.soundEffectsEnabled = gameSettings.soundEffectsEnabled;
+                    data.musicEnabled = gameSettings.musicEnabled;
+                    data.displayHelp = gameSettings.displayControls;
+                    data.fullScreen = gameSettings.fullScreen;
+                    data.wideScreen = gameSettings.wideScreen;
+                    data.keyboardControls = gameSettings.keyboardControls;
+                    HighScoreTracker.SaveHighScores(data);
+                    
+                    deviceSelected = false;
+                    HighScoreTracker.device = null;
+                    HighScoreTracker.container = null;
+                    HighScoreTracker.cachedData = null;
+                    splashScreen = new SplashScreen();
+                    metaState = MetaState.SplashScreen;
+                }
+                if (result == MenuResult.BuyFullGame)
+                {
+                    try { Guide.ShowMarketplace(Game.playerIndex); }
+                    catch (GamerPrivilegeException)
+                    {                        
+                        Guide.BeginShowMessageBox("Oops!",
+                            "The current controller is either not signed in or is unable to purchase games on XBox Live.",
+                            new string[] { "OK" },
+                            0, MessageBoxIcon.None,null,null);                         	              
+                    }
+                        
+                    
+                }
                 if (result == MenuResult.GoToSettings)
                 {
                     metaState = MetaState.Settings;                    
@@ -697,8 +774,6 @@ namespace PuzzleBox
 
         protected override void Draw(GameTime gameTime)
         {
-            if (metaState == MetaState.InitialLoad)
-                return;
             Color bgColor = Color.DarkBlue;
             bgColor.R = 14;
             bgColor.B = 84;
@@ -706,6 +781,10 @@ namespace PuzzleBox
             Game.spriteBatch.Begin();
             spriteBatch.Draw(MainMenu.background, new Rectangle(0, 0, screenSizeX, screenSizeY), Color.White);
 
+            if (metaState == MetaState.SplashScreen || metaState == MetaState.GetDevice || metaState == MetaState.InitialLoad)
+            {
+                splashScreen.Draw();                
+            }
             if (metaState == MetaState.JellyfishCity)
                 jellyCity.Draw();
             if (metaState == MetaState.GamePlay || metaState == MetaState.Paused || metaState == MetaState.Summary)            
@@ -716,7 +795,7 @@ namespace PuzzleBox
 
             if (metaState == MetaState.Paused)
                 pauseMenu.Draw();
-            if (metaState == MetaState.Summary || summaryMenu.state==SummaryMenuState.READY)
+            if (metaState == MetaState.Summary || (summaryMenu!=null && summaryMenu.state==SummaryMenuState.READY))
                 summaryMenu.Draw();
             if (metaState == MetaState.Tutorial)
                 tutorialLauncher.Draw();

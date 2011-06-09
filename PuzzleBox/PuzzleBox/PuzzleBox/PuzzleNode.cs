@@ -82,7 +82,7 @@ namespace PuzzleBox
             switch (v)
             {
                 case 0:
-                    return Color.Blue;
+                    return Game.jellyBlue;
                 case 1:
                     return Color.Yellow;
                 case 2:

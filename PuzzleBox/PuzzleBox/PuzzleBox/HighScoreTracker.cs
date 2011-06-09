@@ -15,8 +15,8 @@ namespace PuzzleBox
         public bool displayHelp = true;
         public bool musicEnabled = true;
         public bool soundEffectsEnabled = true;
-        public bool fullScreen = false;
-        public bool wideScreen = false;
+        public bool fullScreen = true;
+        public bool wideScreen = true;
         public bool keyboardControls = false;
         public LevelData[] timeAttackLevels;
         public LevelData[] moveChallengeLevels;
@@ -36,6 +36,7 @@ namespace PuzzleBox
         public string[] playerNames;
         public bool played;
         public bool unlocked;
+        //public bool disabled;
         public int rank;        
 
         public LevelData()
@@ -50,7 +51,9 @@ namespace PuzzleBox
     public class HighScoreTracker
     {
         public static StorageDevice device = null;
+        public static StorageContainer container = null;
         public static string highScorePath = "Data\\highscores.txt";
+        public static HighScoreData cachedData = null;
 
         public static LevelData GetHighScoresForLevel(GameMode mode, int level)
         {
@@ -72,14 +75,7 @@ namespace PuzzleBox
 
         public static void InitializeHighScores()
         {
-            // Open a storage container.
-            IAsyncResult result =
-                device.BeginOpenContainer("StorageDemo", null, null);
-            result.AsyncWaitHandle.WaitOne();
-            StorageContainer container = device.EndOpenContainer(result);
-            result.AsyncWaitHandle.Close();
-
-            if(false == container.FileExists("highscores.sav"))
+            if((container==null && cachedData==null) || (container!=null && false == container.FileExists("highscores.sav")))
             {
 
                 HighScoreData defaultData = new HighScoreData();
@@ -89,6 +85,7 @@ namespace PuzzleBox
                     defaultData.moveChallengeLevels[i].rank = 0;
                     defaultData.moveChallengeLevels[i].played = false;
                     defaultData.moveChallengeLevels[i].unlocked = false;
+                    //defaultData.moveChallengeLevels[i].disabled = true;
                     defaultData.moveChallengeLevels[i].playerNames[0] = "JLY";
                     defaultData.moveChallengeLevels[i].highScores[0] = 500*(i+1);
                     defaultData.moveChallengeLevels[i].playerNames[1] = "KEV";
@@ -102,12 +99,15 @@ namespace PuzzleBox
 
                 }
                 defaultData.moveChallengeLevels[0].unlocked = true;
+                //defaultData.moveChallengeLevels[0].disabled = false;
+                //defaultData.moveChallengeLevels[1].disabled = false;
                 for(int i = 0; i < 20; i++)
                 {
                     defaultData.puzzleLevels[i] = new LevelData();
                     defaultData.puzzleLevels[i].rank = 0;
                     defaultData.puzzleLevels[i].played = false;
                     defaultData.puzzleLevels[i].unlocked = false;
+                    //defaultData.puzzleLevels[i].disabled = true;
                     
                     defaultData.puzzleLevels[i].playerNames[0] = "JLY";
                     defaultData.puzzleLevels[i].highScores[0] = 60000;
@@ -119,9 +119,12 @@ namespace PuzzleBox
                     defaultData.puzzleLevels[i].highScores[3] = 240000;
                     defaultData.puzzleLevels[i].playerNames[4] = "FRK";
                     defaultData.puzzleLevels[i].highScores[4] = 300000;
-                    
-                    if(i<6)
+
+                    if (i < 6)
+                    {
                         defaultData.puzzleLevels[i].unlocked = true;
+                        //defaultData.puzzleLevels[i].disabled = false;                        
+                    }
                 }
                 defaultData.puzzleLevels[0].unlocked = true;
                 for(int i = 0; i < 3; i++)
@@ -130,6 +133,7 @@ namespace PuzzleBox
                     defaultData.timeAttackLevels[i].rank = 0;
                     defaultData.timeAttackLevels[i].played = false;
                     defaultData.timeAttackLevels[i].unlocked = false;
+                    //defaultData.timeAttackLevels[i].disabled = true;
                     defaultData.timeAttackLevels[i].playerNames[0] = "JLY";
                     defaultData.timeAttackLevels[i].highScores[0] = 500 * (i + 1);
                     defaultData.timeAttackLevels[i].playerNames[1] = "KEV";
@@ -143,21 +147,20 @@ namespace PuzzleBox
 
                 }
                 defaultData.timeAttackLevels[0].unlocked = true;
+                //defaultData.timeAttackLevels[0].disabled = false;
                 SaveHighScores(defaultData);
             }
         }
 
         public static void SaveHighScores(HighScoreData data)
         {
-            // Open a storage container.
-            IAsyncResult result =
-                device.BeginOpenContainer("StorageDemo", null, null);
-            result.AsyncWaitHandle.WaitOne();
-            StorageContainer container = device.EndOpenContainer(result);
-            result.AsyncWaitHandle.Close();
-
             // Open the file, creating it if necessary
             //FileStream stream = File.Open(highScorePath, FileMode.Create);
+            if (container == null)
+            {
+                cachedData = data;
+                return;
+            }
             Stream stream = container.OpenFile("highscores.sav", FileMode.Create);
             
             try
@@ -177,15 +180,11 @@ namespace PuzzleBox
         public static HighScoreData LoadHighScores()
         {
             HighScoreTracker.InitializeHighScores();
-        
-            HighScoreData data;
 
-            // Open a storage container.
-            IAsyncResult result =
-                device.BeginOpenContainer("StorageDemo", null, null);
-            result.AsyncWaitHandle.WaitOne();
-            StorageContainer container = device.EndOpenContainer(result);
-            result.AsyncWaitHandle.Close();
+            if (container == null)
+                return cachedData;
+
+            HighScoreData data;
 
             // Open the file
             Stream stream = container.OpenFile("highscores.sav",FileMode.Open);

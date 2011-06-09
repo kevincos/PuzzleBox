@@ -4,7 +4,7 @@ BOX,0,0,2,128-128-128-False-False-False-128-128-128-0
 BOX,0,1,0,0-128-0-False-False-False-128-128-128-0
 BOX,0,1,1,128-128-128-False-False-False-128-128-128-0
 BOX,0,1,2,255-140-0-False-False-False-128-128-128-0
-BOX,0,2,0,0-0-255-False-False-False-128-128-128-0
+BOX,0,2,0,40-75-255-False-False-False-128-128-128-0
 BOX,0,2,1,255-0-0-False-False-False-128-128-128-0
 BOX,0,2,2,128-128-128-False-False-False-128-128-128-0
 BOX,1,0,0,255-0-0-False-False-False-128-128-128-0
@@ -18,7 +18,7 @@ BOX,1,2,1,128-128-128-False-False-False-128-128-128-0
 BOX,1,2,2,255-0-0-False-False-False-128-128-128-0
 BOX,2,0,0,128-128-128-False-False-False-128-128-128-0
 BOX,2,0,1,128-128-128-False-False-False-128-128-128-0
-BOX,2,0,2,0-0-255-False-False-False-128-128-128-0
+BOX,2,0,2,40-75-255-False-False-False-128-128-128-0
 BOX,2,1,0,255-140-0-False-False-False-128-128-128-0
 BOX,2,1,1,128-128-128-False-False-False-128-128-128-0
 BOX,2,1,2,0-128-0-False-False-False-128-128-128-0
@@ -26,7 +26,7 @@ BOX,2,2,0,128-128-128-False-False-False-128-128-128-0
 BOX,2,2,1,128-128-128-False-False-False-128-128-128-0
 BOX,2,2,2,128-128-128-False-False-False-128-128-128-0
 GRID,0,0,128-128-128-False-False-False-128-128-128-0
-GRID,0,1,0-0-255-False-False-False-128-128-128-0
+GRID,0,1,40-75-255-False-False-False-128-128-128-0
 GRID,0,2,255-0-0-False-False-False-128-128-128-0
 GRID,0,3,255-0-0-False-False-False-128-128-128-0
 GRID,0,4,128-128-128-False-False-False-128-128-128-0
@@ -121,7 +121,7 @@ QUEUE,2,4,7,128-128-128-False-False-False-128-128-128-0
 QUEUE,2,4,8,128-128-128-False-False-False-128-128-128-0
 QUEUE,2,4,9,128-128-128-False-False-False-128-128-128-0
 QUEUE,3,0,0,128-128-128-False-False-False-128-128-128-0
-QUEUE,3,0,1,0-0-255-False-False-False-128-128-128-0
+QUEUE,3,0,1,40-75-255-False-False-False-128-128-128-0
 QUEUE,3,0,2,255-0-0-False-False-False-128-128-128-0
 QUEUE,3,0,3,128-128-128-False-False-False-128-128-128-0
 QUEUE,3,0,4,128-128-128-False-False-False-128-128-128-0

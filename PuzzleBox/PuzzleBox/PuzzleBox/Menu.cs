@@ -31,6 +31,8 @@ namespace PuzzleBox
         public string instructions;
         public int level;
 
+        public bool fullVersionOnly = false;
+
         // Endgame Conditions
         public WinType winType;
         public LoseType loseType;
@@ -158,6 +160,8 @@ namespace PuzzleBox
         GoToMainMenu,
         GoToResults,
         ResumeGame,
+        BuyFullGame,
+        ReturnToSplashScreen,
         Quit
     }
 
@@ -279,7 +283,7 @@ namespace PuzzleBox
             {
                 if (i == selectedIndex)
                 {                    
-                    PuzzleNode p = new PuzzleNode(Color.Blue);
+                    PuzzleNode p = new PuzzleNode(Game.jellyBlue);
                     p.screenX = optionListX - 25;
                     p.screenY = optionListY + optionHeight / 2 + i * optionGap;
                     if (state == MenuState.AnimateDown)
@@ -350,14 +354,14 @@ namespace PuzzleBox
         {
             if (state == MenuState.Ready)
             {
-                GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+                GamePadState gamePadState = GamePad.GetState(Game.playerIndex);
                 Vector2 leftStick = gamePadState.ThumbSticks.Left;
                 Vector2 rightStick = gamePadState.ThumbSticks.Right;
-                if (Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -Game.gameSettings.controlStickTrigger || rightStick.Y < -Game.gameSettings.controlStickTrigger)
+                if (gamePadState.IsButtonDown(Buttons.DPadDown) || gamePadState.IsButtonDown(Buttons.DPadDown) || gamePadState.IsButtonDown(Buttons.DPadDown) || Keyboard.GetState().IsKeyDown(Keys.Down) || leftStick.Y < -Game.gameSettings.controlStickTrigger || rightStick.Y < -Game.gameSettings.controlStickTrigger)
                 {
                     SelectDown();                    
                 }
-                else if (Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > Game.gameSettings.controlStickTrigger || rightStick.Y > Game.gameSettings.controlStickTrigger)
+                else if (gamePadState.IsButtonDown(Buttons.DPadUp) || gamePadState.IsButtonDown(Buttons.DPadUp) || Keyboard.GetState().IsKeyDown(Keys.Up) || leftStick.Y > Game.gameSettings.controlStickTrigger || rightStick.Y > Game.gameSettings.controlStickTrigger)
                 {
                     SelectUp();                    
                 }
@@ -365,7 +369,7 @@ namespace PuzzleBox
                 {
                     return MenuResult.GoToMainMenu;
                 }
-                else if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                else if (gamePadState.IsButtonDown(Buttons.DPadRight) || gamePadState.IsButtonDown(Buttons.DPadRight) || Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
                     if (optionList[selectedIndex].type == MenuType.ColorSelect)
                     {
@@ -389,7 +393,7 @@ namespace PuzzleBox
                     }
                     state = MenuState.Wait;
                 }
-                else if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                else if (gamePadState.IsButtonDown(Buttons.DPadLeft) || gamePadState.IsButtonDown(Buttons.DPadLeft) || Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
                     if (optionList[selectedIndex].type == MenuType.ColorSelect)
                     {

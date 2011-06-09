@@ -431,7 +431,7 @@ namespace PuzzleBox
                     Matcher.UpdateTimeCountdown(puzzleBox, masterGrid, gameTime.ElapsedGameTime.Milliseconds);
                 if (mode == ControlMode.NORMAL)
                 {
-                    if (Keyboard.GetState().IsKeyDown(Keys.P) || GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Start))
+                    if (Keyboard.GetState().IsKeyDown(Keys.P) || GamePad.GetState(Game.playerIndex).IsButtonDown(Buttons.Start))
                     {
                         gameState = State.PAUSING;
                         savedShift = shift;
@@ -440,9 +440,13 @@ namespace PuzzleBox
                 }
                 if (mode == ControlMode.NORMAL || mode == ControlMode.EDITOR)
                 {
-                    Vector2 stick = GamePad.GetState(PlayerIndex.One).ThumbSticks.Left;
-                    GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
-
+                    Vector2 stick = GamePad.GetState(Game.playerIndex).ThumbSticks.Left;
+                    GamePadState gamePadState = GamePad.GetState(Game.playerIndex);
+                    //if (gamePadState.IsConnected == false)
+                    //{
+                        //gameState = State.PAUSING;
+                        //animateTime = 0;
+                    //}
                     if (Keyboard.GetState().IsKeyDown(Keys.B) || gamePadState.IsButtonDown(Buttons.B))
                     {
                         if (Game.currentSettings.mode == GameMode.Puzzle)
@@ -450,7 +454,10 @@ namespace PuzzleBox
                             if (prevPuzzleBox == null)
                                 SoundEffects.PlayClick();
                             else
+                            {
+                                SoundEffects.PlayScore();
                                 Back();
+                            }
                         }
                     }
                     if ((Keyboard.GetState().IsKeyDown(Keys.E) || gamePadState.IsButtonDown(Buttons.Y)))
@@ -485,7 +492,7 @@ namespace PuzzleBox
                     }
                     if ((TutorialStage.phase == TutorialPhase.None || TutorialStage.restrictions == ControlRestrictions.None || TutorialStage.restrictions == ControlRestrictions.StickOnly))
                     {
-                        if (Keyboard.GetState().IsKeyDown(Keys.Left) || stick.X < -Game.gameSettings.controlStickTrigger)
+                        if (gamePadState.IsButtonDown(Buttons.DPadLeft) || gamePadState.IsButtonDown(Buttons.DPadLeft) || Keyboard.GetState().IsKeyDown(Keys.Left) || stick.X < -Game.gameSettings.controlStickTrigger)
                         {
                             SoundEffects.PlayMove();
                             prevMasterGrid = masterGrid.Copy();
@@ -493,7 +500,7 @@ namespace PuzzleBox
                             prevCubeDistance = cubeDistance;
                             gameState = State.ROTATEPOSY;
                         }
-                        if (Keyboard.GetState().IsKeyDown(Keys.Right) || stick.X > Game.gameSettings.controlStickTrigger)
+                        if (gamePadState.IsButtonDown(Buttons.DPadRight) || gamePadState.IsButtonDown(Buttons.DPadRight) || Keyboard.GetState().IsKeyDown(Keys.Right) || stick.X > Game.gameSettings.controlStickTrigger)
                         {
                             SoundEffects.PlayMove();
                             prevMasterGrid = masterGrid.Copy();
@@ -501,7 +508,7 @@ namespace PuzzleBox
                             prevCubeDistance = cubeDistance;
                             gameState = State.ROTATENEGY;
                         }
-                        if (Keyboard.GetState().IsKeyDown(Keys.Up) || stick.Y > Game.gameSettings.controlStickTrigger)
+                        if (gamePadState.IsButtonDown(Buttons.DPadUp) || gamePadState.IsButtonDown(Buttons.DPadUp) || Keyboard.GetState().IsKeyDown(Keys.Up) || stick.Y > Game.gameSettings.controlStickTrigger)
                         {
                             SoundEffects.PlayMove();
                             prevMasterGrid = masterGrid.Copy();
@@ -509,7 +516,7 @@ namespace PuzzleBox
                             prevCubeDistance = cubeDistance;
                             gameState = State.ROTATEPOSX;
                         }
-                        if (Keyboard.GetState().IsKeyDown(Keys.Down) || stick.Y < -Game.gameSettings.controlStickTrigger)
+                        if (gamePadState.IsButtonDown(Buttons.DPadDown) || gamePadState.IsButtonDown(Buttons.DPadDown) || gamePadState.IsButtonDown(Buttons.DPadDown) || Keyboard.GetState().IsKeyDown(Keys.Down) || stick.Y < -Game.gameSettings.controlStickTrigger)
                         {
                             SoundEffects.PlayMove();
                             prevMasterGrid = masterGrid.Copy();
@@ -805,7 +812,7 @@ namespace PuzzleBox
                         }
                         if (Keyboard.GetState().IsKeyDown(Keys.B))
                         {
-                            selectedNode.color = Color.Blue;
+                            selectedNode.color = Game.jellyBlue;
                         }
                         if (Keyboard.GetState().IsKeyDown(Keys.Y))
                         {
@@ -921,11 +928,11 @@ namespace PuzzleBox
             //OrbRenderer.DrawBackground();
 
             // Calculate tilt data
-            if (gameState != State.PAUSING && gameState != State.RESUMING && GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Length() > Game.gameSettings.controlStickTrigger)
+            if (gameState != State.PAUSING && gameState != State.RESUMING && GamePad.GetState(Game.playerIndex).ThumbSticks.Right.Length() > Game.gameSettings.controlStickTrigger)
             {
                 //shift = new Vector2(Game.screenCenterX - Mouse.GetState().X, Game.screenCenterY - Mouse.GetState().Y);
-                targetShift = new Vector2(GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X * Game.screenCenterX,
-                    -GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y * Game.screenCenterY);
+                targetShift = new Vector2(GamePad.GetState(Game.playerIndex).ThumbSticks.Right.X * Game.screenCenterX,
+                    -GamePad.GetState(Game.playerIndex).ThumbSticks.Right.Y * Game.screenCenterY);
                 if (shift != targetShift)
                 {
                     Vector2 shiftDelta = targetShift - shift;
@@ -959,10 +966,10 @@ namespace PuzzleBox
                         //int targetX = (Game.screenCenterX - Mouse.GetState().X);
                         //int targetY = (Game.screenCenterY - Mouse.GetState().Y);
                         // Gamepad Camera                       
-                        if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Length() > Game.gameSettings.controlStickTrigger)
+                        if (GamePad.GetState(Game.playerIndex).ThumbSticks.Right.Length() > Game.gameSettings.controlStickTriggerView)
                         {
-                            targetShift = new Vector2(GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X * Game.screenCenterX,
-                                -GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y * Game.screenCenterY);
+                            targetShift = new Vector2(GamePad.GetState(Game.playerIndex).ThumbSticks.Right.X * Game.screenCenterX,
+                                -GamePad.GetState(Game.playerIndex).ThumbSticks.Right.Y * Game.screenCenterY);
                             savedShift = targetShift;
                         }
                         else

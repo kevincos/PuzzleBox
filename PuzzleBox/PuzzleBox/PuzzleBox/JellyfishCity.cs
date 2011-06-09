@@ -167,7 +167,7 @@ namespace PuzzleBox
             }
             if (state == JellyfishCityState.HELLO)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
+                if (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(Game.playerIndex).IsButtonDown(Buttons.A))
                 {
                     state = JellyfishCityState.NURSEOUT;
                     animateTime = 0;
@@ -175,7 +175,7 @@ namespace PuzzleBox
             }
             if (state == JellyfishCityState.GOODBYE)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
+                if (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(Game.playerIndex).IsButtonDown(Buttons.A))
                 {
                     state = JellyfishCityState.NURSEOUT;
                     animateTime = 0;
@@ -183,7 +183,7 @@ namespace PuzzleBox
             }
             if (state == JellyfishCityState.VIEW)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
+                if (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(Game.playerIndex).IsButtonDown(Buttons.A))
                 {
                     state = JellyfishCityState.NURSEIN;
                     animateTime = 0;

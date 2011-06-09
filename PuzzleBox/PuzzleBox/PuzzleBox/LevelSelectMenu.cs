@@ -196,7 +196,7 @@ namespace PuzzleBox
                 {
                     animateTime = 0;
                     LevelData levelData = GetLevelData(currentLevel);
-                    if (levelData.unlocked)
+                    if (levelData.unlocked && !(Guide.IsTrialMode && levelList[currentLevel].fullVersionOnly))
                         state = SelectMenuState.SELECTING;
                     else
                         state = SelectMenuState.READY;
@@ -207,7 +207,7 @@ namespace PuzzleBox
             if (cooldown <= 0)
             {
                 cooldown = 0;
-                GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+                GamePadState gamePadState = GamePad.GetState(Game.playerIndex);
                 Vector2 leftStick = gamePadState.ThumbSticks.Left;
                 Vector2 rightStick = gamePadState.ThumbSticks.Right;
                     
@@ -217,7 +217,7 @@ namespace PuzzleBox
                     {
                         SoundEffects.PlayClick();
                         LevelData levelData = GetLevelData(currentLevel);
-                        if (levelData.unlocked == false)
+                        if (levelData.unlocked == false || (Guide.IsTrialMode && levelList[currentLevel].fullVersionOnly))
                             state = SelectMenuState.DOCTOROUT;
                         currentTextPiece++;
                         animateTime = 0;
@@ -231,7 +231,7 @@ namespace PuzzleBox
                 }
                 if (state == SelectMenuState.READY)
                 {
-                    if (Keyboard.GetState().IsKeyDown(Keys.Left) || leftStick.X < -Game.gameSettings.controlStickTrigger || rightStick.X < -Game.gameSettings.controlStickTrigger)
+                    if (gamePadState.IsButtonDown(Buttons.DPadLeft) || gamePadState.IsButtonDown(Buttons.DPadLeft) || Keyboard.GetState().IsKeyDown(Keys.Left) || leftStick.X < -Game.gameSettings.controlStickTrigger || rightStick.X < -Game.gameSettings.controlStickTrigger)
                     {                        
                         if (currentLevel > 0)
                         {
@@ -250,7 +250,7 @@ namespace PuzzleBox
                             animateTime = 0;
                         }
                     }
-                    if (Keyboard.GetState().IsKeyDown(Keys.Right) || leftStick.X > Game.gameSettings.controlStickTrigger || rightStick.X > Game.gameSettings.controlStickTrigger)
+                    if (gamePadState.IsButtonDown(Buttons.DPadRight) || gamePadState.IsButtonDown(Buttons.DPadRight) || Keyboard.GetState().IsKeyDown(Keys.Right) || leftStick.X > Game.gameSettings.controlStickTrigger || rightStick.X > Game.gameSettings.controlStickTrigger)
                     {
                         if (currentLevel < levelList.Count - 1)
                         {
@@ -281,7 +281,7 @@ namespace PuzzleBox
                         if (textPieces.Count() <= 1)
                         {
                             LevelData levelData = GetLevelData(currentLevel);
-                            if (levelData.unlocked)
+                            if (levelData.unlocked && !(Guide.IsTrialMode && levelList[currentLevel].fullVersionOnly))
                                 state = SelectMenuState.SELECTING;
                             else
                                 state = SelectMenuState.DOCTORIN;
@@ -336,8 +336,8 @@ namespace PuzzleBox
                     }
                 }
 
-                LevelData levelData = GetLevelData(i);   
-                if(levelData.unlocked)
+                LevelData levelData = GetLevelData(i);
+                if (levelData.unlocked && !(Guide.IsTrialMode && levelList[i].fullVersionOnly))
                     JellyfishRenderer.DrawJellyfish(x + selectedJellyX, selectedJellyY + y, 100, levelList[i].texture, scale);
                 else
                     JellyfishRenderer.DrawJellyfish(x + selectedJellyX, selectedJellyY + y, 100, JellyfishRenderer.mysteryJelly, scale);
@@ -448,8 +448,9 @@ namespace PuzzleBox
             }
             if (state == SelectMenuState.TEXT)
             {
-                LevelData levelData = GetLevelData(currentLevel);         
-                if (levelData.unlocked)
+                LevelData levelData = GetLevelData(currentLevel);
+
+                if (levelData.unlocked && !(Guide.IsTrialMode && levelList[currentLevel].fullVersionOnly))
                 {
                     if (textPieces[currentTextPiece].Split(':')[0] == "D")
                         JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
@@ -457,6 +458,11 @@ namespace PuzzleBox
                         JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
                     String text = textPieces[currentTextPiece].Split(':')[1];
                     Game.spriteBatch.DrawString(Game.spriteFont, text, new Vector2(speechX - 250, speechY), Color.Black);
+                }
+                else if (Guide.IsTrialMode && levelList[currentLevel].fullVersionOnly)
+                {
+                    JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
+                    Game.spriteBatch.DrawString(Game.spriteFont, "This patient is only available on the full version\nof Jellyfish, MD. Go to the main menu to unlock it!", new Vector2(speechX - 250, speechY), Color.Black);
                 }
                 else
                 {

@@ -89,7 +89,7 @@ namespace PuzzleBox
                 {
                     if (i == selectedOption)
                     {
-                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count - 2) * 125 + offSet, speechY + 40), Color.Blue);
+                        Game.spriteBatch.DrawString(Game.spriteFont, optionList[i].optionString, new Vector2(speechX - (optionList.Count - 2) * 125 + offSet, speechY + 40), Game.jellyBlue);
                     }
                     else
                     {
@@ -120,7 +120,7 @@ namespace PuzzleBox
             }
             if (state == PauseMenuState.READY && cooldown == 0)
             {
-                GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+                GamePadState gamePadState = GamePad.GetState(Game.playerIndex);
                 Vector2 leftStick = gamePadState.ThumbSticks.Left;
                 Vector2 rightStick = gamePadState.ThumbSticks.Right;
                 if (Keyboard.GetState().IsKeyDown(Keys.Space) || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
@@ -130,7 +130,7 @@ namespace PuzzleBox
                     state = PauseMenuState.NURSEOUT;
                     SoundEffects.PlayMove();
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Right) || leftStick.X > Game.gameSettings.controlStickTrigger || rightStick.X > Game.gameSettings.controlStickTrigger)
+                if (gamePadState.IsButtonDown(Buttons.DPadRight) || gamePadState.IsButtonDown(Buttons.DPadRight) || Keyboard.GetState().IsKeyDown(Keys.Right) || leftStick.X > Game.gameSettings.controlStickTrigger || rightStick.X > Game.gameSettings.controlStickTrigger)
                 {
                     selectedOption++;
                     SoundEffects.PlayClick();
@@ -138,7 +138,7 @@ namespace PuzzleBox
                         selectedOption = optionList.Count() - 1;
                     cooldown = 250;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Left) || leftStick.X < -Game.gameSettings.controlStickTrigger || rightStick.X < -Game.gameSettings.controlStickTrigger)
+                if (gamePadState.IsButtonDown(Buttons.DPadLeft) || gamePadState.IsButtonDown(Buttons.DPadLeft) || Keyboard.GetState().IsKeyDown(Keys.Left) || leftStick.X < -Game.gameSettings.controlStickTrigger || rightStick.X < -Game.gameSettings.controlStickTrigger)
                 {
                     selectedOption--;
                     SoundEffects.PlayClick();
