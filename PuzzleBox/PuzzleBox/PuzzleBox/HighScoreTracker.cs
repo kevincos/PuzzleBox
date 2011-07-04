@@ -74,12 +74,11 @@ namespace PuzzleBox
         }
 
         public static void InitializeHighScores()
-        {
-            if((container==null && cachedData==null) || (container!=null && false == container.FileExists("highscores.sav")))
+        {            
+            if (cachedData == null)
             {
-
-                HighScoreData defaultData = new HighScoreData();
-                for(int i = 0; i < 3; i++)
+                HighScoreData defaultData = new HighScoreData();        
+                for (int i = 0; i < 3; i++)
                 {
                     defaultData.moveChallengeLevels[i] = new LevelData();
                     defaultData.moveChallengeLevels[i].rank = 0;
@@ -87,7 +86,7 @@ namespace PuzzleBox
                     defaultData.moveChallengeLevels[i].unlocked = false;
                     //defaultData.moveChallengeLevels[i].disabled = true;
                     defaultData.moveChallengeLevels[i].playerNames[0] = "JLY";
-                    defaultData.moveChallengeLevels[i].highScores[0] = 500*(i+1);
+                    defaultData.moveChallengeLevels[i].highScores[0] = 500 * (i + 1);
                     defaultData.moveChallengeLevels[i].playerNames[1] = "KEV";
                     defaultData.moveChallengeLevels[i].highScores[1] = 400 * (i + 1);
                     defaultData.moveChallengeLevels[i].playerNames[2] = "SRB";
@@ -101,14 +100,14 @@ namespace PuzzleBox
                 defaultData.moveChallengeLevels[0].unlocked = true;
                 //defaultData.moveChallengeLevels[0].disabled = false;
                 //defaultData.moveChallengeLevels[1].disabled = false;
-                for(int i = 0; i < 20; i++)
+                for (int i = 0; i < 20; i++)
                 {
                     defaultData.puzzleLevels[i] = new LevelData();
                     defaultData.puzzleLevels[i].rank = 0;
                     defaultData.puzzleLevels[i].played = false;
                     defaultData.puzzleLevels[i].unlocked = false;
                     //defaultData.puzzleLevels[i].disabled = true;
-                    
+
                     defaultData.puzzleLevels[i].playerNames[0] = "JLY";
                     defaultData.puzzleLevels[i].highScores[0] = 60000;
                     defaultData.puzzleLevels[i].playerNames[1] = "KEV";
@@ -127,7 +126,7 @@ namespace PuzzleBox
                     }
                 }
                 defaultData.puzzleLevels[0].unlocked = true;
-                for(int i = 0; i < 3; i++)
+                for (int i = 0; i < 3; i++)
                 {
                     defaultData.timeAttackLevels[i] = new LevelData();
                     defaultData.timeAttackLevels[i].rank = 0;
@@ -148,32 +147,50 @@ namespace PuzzleBox
                 }
                 defaultData.timeAttackLevels[0].unlocked = true;
                 //defaultData.timeAttackLevels[0].disabled = false;
-                SaveHighScores(defaultData);
-            }
+                cachedData = defaultData;
+            }            
         }
 
         public static void SaveHighScores(HighScoreData data)
         {
             // Open the file, creating it if necessary
             //FileStream stream = File.Open(highScorePath, FileMode.Create);
-            if (container == null)
-            {
-                cachedData = data;
-                return;
-            }
-            Stream stream = container.OpenFile("highscores.sav", FileMode.Create);
-            
+            cachedData = data;
+
             try
             {
-                // Convert the object to XML data and put it in the stream
-                XmlSerializer serializer = new XmlSerializer(typeof(HighScoreData));
-                serializer.Serialize(stream, data);
+                IAsyncResult result =
+                    HighScoreTracker.device.BeginOpenContainer("StorageDemo", null, null);
+                result.AsyncWaitHandle.WaitOne();
+                container = HighScoreTracker.device.EndOpenContainer(result);
+                result.AsyncWaitHandle.Close();
+
+                Stream stream = container.OpenFile("highscores.sav", FileMode.Create);
+
+                try
+                {
+                    // Convert the object to XML data and put it in the stream
+                    XmlSerializer serializer = new XmlSerializer(typeof(HighScoreData));
+                    serializer.Serialize(stream, data);
+                }
+                catch
+                {
+                }
+                finally
+                {
+                    // Close the file
+                    stream.Flush();
+                    stream.Close();
+                }
+            }
+            catch
+            {
+                return;
             }
             finally
             {
-                // Close the file
-                stream.Flush();
-                stream.Close();
+                if(container!=null)
+                    container.Dispose();
             }
         }
 
@@ -181,29 +198,50 @@ namespace PuzzleBox
         {
             HighScoreTracker.InitializeHighScores();
 
-            if (container == null)
-                return cachedData;
+            HighScoreData data = null;
 
-            HighScoreData data;
-
-            // Open the file
-            Stream stream = container.OpenFile("highscores.sav",FileMode.Open);
-            //FileStream stream = File.Open(highScorePath, FileMode.OpenOrCreate,
-            //FileAccess.Read);
             try
             {
+                IAsyncResult result =
+                            HighScoreTracker.device.BeginOpenContainer("StorageDemo", null, null);
+                result.AsyncWaitHandle.WaitOne();
+                container = HighScoreTracker.device.EndOpenContainer(result);
+                result.AsyncWaitHandle.Close();                                        
 
-                // Read the data from the file
-                XmlSerializer serializer = new XmlSerializer(typeof(HighScoreData));
-                 data = (HighScoreData)serializer.Deserialize(stream);
+                // Open the file
+                Stream stream = container.OpenFile("highscores.sav", FileMode.Open);
+                //FileStream stream = File.Open(highScorePath, FileMode.OpenOrCreate,
+                //FileAccess.Read);
+                try
+                {
+
+                    // Read the data from the file
+                    XmlSerializer serializer = new XmlSerializer(typeof(HighScoreData));
+                    data = (HighScoreData)serializer.Deserialize(stream);
+                    if (data != null)
+                        cachedData = data;
+                }
+                catch(Exception e)
+                {
+                }
+                finally
+                {
+                    // Close the file
+                    stream.Close();
+                }
+            }
+            catch
+            {
             }
             finally
             {
-                // Close the file
-                stream.Close();
+                if(container!=null)
+                    container.Dispose();
+                if(data == null)
+                    data = cachedData;
             }
 
-            return (data);
+            return data;
         }
     }
 }

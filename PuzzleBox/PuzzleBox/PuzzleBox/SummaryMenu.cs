@@ -16,7 +16,8 @@ namespace PuzzleBox
     {
         NURSEIN,
         NURSEOUT,
-        READY
+        READY,
+        WAIT
     }
 
     public class SummaryMenu
@@ -43,7 +44,8 @@ namespace PuzzleBox
             bool endOfSection = TutorialStage.IsEndOfSection();
             if (TutorialStage.phase!=TutorialPhase.None && endOfSection==false)
             {
-                optionList.Add(new MenuOption(MenuResult.GoToResults, "Continue"));
+                if(!(TutorialStage.phase == TutorialPhase.Intro && TutorialStage.introIndex == TutorialStage.controlLessonIndex))
+                    optionList.Add(new MenuOption(MenuResult.GoToResults, "Continue"));
             }
             else if (TutorialStage.phase==TutorialPhase.Fail)
             {
@@ -95,7 +97,7 @@ namespace PuzzleBox
             {
                 JellyfishRenderer.DrawJellyfish(nurseX - 300 * animateTime / 250, nurseY, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
             }
-            if (state == SummaryMenuState.READY)
+            if (state == SummaryMenuState.READY || state == SummaryMenuState.WAIT)
             {
                 JellyfishRenderer.DrawJellyfish(nurseX, nurseY, 100, JellyfishRenderer.nurseJellyfish, .75f, SpriteEffects.FlipHorizontally);
                 if (Game.metaState != MetaState.GamePlay)
@@ -115,6 +117,10 @@ namespace PuzzleBox
                         }
                         offSet += optionList[i].optionString.Length * 10 + 40;
                     }
+                    if (optionList.Count() == 1)
+                    {
+                        Game.spriteBatch.Draw(HelpOverlay.summary_confirm, new Rectangle(speechX+255,speechY+60,25,25),Color.Green);
+                    }
                 }
             }
         }
@@ -123,7 +129,26 @@ namespace PuzzleBox
         {
             cooldown -= gameTime.ElapsedGameTime.Milliseconds;
             if (cooldown < 0) cooldown = 0;
-            if (state == SummaryMenuState.NURSEIN || state == SummaryMenuState.NURSEOUT)
+            if (state == SummaryMenuState.WAIT && animateTime > 1000)
+            {
+                SoundEffects.PlayClick();
+                result = MenuResult.GoToResults;
+                String nextText = null;
+                if (TutorialStage.controlLessonIndex == TutorialStage.introIndex)
+                {
+                    optionList = new List<MenuOption>();
+                }
+                else
+                {
+                    optionList = new List<MenuOption>();
+                    optionList.Add(new MenuOption(MenuResult.GoToResults, "Continue"));
+                }
+                state = SummaryMenuState.READY;
+                nextText = TutorialStage.IntroText();
+                text = nextText;
+                cooldown = 250;
+            }
+            if (state == SummaryMenuState.NURSEIN || state == SummaryMenuState.NURSEOUT || state == SummaryMenuState.WAIT)
             {
                 animateTime += gameTime.ElapsedGameTime.Milliseconds;
             }
@@ -142,66 +167,100 @@ namespace PuzzleBox
                 GamePadState gamePadState = GamePad.GetState(Game.playerIndex);
                 Vector2 leftStick = gamePadState.ThumbSticks.Left;
                 Vector2 rightStick = gamePadState.ThumbSticks.Right;
-                if (Keyboard.GetState().IsKeyDown(Keys.Space) || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
+                if (!(TutorialStage.phase != TutorialPhase.None && TutorialStage.introIndex - 1 == TutorialStage.controlLessonIndex))
                 {
-                    SoundEffects.PlayClick();
-                    result = optionList[selectedOption].result;
-                    String nextText = null;
-                    if (TutorialStage.phase==TutorialPhase.Intro)
+                    if (Keyboard.GetState().IsKeyDown(Keys.Space) || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
                     {
-                        nextText = TutorialStage.IntroText();                        
-                    }
-                    else if (TutorialStage.phase == TutorialPhase.Pass)
-                    {
-                        nextText = TutorialStage.SuccessText();
-                        if (TutorialStage.IsEndOfSection())
-                        {                            
-                            optionList = new List<MenuOption>();
-                            optionList.Add(new MenuOption(MenuResult.GoToResults, "Continue"));
-                            optionList.Add(new MenuOption(MenuResult.Replay, "Practice"));                            
-                        }
-                    }
-                    else if (TutorialStage.phase == TutorialPhase.Fail)
-                    {
-                        nextText = TutorialStage.FailureText();
-                        if (TutorialStage.IsEndOfSection())
+                        SoundEffects.PlayClick();
+                        result = optionList[selectedOption].result;
+                        String nextText = null;
+                        if (TutorialStage.phase == TutorialPhase.Intro)
                         {
-                            optionList = new List<MenuOption>();
-                            optionList.Add(new MenuOption(MenuResult.Replay, "Try Again"));
-                            optionList.Add(new MenuOption(MenuResult.GoToMainMenu, "Main Menu"));                            
+                            if (TutorialStage.controlLessonIndex == TutorialStage.introIndex)
+                            {
+                                optionList = new List<MenuOption>();
+                            }
+                            else
+                            {
+                                optionList = new List<MenuOption>();
+                                optionList.Add(new MenuOption(MenuResult.GoToResults, "Continue"));
+                            }
+                            nextText = TutorialStage.IntroText();
+                        }
+                        else if (TutorialStage.phase == TutorialPhase.Pass)
+                        {
+                            nextText = TutorialStage.SuccessText();
+                            if (TutorialStage.IsEndOfSection())
+                            {
+                                optionList = new List<MenuOption>();
+                                optionList.Add(new MenuOption(MenuResult.GoToResults, "Continue"));
+                                optionList.Add(new MenuOption(MenuResult.Replay, "Practice"));
+                            }
+                        }
+                        else if (TutorialStage.phase == TutorialPhase.Fail)
+                        {
+                            nextText = TutorialStage.FailureText();
+                            if (TutorialStage.IsEndOfSection())
+                            {
+                                optionList = new List<MenuOption>();
+                                optionList.Add(new MenuOption(MenuResult.Replay, "Try Again"));
+                                optionList.Add(new MenuOption(MenuResult.GoToMainMenu, "Main Menu"));
+                            }
+                        }
+                        if (nextText != null)
+                        {
+                            text = nextText;
+                            cooldown = 250;
+                        }
+                        else
+                        {
+                            if ((TutorialStage.phase == TutorialPhase.Pass && result != MenuResult.Replay) || TutorialStage.phase == TutorialPhase.Fail)
+                            {
+                                return result;
+                            }
+                            animateTime = 0;
+                            state = SummaryMenuState.NURSEOUT;
+
                         }
                     }
-                    if (nextText != null)
+
+                    if (gamePadState.IsButtonDown(Buttons.DPadRight) || gamePadState.IsButtonDown(Buttons.DPadRight) || Keyboard.GetState().IsKeyDown(Keys.Right) || leftStick.X > Game.gameSettings.controlStickTrigger || rightStick.X > Game.gameSettings.controlStickTrigger)
                     {
-                        text = nextText;
+                        SoundEffects.PlayClick();
+                        selectedOption++;
+                        if (selectedOption >= optionList.Count())
+                            selectedOption = optionList.Count() - 1;
                         cooldown = 250;
                     }
-                    else
+                    if (gamePadState.IsButtonDown(Buttons.DPadLeft) || gamePadState.IsButtonDown(Buttons.DPadLeft) || Keyboard.GetState().IsKeyDown(Keys.Left) || leftStick.X < -Game.gameSettings.controlStickTrigger || rightStick.X < -Game.gameSettings.controlStickTrigger)
                     {
-                        if (TutorialStage.phase == TutorialPhase.Pass || TutorialStage.phase == TutorialPhase.Fail)
-                        {
-                            return result;
-                        }
-                        animateTime = 0;
-                        state = SummaryMenuState.NURSEOUT;
-                        
+                        SoundEffects.PlayClick();
+                        selectedOption--;
+                        if (selectedOption < 0)
+                            selectedOption = 0;
+                        cooldown = 250;
                     }
                 }
-                if (gamePadState.IsButtonDown(Buttons.DPadRight) || gamePadState.IsButtonDown(Buttons.DPadRight) || Keyboard.GetState().IsKeyDown(Keys.Right) || leftStick.X > Game.gameSettings.controlStickTrigger || rightStick.X > Game.gameSettings.controlStickTrigger)
+                else
                 {
-                    SoundEffects.PlayClick();
-                    selectedOption++;
-                    if (selectedOption >= optionList.Count())
-                        selectedOption = optionList.Count() - 1;
-                    cooldown = 250;
-                }
-                if (gamePadState.IsButtonDown(Buttons.DPadLeft) || gamePadState.IsButtonDown(Buttons.DPadLeft) || Keyboard.GetState().IsKeyDown(Keys.Left) || leftStick.X < -Game.gameSettings.controlStickTrigger || rightStick.X < -Game.gameSettings.controlStickTrigger)
-                {
-                    SoundEffects.PlayClick();
-                    selectedOption--;
-                    if (selectedOption < 0)
-                        selectedOption = 0;
-                    cooldown = 250;
+                    if (TutorialStage.restrictions==ControlRestrictions.StickOnly && (gamePadState.IsButtonDown(Buttons.DPadUp) || Keyboard.GetState().IsKeyDown(Keys.Up) || gamePadState.ThumbSticks.Left.Y > Game.gameSettings.controlStickTrigger ||
+                        gamePadState.IsButtonDown(Buttons.DPadDown) || Keyboard.GetState().IsKeyDown(Keys.Down) || gamePadState.ThumbSticks.Left.Y < -Game.gameSettings.controlStickTrigger ||
+                        gamePadState.IsButtonDown(Buttons.DPadLeft) || Keyboard.GetState().IsKeyDown(Keys.Left) || gamePadState.ThumbSticks.Left.X > Game.gameSettings.controlStickTrigger ||
+                        gamePadState.IsButtonDown(Buttons.DPadRight) || Keyboard.GetState().IsKeyDown(Keys.Left) || gamePadState.ThumbSticks.Left.X < -Game.gameSettings.controlStickTrigger))
+                    {
+                        state = SummaryMenuState.WAIT;
+                        animateTime = 0;
+                    }
+                    if (TutorialStage.restrictions == ControlRestrictions.ShouldersOnly && (gamePadState.IsButtonDown(Buttons.LeftShoulder) || gamePadState.IsButtonDown(Buttons.RightShoulder) || Keyboard.GetState().IsKeyDown(Keys.A) || Keyboard.GetState().IsKeyDown(Keys.S)))
+                    {
+                        state = SummaryMenuState.WAIT;
+                        animateTime = 0;
+                    }
+                    if (TutorialStage.restrictions == ControlRestrictions.TriggersOnly && (gamePadState.IsButtonDown(Buttons.LeftTrigger) || gamePadState.IsButtonDown(Buttons.RightTrigger) || Keyboard.GetState().IsKeyDown(Keys.Q) || Keyboard.GetState().IsKeyDown(Keys.W)))
+                    {
+                        state = SummaryMenuState.WAIT;
+                        animateTime = 0;
+                    }
                 }
             }
             return MenuResult.None;

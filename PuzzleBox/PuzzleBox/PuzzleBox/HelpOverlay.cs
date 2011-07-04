@@ -25,6 +25,7 @@ namespace PuzzleBox
         public static Texture2D help_sound;
         public static Texture2D help_music;
         public static Texture2D help_x;
+        public static Texture2D summary_confirm;
 
         public static void Draw(bool showBack)
         {

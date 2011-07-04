@@ -41,7 +41,8 @@ namespace PuzzleBox
         public static bool active = true;
         public static bool loaded = false;
         public static int lessonIndex = 0;
-        public static int maxLesson = 10;
+        public static int maxLesson = 11;
+        public static int controlLessonIndex = -5;
 
         public static ControlRestrictions restrictions = ControlRestrictions.None;
 
@@ -95,6 +96,7 @@ namespace PuzzleBox
             introIndex = 0;
             successIndex = 0;
             failureIndex = 0;
+            controlLessonIndex = -5;
             phase = TutorialPhase.Intro;
             switch (index)
             {
@@ -111,21 +113,24 @@ namespace PuzzleBox
                     Lesson4(box, grid);
                     break;
                 case (4):
-                    Lesson5(box, grid);
+                    LessonBonus(box, grid);
                     break;
                 case (5):
-                    Lesson6(box, grid);
+                    Lesson5(box, grid);
                     break;
                 case (6):
-                    Lesson7(box, grid);
+                    Lesson6(box, grid);
                     break;
                 case (7):
-                    Lesson8(box, grid);
+                    Lesson7(box, grid);
                     break;
                 case (8):
-                    Lesson9(box, grid);
+                    Lesson8(box, grid);
                     break;
                 case (9):
+                    Lesson9(box, grid);
+                    break;
+                case (10):
                     Lesson10(box, grid);
                     break;
                 default:
@@ -162,14 +167,16 @@ namespace PuzzleBox
 
         public static void Lesson1(PuzzleBox box, MasterGrid grid)
         {
+            controlLessonIndex = 1;
             introText = "" +
             "Look at all these bubbles inside Mister\n"+
             "Jellyfish! The colored ones are toxic! Let's\n" +
             "see if we can get rid of them.:"+
-            "Use the Left Control Stick to rotate the\n" +
-            "bubbles in Mister Jellyfish's body.:" +
-            "Try to match up the colored bubbles in\n" +
-            "his body with the bubbles in his tentacles!";
+            "You can use the Left Control Stick to rotate\n" +
+            "the bubbles in Mister Jellyfish's body.\n" +
+            "Try it now!:" +
+            "Perfect! Try to match up the colored bubbles\n" +
+            "in his body with the bubbles in his tentacles!";
             successText = "" +
             "Great job! When you aligned the bubbles in\n" +
             "his body with the bubbles in his tentacles,\n" +
@@ -193,12 +200,14 @@ namespace PuzzleBox
 
         public static void Lesson2(PuzzleBox box, MasterGrid grid)
         {
+            controlLessonIndex = 0;
             introText = "" +
-            "Instead of using the Left Control Stick, try\n" +
-            "using the Left and Right Shoulder Buttons.:" +
-            "This will perform a different type of\n" +
+            "Instead of using the Left Control Stick, you\n" +
+            "can use the Left and Right Shoulder Buttons.\n" + 
+            "Try it now!:" +
+            "Good! This will perform a different type of\n" +
             "rotation. Use the Shoulder Buttons to match\n" +
-            "the bubbles!";
+            "these bubbles!";
             successText = "" +
             "Nice! If you can master all 6 types of these\n" +
             "rotations, you'll do great!";
@@ -221,17 +230,13 @@ namespace PuzzleBox
 
         public static void Lesson3(PuzzleBox box, MasterGrid grid)
         {
+            controlLessonIndex = 0;
             introText = "" +
-            "In addition to rotations, you can use the Left\n" +
-            "and Right Triggers to push and pull the bubbles\n" +
-            "in the Jellyfish's body.:" +
-            "That way, you can change which layer of bubbles\n" +
-            "aligns with the tentacles.:" +
-            "Also, you can use the Right Control Stick at any\n" +
-            "time to shift the camera angle.:" +
-            "I like to set the camera so that all 27 bubbles\n" +
-            "in the body are visible at the same time.:" +
-            "But you should do whatever feels comfortable!\n"+
+            "In addition, you can use the Left and Right\n" +
+            "Triggers to push and pull the bubbles in the\n" +
+            "Jellyfish's body. Try it now!:" +
+            "Great! That way, you can change which layer of\n" +
+            "bubbles aligns with the tentacles.:" +
             "Now, use the Left and Right Triggers to match\n"+
             "the bubbles!";
             successText = "" +
@@ -240,7 +245,7 @@ namespace PuzzleBox
             "bubbles however you want!:"+
             "If you need a reminder of the controls, take a\n" +
             "look around the top and bottom left of the\n"+
-            "of the screen for a review.";
+            "screen for a review.";
             Clear(box, grid);
             restrictions = ControlRestrictions.TriggersOnly;
             grid[0, 1] = new PuzzleNode(Color.Red);
@@ -265,8 +270,7 @@ namespace PuzzleBox
             "Stick and Shoulder Buttons to rotate them!:" +
             "Try and match all the bubbles!";
             successText = "" +
-            "Way to go! You're getting the hang of it!\n" +
-            "Let's talk about some more advanced topics!";
+            "That's perfect!";
             failureText = "BUG!";
             Clear(box, grid);
             restrictions = ControlRestrictions.None;
@@ -282,6 +286,48 @@ namespace PuzzleBox
             box[0, 2, 0] = new PuzzleNode(Game.jellyBlue);
             box[0, 0, 1] = new PuzzleNode(Color.Green);
             box[2, 1, 1] = new PuzzleNode(Color.Orange);
+        }
+
+        public static void LessonBonus(PuzzleBox box, MasterGrid grid)
+        {
+            introText = "" +
+            "We'll learn some advanced techniques soon,\n" +
+            "but matching bubbles like this is the core\n" +
+            "skill for any Jellyfish surgeon.:" +
+            "So let's practice this some more!\n" +
+            "Also, you can use the Right Control Stick at any\n" +
+            "time to shift the camera angle.:" +
+            "I like to set the camera so that all 27 bubbles\n" +
+            "in the body are visible at the same time.:" +
+            "But you should do whatever feels comfortable!\n" +
+            "Now, match those bubbles!";
+        
+            successText = "" +
+            "Way to go! You're getting the hang of it!\n" +
+            "Let's talk about some more advanced topics!";
+            failureText = "BUG!";
+            Clear(box, grid);
+            restrictions = ControlRestrictions.None;
+            grid[2, 0] = new PuzzleNode(Color.Red);
+            grid[3, 0] = new PuzzleNode(Color.Orange);
+            grid[3, 4] = new PuzzleNode(Color.Orange);
+            grid.queues[3, 4][0] = new PuzzleNode(Game.jellyBlue);
+            grid[0, 1] = new PuzzleNode(Color.Magenta);
+            grid.queues[3, 0][1] = new PuzzleNode(Game.jellyBlue);
+            grid[1, 0] = new PuzzleNode(Game.jellyBlue);
+            grid[0, 2] = new PuzzleNode(Color.Yellow);
+            grid.queues[0, 2][0] = (new PuzzleNode(Color.Red)); 
+            grid[4, 2] = new PuzzleNode(Color.Green);
+            grid[2, 4] = new PuzzleNode(Color.Yellow);
+            grid.queues[4, 2][0] = (new PuzzleNode(Color.Yellow)); 
+            grid.queues[4, 2][1] = (new PuzzleNode(Color.Red));
+            box[1, 1, 0] = new PuzzleNode(Color.Red);            
+            box[1, 0, 2] = new PuzzleNode(Color.Magenta);
+            box[0, 2, 2] = new PuzzleNode(Game.jellyBlue);
+            box[0, 1, 2] = new PuzzleNode(Color.Yellow);
+            box[0, 0, 1] = new PuzzleNode(Color.Green);
+            box[2, 0, 0] = new PuzzleNode(Color.Orange);
+            box[2, 2, 2] = new PuzzleNode(Color.Orange);
         }
 
         public static void Lesson5(PuzzleBox box, MasterGrid grid)
@@ -400,8 +446,7 @@ namespace PuzzleBox
             "two tentacles at the same time, it will be\n" +
             "replaced by a bonus bubble.:" +
             "You can reuse the bonus bubbles to make more\n" +
-            "matches. Try getting the bonus bubbles first!" +            
-            "to push and pull the bubbles.";
+            "matches. Try getting the bonus bubbles first!";            
             restrictions = ControlRestrictions.None;
             Clear(box, grid);
             box[0, 1, 2] = new PuzzleNode(Color.Yellow);            

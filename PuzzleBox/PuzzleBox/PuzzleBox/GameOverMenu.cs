@@ -61,7 +61,7 @@ namespace PuzzleBox
         String initials = "---";
         int currentCharacter = 0;
 
-        String congratulationsMessage = "Testing...";
+        String congratulationsMessage = "Loading...";
 
         LevelData levelData;
 

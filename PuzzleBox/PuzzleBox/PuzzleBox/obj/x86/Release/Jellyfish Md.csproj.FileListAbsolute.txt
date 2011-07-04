@@ -117,3 +117,4 @@ C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Release\ResolveA
 C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Release\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Release\Jellyfish MD.exe
 C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\obj\x86\Release\Jellyfish MD.pdb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\x86\Release\Content\summary_confirm.xnb

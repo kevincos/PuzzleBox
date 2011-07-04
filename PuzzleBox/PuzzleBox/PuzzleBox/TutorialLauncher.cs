@@ -101,6 +101,7 @@ namespace PuzzleBox
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(Game.playerIndex).IsButtonDown(Buttons.A))
                 {
+                    SoundEffects.PlayClick();
                     state = TutorialLauncherState.DOCTOROUT;
                     animateTime = 0;
                 }
@@ -150,16 +151,19 @@ namespace PuzzleBox
                 JellyfishRenderer.DrawJellyfish(doctorX, doctorY, 100, JellyfishRenderer.doctorJellyfish, .75f, SpriteEffects.FlipHorizontally);
                 JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.FlipHorizontally);
                 Game.spriteBatch.DrawString(Game.spriteFont, "Hey there! Jellyfish Surgery is very tricky, but \nNurse Jellyfish will teach you the basics..", new Vector2(speechX - 260, speechY), Color.Black);
+                Game.spriteBatch.Draw(HelpOverlay.summary_confirm, new Rectangle(speechX + 255, speechY + 60, 25, 25), Color.Green);
             }
             if (state == TutorialLauncherState.NURSETEXT)
             {
                 JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
                 Game.spriteBatch.DrawString(Game.spriteFont, "Welcome! You must be Doctor Jellyfish's \nnew assistant. Look! Here he is now...", new Vector2(speechX - 260, speechY), Color.Black);
+                Game.spriteBatch.Draw(HelpOverlay.summary_confirm, new Rectangle(speechX + 255, speechY + 60, 25, 25), Color.Green);
             }
             if (state == TutorialLauncherState.FINALTEXT)
             {
                 JellyfishRenderer.DrawSpeechBubble(speechX, speechY, 100, SpriteEffects.None);
                 Game.spriteBatch.DrawString(Game.spriteFont, "We can practice on Mister Jellyfish here! \nLet's take a look inside and get started...", new Vector2(speechX - 260, speechY), Color.Black);
+                Game.spriteBatch.Draw(HelpOverlay.summary_confirm, new Rectangle(speechX + 255, speechY + 60, 25, 25), Color.Green);
             }
 
         }        

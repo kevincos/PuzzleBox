@@ -38,6 +38,8 @@ namespace PuzzleBox
         List<Vector2> endPositions;
         List<Texture2D> textures;
 
+        public bool stillActive = false;
+
         public SplashScreen()
         {
             Game.SetSplashResolution();
@@ -167,6 +169,11 @@ namespace PuzzleBox
             {
                 animateTime = maxAnimateTime;
                 state = SplashScreenState.WAIT;
+                return MenuResult.GoToMainMenu;
+            }
+            if (state == SplashScreenState.WAIT && this.stillActive == true)
+            {
+                stillActive = false;
                 return MenuResult.GoToMainMenu;
             }
             if (state == SplashScreenState.READY)

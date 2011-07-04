@@ -169,7 +169,13 @@ namespace PuzzleBox
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(Game.playerIndex).IsButtonDown(Buttons.A))
                 {
-                    state = JellyfishCityState.NURSEOUT;
+                    if (jelliesSaved == 0)
+                    {
+                        intro = false;
+                        state = JellyfishCityState.GOODBYE;
+                    }
+                    else
+                        state = JellyfishCityState.NURSEOUT;
                     animateTime = 0;
                 }
             }
@@ -239,7 +245,13 @@ namespace PuzzleBox
                 }
                 if(state == JellyfishCityState.GOODBYE)
                     Game.spriteBatch.DrawString(Game.spriteFont, "Come back soon!", new Vector2(speechX - 270, speechY), Color.Black);
-            }            
+                Game.spriteBatch.Draw(HelpOverlay.summary_confirm, new Rectangle(speechX + 255, speechY + 60, 25, 25), Color.Green);
+            }
+            if (state == JellyfishCityState.VIEW)
+            {
+                Game.spriteBatch.DrawString(Game.spriteFont, "Done", new Vector2(1090, 655), Color.White);
+                Game.spriteBatch.Draw(HelpOverlay.summary_confirm, new Rectangle(1150, 650, 40, 40), Color.Green);
+            }
         }
     }
 }

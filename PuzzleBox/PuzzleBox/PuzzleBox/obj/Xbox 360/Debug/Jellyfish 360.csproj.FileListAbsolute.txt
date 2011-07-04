@@ -117,3 +117,4 @@ C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\obj\Xbox 360\Debug\Resol
 C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\obj\Xbox 360\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\obj\Xbox 360\Debug\Jellyfish MD.exe
 C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\obj\Xbox 360\Debug\Jellyfish MD.pdb
+C:\git_projects\PuzzleBox\PuzzleBox\PuzzleBox\PuzzleBox\bin\Xbox 360\Debug\Content\summary_confirm.xnb

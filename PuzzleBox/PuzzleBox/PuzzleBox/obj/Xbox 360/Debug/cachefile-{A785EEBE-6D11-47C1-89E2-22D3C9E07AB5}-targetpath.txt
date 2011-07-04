@@ -92,3 +92,4 @@ Content\music_game.xnb
 Content\music_game.wma
 Content\music_menu.xnb
 Content\music_menu.wma
+Content\summary_confirm.xnb

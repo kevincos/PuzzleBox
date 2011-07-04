@@ -64,6 +64,9 @@ namespace PuzzleBox
         public static SpriteBatch spriteBatch;
         public static int screenSizeX = 800;
         public static int screenSizeY = 400;
+        bool reselectDevice = false;
+        bool showRetry = false;
+        bool backToRetry = false;
 
         public static int screenCenterX;
         public static int screenCenterY;        
@@ -82,27 +85,86 @@ namespace PuzzleBox
                 deviceSelected = true;
             else
             {
-                splashScreen = new SplashScreen();
-                metaState = MetaState.SplashScreen;
+                if (metaState == MetaState.SplashScreen)
+                {
+                    splashScreen = new SplashScreen();
+                    metaState = MetaState.SplashScreen;
+                }
+                else
+                {
+                    backToRetry = true;
+                    showRetry = false;
+                }
             }
         }
 
         void GetDevice(IAsyncResult result)
         {
-            HighScoreTracker.device = StorageDevice.EndShowSelector(result);
+            try
+            {
+                HighScoreTracker.device = StorageDevice.EndShowSelector(result);
+            }
+            catch
+            {
+                HighScoreTracker.device = null;
+            }
             if (HighScoreTracker.device == null)
             {
-                while (Guide.IsVisible == true)
+                try
                 {
-                    System.Threading.Thread.Sleep(100);
+                    while (Guide.IsVisible == true)
+                        System.Threading.Thread.Sleep(500);
+                    if (Guide.IsVisible == false)
+                    {
+                        Guide.BeginShowMessageBox("No Storage Device Selected",
+                            "You will be unable to save your game progress or high scores.",
+                            new string[] { "OK" },
+                            0, MessageBoxIcon.None, NoStorageCallback, null);
+                    }
                 }
-                Guide.BeginShowMessageBox("No Storage Device Selected",
-                    "You will be unable to save your game progress or high scores.",
-                    new string[] { "OK" },
-                    0, MessageBoxIcon.None, NoStorageCallback, null);                   	              
+                catch
+                {
+                    splashScreen = new SplashScreen();
+                    metaState = MetaState.SplashScreen;
+                }
             }
             else
                 deviceSelected = true;
+        }
+
+        void RetryDevice(IAsyncResult result)
+        {
+            try
+            {
+                HighScoreTracker.device = StorageDevice.EndShowSelector(result);
+            }
+            catch
+            {
+                HighScoreTracker.device = null;
+            }
+            if (HighScoreTracker.device == null)
+            {
+                try
+                {
+                    while (Guide.IsVisible == true)
+                        System.Threading.Thread.Sleep(500);
+                    if (Guide.IsVisible == false)
+                    {
+                        Guide.BeginShowMessageBox("No Storage Device Selected",
+                            "You will be unable to save your game progress or high scores.",
+                            new string[] { "OK" },
+                            0, MessageBoxIcon.None, NoStorageCallback, null);
+                    }
+                }
+                catch
+                {
+                }
+            }
+            else
+            {
+                deviceSelected = true;
+                HighScoreData data = HighScoreTracker.LoadHighScores();
+            }
         }
 
 
@@ -194,6 +256,7 @@ namespace PuzzleBox
             HelpOverlay.help_leftbutton = Content.Load<Texture2D>("help_leftbutton");
             HelpOverlay.help_rightbutton = Content.Load<Texture2D>("help_rightbutton");
             HelpOverlay.help_x = Content.Load<Texture2D>("help_x");
+            HelpOverlay.summary_confirm = Content.Load<Texture2D>("summary_confirm");
             spriteFont = Content.Load<SpriteFont>("SpriteFont1");
             menuFont = Content.Load<SpriteFont>("SpriteFont2");
             OrbRenderer.orbTexture = Content.Load<Texture2D>("orb");
@@ -309,21 +372,41 @@ namespace PuzzleBox
                 if (MenuResult.GoToMainMenu == splashScreen.Update(gameTime))
                 {
                     base.Initialize();
-                    StorageDevice.BeginShowSelector(this.GetDevice, "Select Storage Device");                        
+                    try
+                    {
+                        if (Guide.IsVisible == true)
+                            splashScreen.stillActive = true;
+                        else
+                            StorageDevice.BeginShowSelector(this.GetDevice, "Select Storage Device");                        
+                    }
+                    catch
+                    {
+                        splashScreen.stillActive = true;                        
+                    }
                 }
 
-            }            
-            if (metaState == MetaState.SplashScreen && deviceSelected==true)
+            }
+            if (HighScoreTracker.device != null && HighScoreTracker.device.IsConnected == true)
             {
-                if (HighScoreTracker.device != null)
+                showRetry = false;
+            }
+            if (backToRetry == true || (HighScoreTracker.device != null && showRetry == false && HighScoreTracker.device.IsConnected == false))
+            {
+                if (Guide.IsVisible == false)
                 {
-                    IAsyncResult result =
-                    HighScoreTracker.device.BeginOpenContainer("StorageDemo", null, null);
-                    result.AsyncWaitHandle.WaitOne();
-                    HighScoreTracker.container = HighScoreTracker.device.EndOpenContainer(result);
-                    result.AsyncWaitHandle.Close();
+                    try
+                    {
+                        StorageDevice.BeginShowSelector(this.RetryDevice, "Select Storage Device");
+                        backToRetry = false;
+                        showRetry = true;
+                    }
+                    catch
+                    {
+                    }
                 }
-
+            }
+            if (metaState == MetaState.SplashScreen && deviceSelected==true)
+            {                
                 HighScoreData data = HighScoreTracker.LoadHighScores();
                 gameSettings = new GameSettings();
                 gameSettings.displayControls = data.displayHelp;
@@ -351,10 +434,14 @@ namespace PuzzleBox
                 selectMenu = new LevelSelectMenu();
                 tutorialLauncher = new TutorialLauncher();
                 settingsMenu = new Menu(MenuClass.SettingsMenu);
+                
+                if(Guide.IsTrialMode)
+                    mainMenu.AddMenuItem(MenuResult.GoToTutorial, "Tutorial", "Learn to play Jellyfish, MD");
                 mainMenu.AddMenuItem(MenuResult.GoToTimeAttack, "Emergency Room", "Score as many points as you can within the \ntime limit.");
                 mainMenu.AddMenuItem(MenuResult.GoToMoveChallenge, "Operation", "Score as many points as you can with a \nlimited number of moves.");
                 mainMenu.AddMenuItem(MenuResult.GoToPuzzle, "Challenge", "Solve a series of unique challenges.");
-                mainMenu.AddMenuItem(MenuResult.GoToTutorial, "Tutorial", "Learn to play Jellyfish, MD");
+                if(Guide.IsTrialMode==false)
+                    mainMenu.AddMenuItem(MenuResult.GoToTutorial, "Tutorial", "Learn to play Jellyfish, MD");
                 mainMenu.AddMenuItem(MenuResult.BuyFullGame, "Unlock Full Game", "Purchase the full version of Jellyfish, MD"); 
                 mainMenu.AddMenuItem(MenuResult.GoToJellyfishCity, "Jellyfish Parade", "Check in on your former patients!");                
                 mainMenu.AddMenuItem(MenuResult.GoToSettings, "Settings", "Change settings for Jellyfish, MD");
@@ -366,8 +453,11 @@ namespace PuzzleBox
                 settingsMenu.AddMenuItem(MenuType.SoundToggle, "Sound Effects");
                 settingsMenu.AddMenuItem(MenuType.MusicToggle, "Music");
                 settingsMenu.AddMenuItem(MenuType.HelpToggle, "Help Overlay");
-                settingsMenu.AddMenuItem(MenuType.FullScreenToggle, "Full Screen");
-                settingsMenu.AddMenuItem(MenuType.WideScreenToggle, "Wide Screen");
+
+                #if WINDOWS
+                    settingsMenu.AddMenuItem(MenuType.FullScreenToggle, "Full Screen");
+                    settingsMenu.AddMenuItem(MenuType.WideScreenToggle, "Wide Screen");
+                #endif
                 UpdateResolution();
 
                 metaState = MetaState.MainMenu;
@@ -481,6 +571,8 @@ namespace PuzzleBox
                     Engine.clock.Update(gameTime);
                 }
                 MenuResult result = summaryMenu.Update(gameTime);
+                if (TutorialStage.phase != TutorialPhase.None && TutorialStage.introIndex-1 == TutorialStage.controlLessonIndex)
+                    p1engine.Update(gameTime);
                 if (result == MenuResult.GoToMainMenu)
                 {
                     TutorialStage.phase = TutorialPhase.None;
@@ -488,16 +580,24 @@ namespace PuzzleBox
                 }
                 if (result == MenuResult.Replay)
                 {
-                    if (TutorialStage.phase == TutorialPhase.Fail || TutorialStage.phase == TutorialPhase.Pass)
+                    if (TutorialStage.phase == TutorialPhase.Fail)
                     {
-                        //p1engine = new Engine(TutorialStage.lessonIndex);
                         p1engine.LoadTutorial(TutorialStage.lessonIndex);
-                        //p1engine.gameState = State.VANISH;
                         TutorialStage.phase = TutorialPhase.Intro;
                         TutorialStage.failureIndex = 0;
                         TutorialStage.introIndex = 0;
                         TutorialStage.successIndex = 0;
                         p1engine.firstResume = true;
+                        metaState = MetaState.GamePlay;
+                    }
+                    else if (TutorialStage.phase == TutorialPhase.Pass)
+                    {
+                        p1engine.LoadTutorial(TutorialStage.lessonIndex);
+                        TutorialStage.phase = TutorialPhase.Intro;
+                        TutorialStage.failureIndex = 0;
+                        TutorialStage.introIndex = 0;
+                        TutorialStage.successIndex = 0;
+                        p1engine.firstResume = false;
                         metaState = MetaState.GamePlay;
                     }
                     else
@@ -672,8 +772,10 @@ namespace PuzzleBox
                     data.keyboardControls = gameSettings.keyboardControls;
                     HighScoreTracker.SaveHighScores(data);
                     
-                    deviceSelected = false;
+                    deviceSelected = false;                    
                     HighScoreTracker.device = null;
+                    if (HighScoreTracker.container != null)
+                        HighScoreTracker.container.Dispose();
                     HighScoreTracker.container = null;
                     HighScoreTracker.cachedData = null;
                     splashScreen = new SplashScreen();
@@ -683,11 +785,14 @@ namespace PuzzleBox
                 {
                     try { Guide.ShowMarketplace(Game.playerIndex); }
                     catch (GamerPrivilegeException)
-                    {                        
+                    {
                         Guide.BeginShowMessageBox("Oops!",
                             "The current controller is either not signed in or is unable to purchase games on XBox Live.",
                             new string[] { "OK" },
-                            0, MessageBoxIcon.None,null,null);                         	              
+                            0, MessageBoxIcon.None, null, null);
+                    }
+                    catch
+                    {
                     }
                         
                     
